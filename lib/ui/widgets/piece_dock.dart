@@ -60,24 +60,71 @@ class PieceDock extends StatelessWidget {
                     isPlaceable: isPlaceable,
                   ),
                   const SizedBox(height: 6),
-                  GestureDetector(
-                    onTap: () => gameProvider.rotatePiece(index),
-                    child: Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.08),
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: Colors.white.withOpacity(0.15),
-                          width: 0.8,
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // Bouton Pivoter 90°
+                      GestureDetector(
+                        onTap: () => gameProvider.rotatePiece(index),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF1A2B42),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: const Color(0xFF00F2FE).withOpacity(0.4),
+                              width: 0.8,
+                            ),
+                          ),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.rotate_right_rounded, color: Color(0xFF00F2FE), size: 14),
+                              SizedBox(width: 2),
+                              Text(
+                                '90°',
+                                style: TextStyle(
+                                  color: Color(0xFF00F2FE),
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                      child: const Icon(
-                        Icons.rotate_right_rounded,
-                        color: Colors.white70,
-                        size: 16,
+                      const SizedBox(width: 4),
+                      // Bouton Miroir
+                      GestureDetector(
+                        onTap: () => gameProvider.mirrorPiece(index),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF2D1B38),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: const Color(0xFFFF0844).withOpacity(0.4),
+                              width: 0.8,
+                            ),
+                          ),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.flip_rounded, color: Color(0xFFFF708D), size: 14),
+                              SizedBox(width: 2),
+                              Text(
+                                'Miroir',
+                                style: TextStyle(
+                                  color: Color(0xFFFF708D),
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ],
               ),

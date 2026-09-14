@@ -39,6 +39,16 @@ class BlockShape {
     );
   }
 
+  /// Inverse la forme horizontalement (effet miroir gauche <-> droite)
+  BlockShape mirror() {
+    final mirroredMatrix = matrix.map((row) => row.reversed.toList()).toList();
+    return BlockShape(
+      id: '${id}_mir',
+      matrix: mirroredMatrix,
+      colorIndex: colorIndex,
+    );
+  }
+
   /// Crée une copie de la forme avec une couleur différente
   BlockShape withColor(int newColorIndex) {
     return BlockShape(
