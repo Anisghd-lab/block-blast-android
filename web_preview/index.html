@@ -19,6 +19,8 @@
       user-select: none;
       -webkit-user-select: none;
       overflow: hidden;
+      touch-action: none;
+      overscroll-behavior: none;
     }
     .font-num {
       font-family: 'Space Grotesk', sans-serif;
@@ -425,24 +427,45 @@
     }
 
     function attachDragHandlers(el, slotIndex) {
-      const onPointerDown = (e) => {
-        if (isGameOver || isPaused) return;
-        if (e.target.closest('button')) return;
+      el.style.touchAction = 'none';
 
+      const handleStart = (clientX, clientY) => {
+        if (isGameOver || isPaused) return;
         const piece = availablePieces[slotIndex];
         if (!piece) return;
+
+        initAudio();
 
         activeDrag = {
           slotIndex: slotIndex,
           piece: piece,
           element: el,
-          startX: e.clientX,
-          startY: e.clientY,
+          startX: clientX,
+          startY: clientY,
           hasMoved: false
         };
+
+        // Préparer immédiatement le clone dans dragGhost
+        const metrics = getBoardMetrics();
+        dragGhost.innerHTML = '';
+        const ghostPiece = createPieceElement(activeDrag.piece, metrics.cellW);
+        dragGhost.appendChild(ghostPiece);
       };
 
-      el.addEventListener('pointerdown', onPointerDown);
+      // Écouteur tactile mobile
+      el.addEventListener('touchstart', (e) => {
+        if (e.touches.length > 1) return;
+        e.preventDefault();
+        const t = e.touches[0];
+        handleStart(t.clientX, t.clientY);
+      }, { passive: false });
+
+      // Écouteur souris desktop
+      el.addEventListener('mousedown', (e) => {
+        if (e.button !== 0) return;
+        e.preventDefault();
+        handleStart(e.clientX, e.clientY);
+      });
     }
 
     function updateDragPosition(clientX, clientY) {
@@ -506,34 +529,30 @@
       }
     }
 
-    window.addEventListener('pointermove', (e) => {
+    function handleMove(clientX, clientY) {
       if (!activeDrag) return;
-      const dx = e.clientX - activeDrag.startX;
-      const dy = e.clientY - activeDrag.startY;
+      const dx = clientX - activeDrag.startX;
+      const dy = clientY - activeDrag.startY;
 
-      if (!activeDrag.hasMoved && (Math.abs(dx) > 6 || Math.abs(dy) > 6)) {
+      // Seuil minimal de 4 pixels pour distinguer le tap de rotation du glisser-déposer
+      if (!activeDrag.hasMoved && (Math.abs(dx) > 4 || Math.abs(dy) > 4)) {
         activeDrag.hasMoved = true;
         playClick();
         if (navigator.vibrate) navigator.vibrate(15);
-
-        const metrics = getBoardMetrics();
-        dragGhost.innerHTML = '';
-        const ghostPiece = createPieceElement(activeDrag.piece, metrics.cellW);
-        dragGhost.appendChild(ghostPiece);
         dragGhost.classList.remove('hidden');
         activeDrag.element.style.opacity = '0.2';
       }
 
       if (activeDrag.hasMoved) {
-        updateDragPosition(e.clientX, e.clientY);
+        updateDragPosition(clientX, clientY);
       }
-    });
+    }
 
-    const handlePointerUp = (e) => {
+    function handleEnd() {
       if (!activeDrag) return;
 
       if (!activeDrag.hasMoved) {
-        // Un tap direct sur la pièce sans la déplacer la fait tourner !
+        // Tap direct sans mouvement -> rotation de la pièce à 90°
         rotateSlotPiece(activeDrag.slotIndex);
       } else {
         if (activeDrag.target && activeDrag.target.isValid) {
@@ -546,10 +565,37 @@
       clearGhostPreview();
       dragGhost.classList.add('hidden');
       activeDrag = null;
-    };
+    }
 
-    window.addEventListener('pointerup', handlePointerUp);
-    window.addEventListener('pointercancel', handlePointerUp);
+    // Événements globaux Touch pour mobile (priorité absolue, empêche tout blocage navigateur)
+    window.addEventListener('touchmove', (e) => {
+      if (!activeDrag) return;
+      e.preventDefault();
+      const t = e.touches[0];
+      handleMove(t.clientX, t.clientY);
+    }, { passive: false });
+
+    window.addEventListener('touchend', (e) => {
+      if (!activeDrag) return;
+      e.preventDefault();
+      handleEnd();
+    }, { passive: false });
+
+    window.addEventListener('touchcancel', (e) => {
+      if (!activeDrag) return;
+      handleEnd();
+    });
+
+    // Événements souris pour desktop
+    window.addEventListener('mousemove', (e) => {
+      if (!activeDrag) return;
+      handleMove(e.clientX, e.clientY);
+    });
+
+    window.addEventListener('mouseup', (e) => {
+      if (!activeDrag) return;
+      handleEnd();
+    });
 
     // --- MOTEUR DE JEU ---
     function canPlace(matrix, startR, startC) {
