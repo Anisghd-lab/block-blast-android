@@ -9,12 +9,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@600;700;800;900&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
     body {
       background-color: #111223;
       font-family: 'Rubik', sans-serif;
       user-select: none;
       -webkit-user-select: none;
-      touch-action: none;
       overflow: hidden;
     }
     .font-num {
@@ -29,6 +32,7 @@
       border-radius: 16px;
       border: 1.5px solid rgba(255, 255, 255, 0.08);
       box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+      touch-action: none;
     }
     .cell {
       aspect-ratio: 1;
@@ -76,15 +80,12 @@
       0% { transform: translate(0, 0) scale(1); opacity: 1; }
       100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
     }
-    .piece-preview {
-      cursor: grab;
-      touch-action: none;
+    .btn-action {
+      cursor: pointer;
+      touch-action: manipulation;
     }
-    .rotate-btn {
-      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .rotate-btn:active {
-      transform: rotate(90deg) scale(0.9);
+    .btn-action:active {
+      transform: scale(0.92);
     }
   </style>
 </head>
@@ -93,20 +94,20 @@
   <!-- HUD Supérieur -->
   <header class="w-full flex flex-col items-center pt-2">
     <div class="w-full flex items-center justify-between px-2">
-      <!-- Pause -->
-      <button id="btnPause" class="w-10 h-10 rounded-full bg-[#1d1e30] border border-white/10 flex items-center justify-center text-white active:scale-95 transition">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6"/></svg>
+      <!-- Bouton Pause -->
+      <button id="btnPause" type="button" class="btn-action w-11 h-11 rounded-full bg-[#1d1e30] border border-white/10 flex items-center justify-center text-white shadow-lg">
+        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
       </button>
 
       <!-- Record -->
-      <div class="flex items-center space-x-1 px-3 py-1 rounded-full bg-[#1d1e30] border border-amber-400/30 text-amber-400 font-num text-xs font-bold">
+      <div class="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full bg-[#1d1e30] border border-amber-400/30 text-amber-400 font-num text-xs font-bold shadow-md">
         <span>👑 BEST:</span>
         <span id="txtHighScore">0</span>
       </div>
 
-      <!-- Son -->
-      <button id="btnSound" class="w-10 h-10 rounded-full bg-[#1d1e30] border border-white/10 flex items-center justify-center text-white active:scale-95 transition">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
+      <!-- Bouton Son -->
+      <button id="btnSound" type="button" class="btn-action w-11 h-11 rounded-full bg-[#1d1e30] border border-white/10 flex items-center justify-center text-white shadow-lg">
+        <span id="soundIcon" class="text-lg">🔊</span>
       </button>
     </div>
 
@@ -129,24 +130,38 @@
     <div id="particleContainer" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
   </main>
 
-  <!-- Astuce / Contrôle Rotation -->
-  <div class="text-[11px] text-gray-400 flex items-center justify-center gap-1 opacity-80 -mb-2">
-    <span>💡</span>
-    <span>Touchez le bouton 🔄 pour pivoter les blocs</span>
-  </div>
-
   <!-- Tiroir de 3 Pièces Inférieur -->
-  <footer class="w-full max-w-[360px] pb-4">
-    <div class="w-full h-32 bg-[#1d1e30]/80 border border-white/10 rounded-2xl flex items-center justify-around px-2" id="dock">
+  <footer class="w-full max-w-[380px] pb-3">
+    <div class="w-full h-36 bg-[#1d1e30]/80 border border-white/10 rounded-2xl flex items-center justify-around px-1" id="dock">
       <!-- 3 Emplacements de formes -->
-      <div class="relative w-28 h-28 flex flex-col items-center justify-center" id="slot-0"></div>
-      <div class="relative w-28 h-28 flex flex-col items-center justify-center" id="slot-1"></div>
-      <div class="relative w-28 h-28 flex flex-col items-center justify-center" id="slot-2"></div>
+      <div class="w-28 h-32 flex flex-col items-center justify-center gap-1.5" id="slot-0"></div>
+      <div class="w-28 h-32 flex flex-col items-center justify-center gap-1.5" id="slot-1"></div>
+      <div class="w-28 h-32 flex flex-col items-center justify-center gap-1.5" id="slot-2"></div>
     </div>
   </footer>
 
   <!-- Élément flottant de glissement (Drag Ghost) -->
   <div id="dragGhost" class="fixed pointer-events-none z-50 hidden"></div>
+
+  <!-- Modal Pause -->
+  <div id="pauseModal" class="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-6 z-50 hidden">
+    <div class="w-full max-w-xs bg-[#0c0d1d] border-2 border-white/20 rounded-3xl p-6 text-center shadow-2xl">
+      <h2 class="text-2xl font-black text-white mb-6">PARTIE EN PAUSE</h2>
+      
+      <div class="flex justify-center mb-6">
+        <button id="btnToggleSoundPause" type="button" class="btn-action px-4 py-2.5 rounded-xl bg-[#1d1e30] border border-white/15 text-white font-bold text-sm flex items-center gap-2">
+          <span id="soundIconPause">🔊</span> Son : <span id="soundStatusPause">ACTIF</span>
+        </button>
+      </div>
+
+      <button id="btnResume" type="button" class="btn-action w-full py-3.5 bg-[#00f2fe] hover:bg-[#00dce6] text-[#00373a] font-black rounded-xl text-lg mb-3 shadow-lg shadow-cyan-500/30 transition">
+        REPRENDRE
+      </button>
+      <button id="btnRestartFromPause" type="button" class="btn-action w-full py-3 bg-[#1d1e30] hover:bg-[#252742] text-white font-bold rounded-xl text-sm border border-white/10 transition">
+        RECOMMENCER
+      </button>
+    </div>
+  </div>
 
   <!-- Modal Game Over -->
   <div id="gameOverModal" class="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-6 z-50 hidden">
@@ -158,7 +173,7 @@
         <div id="modalScore" class="text-4xl font-black text-white my-1">0</div>
         <div class="text-xs font-bold text-amber-400 font-num">MEILLEUR : <span id="modalBest">0</span></div>
       </div>
-      <button id="btnRestart" class="w-full py-3.5 bg-[#00f2fe] hover:bg-[#00dce6] active:scale-95 text-[#00373a] font-black rounded-xl text-lg shadow-lg shadow-cyan-500/30 transition">
+      <button id="btnRestart" type="button" class="btn-action w-full py-3.5 bg-[#00f2fe] hover:bg-[#00dce6] text-[#00373a] font-black rounded-xl text-lg shadow-lg shadow-cyan-500/30 transition">
         REJOUER
       </button>
     </div>
@@ -168,12 +183,18 @@
     // --- AUDIO SYNTHESIS (Web Audio API) ---
     let audioCtx = null;
     let soundEnabled = true;
+
     function initAudio() {
       if (!audioCtx) {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
     }
+
     const comboNotes = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88, 523.25];
+
     function playNote(freq) {
       if (!soundEnabled) return;
       initAudio();
@@ -198,8 +219,8 @@
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.type = 'triangle';
-        osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(580, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
         osc.connect(gain);
         gain.connect(audioCtx.destination);
@@ -215,14 +236,14 @@
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(440, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(660, audioCtx.currentTime + 0.1);
-        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+        osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(700, audioCtx.currentTime + 0.12);
+        gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.12);
         osc.connect(gain);
         gain.connect(audioCtx.destination);
         osc.start();
-        osc.stop(audioCtx.currentTime + 0.1);
+        osc.stop(audioCtx.currentTime + 0.12);
       } catch(e) {}
     }
 
@@ -238,7 +259,7 @@
       [[1, 1, 1], [0, 1, 0]], [[0, 1, 0], [1, 1, 1]], [[1, 0], [1, 1], [1, 0]], [[0, 1], [1, 1], [0, 1]] // T
     ];
 
-    // Rotation à 90 degrés dans le sens horaire
+    // Rotation d'une matrice à 90 degrés dans le sens horaire
     function rotateMatrix(matrix) {
       const rows = matrix.length;
       const cols = matrix[0].length;
@@ -259,6 +280,7 @@
     let comboStreak = 0;
     let availablePieces = [null, null, null];
     let isGameOver = false;
+    let isPaused = false;
 
     const boardEl = document.getElementById('board');
     const txtScore = document.getElementById('txtScore');
@@ -269,7 +291,7 @@
 
     txtHighScore.textContent = highScore;
 
-    // Initialisation du plateau HTML
+    // Initialisation de la grille
     for (let r = 0; r < SIZE; r++) {
       for (let c = 0; c < SIZE; c++) {
         const cell = document.createElement('div');
@@ -292,7 +314,6 @@
       }
     }
 
-    // Génération d'un trio de pièces
     function spawnTrio() {
       for (let i = 0; i < 3; i++) {
         const shapeIdx = Math.floor(Math.random() * SHAPES.length);
@@ -307,12 +328,12 @@
     }
 
     function rotateSlotPiece(slotIndex) {
-      if (isGameOver) return;
+      if (isGameOver || isPaused) return;
       const piece = availablePieces[slotIndex];
       if (!piece) return;
 
       playRotate();
-      if (navigator.vibrate) navigator.vibrate(20);
+      if (navigator.vibrate) navigator.vibrate(25);
 
       piece.matrix = rotateMatrix(piece.matrix);
       renderDock();
@@ -326,33 +347,34 @@
         const piece = availablePieces[i];
         if (!piece) continue;
 
-        // Conteneur de pièce
-        const pieceWrapper = document.createElement('div');
-        pieceWrapper.className = 'flex flex-col items-center justify-center gap-1.5 cursor-grab';
-
-        const pieceEl = createPieceElement(piece, 18);
+        // 1. Visuel de la pièce (déplaçable)
+        const pieceEl = createPieceElement(piece, 17);
         pieceEl.dataset.slot = i;
         attachDragHandlers(pieceEl, i);
-        pieceWrapper.appendChild(pieceEl);
+        slot.appendChild(pieceEl);
 
-        // Bouton de rotation explicite
+        // 2. Bouton Rotation cliquable et tactile
         const rotBtn = document.createElement('button');
-        rotBtn.className = 'rotate-btn w-6 h-6 rounded-full bg-[#252742] hover:bg-[#323354] border border-white/20 flex items-center justify-center text-xs text-white/90 shadow';
-        rotBtn.innerHTML = '🔄';
-        rotBtn.title = 'Tourner la pièce';
-        rotBtn.onclick = (e) => {
+        rotBtn.type = 'button';
+        rotBtn.className = 'btn-action flex items-center justify-center gap-1 px-3 py-1 bg-[#252742] hover:bg-[#323354] border border-white/20 rounded-full text-xs font-bold text-cyan-300 shadow shadow-black/40';
+        rotBtn.innerHTML = '<span>🔄</span><span>Tourner</span>';
+
+        const handleRotate = (e) => {
+          e.preventDefault();
           e.stopPropagation();
           rotateSlotPiece(i);
         };
-        pieceWrapper.appendChild(rotBtn);
 
-        slot.appendChild(pieceWrapper);
+        rotBtn.addEventListener('pointerdown', handleRotate);
+        rotBtn.addEventListener('click', handleRotate);
+
+        slot.appendChild(rotBtn);
       }
     }
 
     function createPieceElement(piece, cellSize) {
       const container = document.createElement('div');
-      container.className = 'piece-preview flex flex-col items-center justify-center';
+      container.className = 'flex flex-col items-center justify-center cursor-grab active:cursor-grabbing p-1 rounded-lg';
       for (let r = 0; r < piece.matrix.length; r++) {
         const row = document.createElement('div');
         row.className = 'flex';
@@ -360,7 +382,7 @@
           const block = document.createElement('div');
           block.style.width = `${cellSize}px`;
           block.style.height = `${cellSize}px`;
-          block.style.margin = '2px';
+          block.style.margin = '1.5px';
           block.style.borderRadius = '4px';
           if (piece.matrix[r][c] > 0) {
             block.className = `filled color-${piece.color}`;
@@ -372,48 +394,43 @@
       return container;
     }
 
-    // --- CALCUL GÉOMÉTRIQUE SANS DÉCALAGE ("ZÉRO MARCHE") ---
+    // --- DRAG & DROP GÉOMÉTRIQUE SANS DÉCALAGE ---
     let activeDrag = null;
-
-    function attachDragHandlers(el, slotIndex) {
-      let startX = 0;
-      let startY = 0;
-      let isDragging = false;
-
-      const onStart = (e) => {
-        if (isGameOver) return;
-        const touch = e.touches ? e.touches[0] : e;
-        startX = touch.clientX;
-        startY = touch.clientY;
-        isDragging = false;
-
-        const piece = availablePieces[slotIndex];
-        if (!piece) return;
-
-        // Préparation du drag
-        activeDrag = {
-          slotIndex: slotIndex,
-          piece: piece,
-          element: el,
-          startX: startX,
-          startY: startY,
-          hasMoved: false
-        };
-      };
-
-      el.addEventListener('mousedown', onStart);
-      el.addEventListener('touchstart', onStart, { passive: false });
-    }
 
     function getBoardMetrics() {
       const firstCell = document.getElementById('cell-0-0').getBoundingClientRect();
       const secondCell = document.getElementById('cell-0-1').getBoundingClientRect();
-      const stepX = secondCell.left - firstCell.left;
       const secondRowCell = document.getElementById('cell-1-0').getBoundingClientRect();
+      const stepX = secondCell.left - firstCell.left;
       const stepY = secondRowCell.top - firstCell.top;
-      const cellW = firstCell.width;
-      const cellH = firstCell.height;
-      return { firstCell, cellW, cellH, stepX, stepY };
+      return {
+        firstCell,
+        cellW: firstCell.width,
+        cellH: firstCell.height,
+        stepX,
+        stepY
+      };
+    }
+
+    function attachDragHandlers(el, slotIndex) {
+      const onPointerDown = (e) => {
+        if (isGameOver || isPaused) return;
+        if (e.target.closest('button')) return;
+
+        const piece = availablePieces[slotIndex];
+        if (!piece) return;
+
+        activeDrag = {
+          slotIndex: slotIndex,
+          piece: piece,
+          element: el,
+          startX: e.clientX,
+          startY: e.clientY,
+          hasMoved: false
+        };
+      };
+
+      el.addEventListener('pointerdown', onPointerDown);
     }
 
     function updateDragPosition(clientX, clientY) {
@@ -424,30 +441,27 @@
       const rows = piece.matrix.length;
       const cols = piece.matrix[0].length;
 
-      // Dimensions exactes de la pièce en taille plateau (avec espacements de 4px)
+      // Taille exacte de la forme
       const pieceWidth = cols * metrics.cellW + (cols - 1) * 4;
       const pieceHeight = rows * metrics.cellH + (rows - 1) * 4;
 
-      // La pièce flotte 75px au-dessus du point de contact
+      // Décalage vertical de 75px pour dégager la vue du doigt
       const visualCenterX = clientX;
       const visualCenterY = clientY - 75;
 
-      // Position du coin supérieur gauche de la pièce
       const pieceLeft = visualCenterX - pieceWidth / 2;
       const pieceTop = visualCenterY - pieceHeight / 2;
 
-      // Mise à jour de l'élément flottant (sans transform qui fausserait l'alignement)
       dragGhost.style.left = `${pieceLeft}px`;
       dragGhost.style.top = `${pieceTop}px`;
       dragGhost.style.transform = 'none';
 
-      // Calcul de la cellule cible sur la grille
+      // Calcul précis des coordonnées (ligne, colonne) cibles
       const targetCol = Math.round((pieceLeft - metrics.firstCell.left) / metrics.stepX);
       const targetRow = Math.round((pieceTop - metrics.firstCell.top) / metrics.stepY);
 
       clearGhostPreview();
 
-      // Vérification des limites de la grille
       if (targetRow >= 0 && targetRow + rows <= SIZE &&
           targetCol >= 0 && targetCol + cols <= SIZE) {
         const isValid = canPlace(piece.matrix, targetRow, targetCol);
@@ -480,19 +494,16 @@
       }
     }
 
-    function onDragMove(e) {
+    window.addEventListener('pointermove', (e) => {
       if (!activeDrag) return;
-      const touch = e.touches ? e.touches[0] : e;
-      const dx = touch.clientX - activeDrag.startX;
-      const dy = touch.clientY - activeDrag.startY;
+      const dx = e.clientX - activeDrag.startX;
+      const dy = e.clientY - activeDrag.startY;
 
-      // Seuil d'activation du glissement (5px) pour distinguer le clic de rotation du glisser
-      if (!activeDrag.hasMoved && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
+      if (!activeDrag.hasMoved && (Math.abs(dx) > 6 || Math.abs(dy) > 6)) {
         activeDrag.hasMoved = true;
         playClick();
         if (navigator.vibrate) navigator.vibrate(15);
 
-        // Rendu dans dragGhost avec la taille exacte des cases du plateau
         const metrics = getBoardMetrics();
         dragGhost.innerHTML = '';
         const ghostPiece = createPieceElement(activeDrag.piece, metrics.cellW);
@@ -502,24 +513,20 @@
       }
 
       if (activeDrag.hasMoved) {
-        e.preventDefault();
-        updateDragPosition(touch.clientX, touch.clientY);
+        updateDragPosition(e.clientX, e.clientY);
       }
-    }
+    });
 
-    function onDragEnd(e) {
+    const handlePointerUp = (e) => {
       if (!activeDrag) return;
 
       if (!activeDrag.hasMoved) {
-        // C'était un simple tap / clic sur la pièce -> on la fait pivoter !
+        // Un tap direct sur la pièce sans la déplacer la fait tourner !
         rotateSlotPiece(activeDrag.slotIndex);
       } else {
-        // C'était un glisser-déposer
         if (activeDrag.target && activeDrag.target.isValid) {
-          // Placement au pixel près sans aucun décalage de marche
           placePiece(activeDrag.piece, activeDrag.target.r, activeDrag.target.c, activeDrag.slotIndex);
         } else {
-          // Annulation
           activeDrag.element.style.opacity = '1';
         }
       }
@@ -527,14 +534,12 @@
       clearGhostPreview();
       dragGhost.classList.add('hidden');
       activeDrag = null;
-    }
+    };
 
-    window.addEventListener('mousemove', onDragMove);
-    window.addEventListener('touchmove', onDragMove, { passive: false });
-    window.addEventListener('mouseup', onDragEnd);
-    window.addEventListener('touchend', onDragEnd);
+    window.addEventListener('pointerup', handlePointerUp);
+    window.addEventListener('pointercancel', handlePointerUp);
 
-    // --- LOGIQUE DU MOTEUR DE JEU ---
+    // --- MOTEUR DE JEU ---
     function canPlace(matrix, startR, startC) {
       if (startR < 0 || startC < 0) return false;
       if (startR + matrix.length > SIZE || startC + matrix[0].length > SIZE) return false;
@@ -563,13 +568,11 @@
       renderDock();
       renderBoard();
 
-      // Points de pose
       score += blocksPlaced * 10;
       updateScore();
 
       if (navigator.vibrate) navigator.vibrate(30);
 
-      // Vérifier les lignes pleines
       checkLines();
     }
 
@@ -714,25 +717,74 @@
       }
     }
 
-    // Boutons
-    document.getElementById('btnRestart').onclick = () => {
+    function restartGame() {
       document.getElementById('gameOverModal').classList.add('hidden');
+      document.getElementById('pauseModal').classList.add('hidden');
       grid = Array(SIZE).fill(null).map(() => Array(SIZE).fill(0));
       score = 0;
       comboStreak = 0;
       isGameOver = false;
+      isPaused = false;
       updateScore();
       hideComboBanner();
       renderBoard();
       spawnTrio();
-    };
+    }
 
-    document.getElementById('btnSound').onclick = () => {
+    function toggleSound() {
       soundEnabled = !soundEnabled;
+      const icon = soundEnabled ? '🔊' : '🔇';
+      const status = soundEnabled ? 'ACTIF' : 'MUET';
+      document.getElementById('soundIcon').textContent = icon;
+      document.getElementById('soundIconPause').textContent = icon;
+      document.getElementById('soundStatusPause').textContent = status;
       document.getElementById('btnSound').classList.toggle('opacity-50', !soundEnabled);
+    }
+
+    // Gestionnaires des boutons (Pointer events + Click)
+    const attachButtonHandler = (id, handler) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        handler(e);
+      });
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        handler(e);
+      });
     };
 
-    // Lancement
+    attachButtonHandler('btnPause', () => {
+      if (isGameOver) return;
+      isPaused = true;
+      document.getElementById('pauseModal').classList.remove('hidden');
+    });
+
+    attachButtonHandler('btnResume', () => {
+      isPaused = false;
+      document.getElementById('pauseModal').classList.add('hidden');
+    });
+
+    attachButtonHandler('btnRestartFromPause', () => {
+      restartGame();
+    });
+
+    attachButtonHandler('btnRestart', () => {
+      restartGame();
+    });
+
+    attachButtonHandler('btnSound', () => {
+      toggleSound();
+    });
+
+    attachButtonHandler('btnToggleSoundPause', () => {
+      toggleSound();
+    });
+
+    // Lancement du jeu
     spawnTrio();
     renderBoard();
   </script>
