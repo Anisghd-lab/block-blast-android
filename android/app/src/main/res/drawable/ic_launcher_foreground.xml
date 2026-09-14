@@ -1,0 +1,23 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Block Blast Icon: 4 colorful glowing square puzzle tiles -->
+    <!-- Cyan tile -->
+    <path
+        android:fillColor="#00F2FE"
+        android:pathData="M30,30 h20 v20 h-20 z" />
+    <!-- Magenta tile -->
+    <path
+        android:fillColor="#FF0844"
+        android:pathData="M54,30 h20 v20 h-20 z" />
+    <!-- Yellow tile -->
+    <path
+        android:fillColor="#FED929"
+        android:pathData="M30,54 h20 v20 h-20 z" />
+    <!-- Lime tile -->
+    <path
+        android:fillColor="#00F5A0"
+        android:pathData="M54,54 h20 v20 h-20 z" />
+</vector>

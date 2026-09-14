@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>BLOCK BLAST - Hyper-Satisfying Puzzle</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Rubik & Space Grotesk -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,400;0,500;0,700;0,800;0,900;1,900&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container": "#1d1e30",
+            "surface-container-lowest": "#0c0d1d",
+            "on-surface-variant": "#b9cacb",
+            "tertiary": "#fff7e6",
+            "error": "#ffb4ab",
+            "background": "#111223",
+            "on-primary": "#00373a",
+            "primary-fixed": "#6ff6ff",
+            "primary-container": "#00f2fe",
+            "on-tertiary": "#3a3000",
+            "on-background": "#e1e0f9",
+            "on-surface": "#e1e0f9",
+            "on-secondary-fixed": "#40000a",
+            "outline": "#849495",
+            "on-error": "#690005",
+            "on-error-container": "#ffdad6",
+            "surface-bright": "#37384a",
+            "surface-variant": "#323346",
+            "primary-fixed-dim": "#00dce6",
+            "on-secondary-container": "#5b0012",
+            "tertiary-fixed": "#ffe16a",
+            "secondary-fixed": "#ffdad9",
+            "on-tertiary-container": "#715f00",
+            "secondary-fixed-dim": "#ffb3b3",
+            "error-container": "#93000a",
+            "primary": "#e0fdff",
+            "inverse-on-surface": "#2e2f41",
+            "tertiary-fixed-dim": "#e8c404",
+            "secondary-container": "#ff5261",
+            "inverse-primary": "#00696f",
+            "on-primary-fixed": "#002022",
+            "on-primary-fixed-variant": "#004f53",
+            "secondary": "#ffb3b3",
+            "surface-tint": "#00dce6",
+            "inverse-surface": "#e1e0f9",
+            "surface-container-high": "#28283b",
+            "on-tertiary-fixed-variant": "#544600",
+            "on-primary-container": "#006a70",
+            "surface-container-highest": "#323346",
+            "on-tertiary-fixed": "#221b00",
+            "tertiary-container": "#fed929",
+            "surface-container-low": "#191a2b",
+            "surface": "#111223",
+            "outline-variant": "#3a494b",
+            "surface-dim": "#111223",
+            "on-secondary": "#680015",
+            "on-secondary-fixed-variant": "#920022"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "gutter": "0.75rem",
+            "space-sm": "0.5rem",
+            "space-xs": "0.25rem",
+            "gutter-mobile": "0.5rem",
+            "space-lg": "1.25rem",
+            "space-xl": "2rem",
+            "margin-mobile": "1rem",
+            "space-md": "0.75rem",
+            "margin": "1.5rem"
+          },
+          "fontFamily": {
+            "headline-lg": ["Rubik"],
+            "headline-xl": ["Rubik"],
+            "label-sm": ["Space Grotesk"],
+            "headline-xl-mobile": ["Rubik"],
+            "body-lg": ["Rubik"],
+            "display-score-mobile": ["Rubik"],
+            "body-md": ["Rubik"],
+            "display-score": ["Rubik"],
+            "label-numeric": ["Space Grotesk"],
+            "headline-md": ["Rubik"]
+          },
+          "fontSize": {
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "headline-xl": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.08em", "fontWeight": "700" }],
+            "headline-xl-mobile": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "500" }],
+            "display-score-mobile": ["40px", { "lineHeight": "44px", "letterSpacing": "-0.03em", "fontWeight": "900" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "display-score": ["56px", { "lineHeight": "60px", "letterSpacing": "-0.03em", "fontWeight": "900" }],
+            "label-numeric": ["14px", { "lineHeight": "18px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "700" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 24px;
+      line-height: 1;
+      display: inline-block;
+      text-transform: none;
+      letter-spacing: normal;
+      word-wrap: normal;
+      white-space: nowrap;
+      direction: ltr;
+    }
+
+    /* Tactile Inset Wells */
+    .cell-well {
+      background-color: #0c0d1d;
+      box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.75), inset 0 0 3px rgba(0, 0, 0, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    /* 3D Glossy Acrylic Blocks */
+    .block-tile {
+      position: relative;
+      border-radius: 0.375rem;
+      box-shadow: 0 4px 0 #070811, 0 5px 8px rgba(0,0,0,0.6);
+      transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .block-tile::before {
+      content: '';
+      position: absolute;
+      top: 1px;
+      left: 2px;
+      right: 2px;
+      height: 38%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.05) 100%);
+      border-radius: 0.25rem 0.25rem 2px 2px;
+      pointer-events: none;
+    }
+    .block-tile::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-top: 1px solid rgba(255,255,255,0.6);
+      border-bottom: 2px solid rgba(0,0,0,0.4);
+      border-radius: 0.375rem;
+      pointer-events: none;
+    }
+
+    /* Neon Palette Variants */
+    .block-cyan {
+      background: linear-gradient(135deg, #00f2fe 0%, #00a3af 100%);
+      box-shadow: 0 4px 0 #004f53, 0 0 10px rgba(0, 242, 254, 0.45);
+    }
+    .block-pink {
+      background: linear-gradient(135deg, #ff5261 0%, #ba0029 100%);
+      box-shadow: 0 4px 0 #680015, 0 0 10px rgba(255, 82, 97, 0.45);
+    }
+    .block-yellow {
+      background: linear-gradient(135deg, #fed929 0%, #c49b00 100%);
+      box-shadow: 0 4px 0 #544600, 0 0 10px rgba(254, 217, 41, 0.45);
+    }
+    .block-lime {
+      background: linear-gradient(135deg, #00f5a0 0%, #00995c 100%);
+      box-shadow: 0 4px 0 #004d2e, 0 0 10px rgba(0, 245, 160, 0.45);
+    }
+    .block-purple {
+      background: linear-gradient(135deg, #b026ff 0%, #63009c 100%);
+      box-shadow: 0 4px 0 #3b005c, 0 0 10px rgba(176, 38, 255, 0.45);
+    }
+    .block-orange {
+      background: linear-gradient(135deg, #ff8400 0%, #b84a00 100%);
+      box-shadow: 0 4px 0 #5c2500, 0 0 10px rgba(255, 132, 0, 0.45);
+    }
+
+    /* Blast & Line Detonation Animation */
+    @keyframes detonationFlash {
+      0%, 100% { filter: brightness(1.2); }
+      50% { filter: brightness(2.8) contrast(1.2); transform: scale(1.06); }
+    }
+    .detonating-cell {
+      animation: detonationFlash 0.55s ease-in-out infinite alternate;
+      z-index: 10;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.85; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.02); }
+    }
+    .combo-banner-pulse {
+      animation: pulseGlow 0.9s ease-in-out infinite;
+    }
+
+    @keyframes floatScore {
+      0% { transform: translateY(4px) scale(0.9); opacity: 0.9; }
+      50% { transform: translateY(-8px) scale(1.05); opacity: 1; }
+      100% { transform: translateY(4px) scale(0.9); opacity: 0.9; }
+    }
+    .score-burst-float {
+      animation: floatScore 1.8s ease-in-out infinite;
+    }
+
+    /* 3D Push Button Effect */
+    .tactile-btn {
+      box-shadow: 0 4px 0 #070811;
+      transition: all 0.08s ease-out;
+    }
+    .tactile-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #070811;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface select-none antialiased min-h-screen flex justify-center items-center overflow-x-hidden p-0 m-0">
+<!-- Mobile Arcade Shell: Max 480px locked portrait canvas -->
+<div class="w-full max-w-[480px] min-h-screen bg-background relative flex flex-col justify-between overflow-hidden shadow-2xl">
+<!-- Ambient Neon Backlight Orbs -->
+<div class="absolute -top-16 -left-16 w-64 h-64 bg-primary-container/10 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute top-1/3 -right-20 w-72 h-72 bg-secondary-container/15 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute bottom-20 left-1/4 w-80 h-80 bg-tertiary-container/10 rounded-full blur-3xl pointer-events-none"></div>
+<!-- 1. TopAppBar (Shared Component Execution) -->
+<header class="docked full-width top-0 bg-surface-container-low shadow-md flex justify-between items-center w-full px-margin-mobile max-w-[480px] mx-auto h-16 pt-safe z-30">
+<!-- Leading: Pause Action Button -->
+<button aria-label="Pause Game" class="w-10 h-10 rounded-xl bg-surface-container-high text-primary flex items-center justify-center tactile-btn border-t border-white/20 active:translate-y-0.5 active:scale-95 transition-transform duration-100 hover:bg-surface-container-high hover:text-primary">
+<span class="material-symbols-outlined text-primary-container">pause</span>
+</button>
+<!-- Center: Level & Headline Branding -->
+<div class="flex flex-col items-center">
+<div class="flex items-center space-x-1.5 bg-surface-container-lowest/80 px-2.5 py-0.5 rounded-full border border-white/5">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container animate-ping"></span>
+<span class="font-label-sm text-label-sm text-primary-fixed tracking-wider">STAGE 48</span>
+</div>
+<span class="text-headline-md font-headline-md font-black text-primary-container tracking-wider drop-shadow-[0_2px_8px_rgba(0,242,254,0.4)]">
+          BLOCK BLAST
+        </span>
+</div>
+<!-- Trailing: Settings Button -->
+<button aria-label="Game Settings" class="w-10 h-10 rounded-xl bg-surface-container-high text-primary flex items-center justify-center tactile-btn border-t border-white/20 active:translate-y-0.5 active:scale-95 transition-transform duration-100 hover:bg-surface-container-high hover:text-primary">
+<span class="material-symbols-outlined text-on-surface-variant">settings</span>
+</button>
+</header>
+<!-- 2. Main HUD: Scores, High Score & Fiery Mega Blast Multiplier -->
+<section class="w-full px-margin-mobile pt-2 pb-1 flex flex-col items-center z-20">
+<!-- High Score Pill -->
+<div class="flex items-center space-x-1.5 bg-surface-container-low/90 px-3.5 py-1 rounded-full border border-tertiary-container/30 shadow-inner mb-1">
+<span class="material-symbols-outlined text-tertiary-container text-base" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+<span class="font-label-sm text-label-sm text-tertiary font-bold tracking-wider">BEST:</span>
+<span class="font-label-numeric text-label-numeric text-tertiary-container font-black">24,920</span>
+</div>
+<!-- Huge Chunky Glowing Score Display -->
+<div class="relative text-center my-0.5">
+<h1 class="font-display-score-mobile text-display-score-mobile text-primary tracking-tight font-black drop-shadow-[0_4px_16px_rgba(0,242,254,0.7)] flex items-center justify-center">
+          14,850
+        </h1>
+</div>
+<!-- Blazing Fiery Combo Multiplier Banner -->
+<div class="w-full max-w-[340px] combo-banner-pulse relative bg-gradient-to-r from-secondary-container via-orange-500 to-tertiary-container p-[1.5px] rounded-xl shadow-[0_0_20px_rgba(255,82,97,0.45)]">
+<div class="bg-surface-container-lowest/95 backdrop-blur-md px-3 py-1.5 rounded-[11px] flex items-center justify-between">
+<div class="flex items-center space-x-1.5">
+<span class="text-lg animate-bounce">🔥</span>
+<div class="flex flex-col">
+<span class="font-headline-md text-sm font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-tertiary-container leading-none">
+                COMBO x5!
+              </span>
+<span class="font-label-sm text-[10px] text-secondary font-bold tracking-wider">
+                MEGA BLAST ACTIVE
+              </span>
+</div>
+</div>
+<!-- Multiplier Badges -->
+<div class="flex items-center space-x-1 bg-surface-container-high px-2 py-0.5 rounded-lg border border-white/10">
+<span class="text-[10px] font-label-numeric text-tertiary-container font-bold">+500 pts</span>
+</div>
+</div>
+</div>
+</section>
+<!-- 3. Main 8x8 Tactical Neon Puzzle Grid -->
+<main class="w-full px-margin-mobile flex flex-col items-center justify-center relative z-20 my-auto py-1">
+<!-- Detonation Shockwave Score Burst Popup (Absolute Over Board) -->
+<div class="absolute z-40 pointer-events-none top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 score-burst-float flex flex-col items-center">
+<div class="bg-gradient-to-r from-secondary-container via-purple-600 to-primary-container p-[2px] rounded-2xl shadow-[0_0_30px_rgba(0,242,254,0.9)]">
+<div class="bg-surface-container-lowest/90 backdrop-blur-md px-4 py-1.5 rounded-[14px] flex items-center space-x-2">
+<span class="material-symbols-outlined text-tertiary-container text-lg" style="font-variation-settings: 'FILL' 1;">bolt</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-primary font-black tracking-tight whitespace-nowrap drop-shadow-[0_2px_8px_rgba(0,242,254,0.8)]">
+              +1,250 BLAST!
+            </span>
+</div>
+</div>
+<!-- Sparkle Particle Glints -->
+<div class="flex space-x-6 text-xs text-tertiary-container font-black drop-shadow-md">
+<span>✨</span>
+<span>⚡</span>
+<span>✨</span>
+</div>
+</div>
+<!-- 8x8 Board Container -->
+<div class="relative p-2.5 rounded-2xl bg-surface-container-lowest border-2 border-surface-container-high shadow-[0_12px_32px_rgba(0,0,0,0.8),inset_0_2px_6px_rgba(255,255,255,0.05)]">
+<!-- Horizontal Shockwave Line (Row 4) -->
+<div class="absolute left-2.5 right-2.5 top-[calc(2.5px+3*12.5%+6.25%)] h-[3px] bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none z-30 blur-[1px] opacity-90"></div>
+<!-- Vertical Shockwave Line (Col 5) -->
+<div class="absolute top-2.5 bottom-2.5 left-[calc(2.5px+4*12.5%+6.25%)] w-[3px] bg-gradient-to-b from-transparent via-white to-transparent pointer-events-none z-30 blur-[1px] opacity-90"></div>
+<!-- 8x8 Grid (Strict 1:1 Aspect Ratio) -->
+<div class="grid grid-cols-8 grid-rows-8 gap-1 w-[336px] h-[336px] relative">
+<!-- ROW 0 -->
+<div class="cell-well rounded-md"></div>
+<div class="cell-well rounded-md"></div>
+<div class="block-tile block-purple"></div>
+<div class="block-tile block-purple"></div>
+<!-- Row 0, Col 4: Detonation beam intercept -->
+<div class="block-tile block-cyan detonating-cell shadow-[0_0_16px_rgba(0,242,254,0.8)]"></div>
+<div class="cell-well rounded-md"></div>
+<div class="cell-well rounded-md"></div>
+<div class="cell-well rounded-md"></div>
+<!-- ROW 1 -->
+<div class="block-tile block-cyan"></div>
+<div class="cell-well rounded-md"></div>
+<div class="cell-well rounded-md"></div>
+<div class="block-tile block-yellow"></div>
+<div class="block-tile block-yellow detonating-cell shadow-[0_0_16px_rgba(254,217,41,0.8)]"></div>
+<div class="block-tile block-yellow"></div>
+<div class="cell-well rounded-md"></div>
+<div class="cell-well rounded-md"></div>
+<!-- ROW 2 -->
+<div class="block-tile block-cyan"></div>
+<div class="cell-well rounded-md"></div>
+<div class="block-tile block-lime"></div>
+<div class="block-tile block-lime"></div>
+<div class="block-tile block-pink detonating-cell shadow-[0_0_16px_rgba(255,82,97,0.8)]"></div>
+<div class="cell-well rounded-md"></div>
+<div class="block-tile block-orange"></div>
+<div class="block-tile block-orange"></div>
+<!-- ROW 3 (DETONATING HORIZONTAL ROW!) -->
+<div class="block-tile block-cyan detonating-cell shadow-[0_0_14px_rgba(0,242,254,0.9)]"></div>
+<div class="block-tile block-cyan detonating-cell shadow-[0_0_14px_rgba(0,242,254,0.9)]"></div>
+<div class="block-tile block-pink detonating-cell shadow-[0_0_14px_rgba(255,82,97,0.9)]"></div>
+<div class="block-tile block-pink detonating-cell shadow-[0_0_14px_rgba(255,82,97,0.9)]"></div>
+<!-- Intersecting Apex: Col 4 x Row 3 -->
+<div class="block-tile block-yellow detonating-cell shadow-[0_0_24px_#ffffff] scale-110 z-20 border border-white"></div>
+<div class="block-tile block-lime detonating-cell shadow-[0_0_14px_rgba(0,245,160,0.9)]"></div>
+<div class="block-tile block-orange detonating-cell shadow-[0_0_14px_rgba(255,132,0,0.9)]"></div>
+<div class="block-tile block-orange detonating-cell shadow-[0_0_14px_rgba(255,132,0,0.9)]"></div>
+<!-- ROW 4 -->
+<div class="cell-well rounded-md"></div>
+<div class="block-tile block-orange"></div>
+<div class="cell-well rounded-md"></div>
+<div class="cell-well rounded-md"></div>
+<div class="block-tile block-purple detonating-cell shadow-[0_0_16px_rgba(176,38,255,0.8)]"></div>
+<div class="cell-well rounded-md"></div>
+<div class="cell-well rounded-md"></div>
+<div class="block-tile block-cyan"></div>
+<!-- ROW 5 -->
+<div class="cell-well rounded-md"></div>
+<div class="block-tile block-orange"></div>
+<div class="block-tile block-orange"></div>
+<div class="cell-well rounded-md"></div>
+<div class="block-tile block-lime detonating-cell shadow-[0_0_16px_rgba(0,245,160,0.8)]"></div>
+<div class="block-tile block-lime"></div>
+<div class="cell-well rounded-md"></div>
+<div class="block-tile block-cyan"></div>
+<!-- ROW 6 -->
+<div class="block-tile block-pink"></div>
+<div class="block-tile block-pink"></div>
+<div class="cell-well rounded-md"></div>
+<div class="cell-well rounded-md"></div>
+<div class="block-tile block-orange detonating-cell shadow-[0_0_16px_rgba(255,132,0,0.8)]"></div>
+<div class="block-tile block-yellow"></div>
+<div class="block-tile block-yellow"></div>
+<div class="cell-well rounded-md"></div>
+<!-- ROW 7 -->
+<div class="block-tile block-pink"></div>
+<div class="cell-well rounded-md"></div>
+<div class="cell-well rounded-md"></div>
+<div class="cell-well rounded-md"></div>
+<div class="block-tile block-pink detonating-cell shadow-[0_0_16px_rgba(255,82,97,0.8)]"></div>
+<div class="cell-well rounded-md"></div>
+<div class="cell-well rounded-md"></div>
+<div class="cell-well rounded-md"></div>
+</div>
+</div>
+</main>
+<!-- 4. Tactical Power-Up Boosters Toolbar -->
+<section class="w-full px-margin-mobile flex justify-center items-center space-x-3 z-20 py-1">
+<!-- Hammer Powerup -->
+<button aria-label="Hammer Tool" class="tactile-btn flex items-center space-x-1.5 px-3 py-1.5 bg-surface-container-high rounded-xl border-t border-white/15 active:translate-y-0.5">
+<span class="material-symbols-outlined text-primary-container text-lg">build</span>
+<span class="font-label-numeric text-xs font-bold text-on-surface">HAMMER</span>
+<span class="bg-primary-container text-on-primary-container text-[10px] font-bold px-1.5 rounded-full">2</span>
+</button>
+<!-- Rotate Shard -->
+<button aria-label="Rotate Shard" class="tactile-btn flex items-center space-x-1.5 px-3 py-1.5 bg-surface-container-high rounded-xl border-t border-white/15 active:translate-y-0.5">
+<span class="material-symbols-outlined text-secondary-container text-lg">sync</span>
+<span class="font-label-numeric text-xs font-bold text-on-surface">ROTATE</span>
+<span class="bg-secondary-container text-white text-[10px] font-bold px-1.5 rounded-full">1</span>
+</button>
+<!-- Undo Move -->
+<button aria-label="Undo Move" class="tactile-btn flex items-center space-x-1.5 px-3 py-1.5 bg-surface-container-high rounded-xl border-t border-white/15 active:translate-y-0.5">
+<span class="material-symbols-outlined text-tertiary-container text-lg">undo</span>
+<span class="font-label-numeric text-xs font-bold text-on-surface">UNDO</span>
+<span class="bg-tertiary-container text-on-tertiary text-[10px] font-bold px-1.5 rounded-full">3</span>
+</button>
+</section>
+<!-- 5. Bottom Piece Spawn Dock (Interactive Tray) -->
+<section class="w-full px-margin-mobile pt-1 pb-20 z-20">
+<div class="relative bg-surface-container-lowest/80 backdrop-blur-md rounded-2xl p-3 border border-white/5 shadow-xl flex flex-col items-center">
+<!-- Drag hint label -->
+<div class="flex items-center space-x-1 mb-2 text-on-surface-variant/80 font-label-sm text-[10px] uppercase tracking-widest">
+<span class="material-symbols-outlined text-xs">touch_app</span>
+<span>DRAG PIECES TO BOARD</span>
+</div>
+<!-- 3-Piece Tray Array -->
+<div class="w-full flex justify-around items-center h-20">
+<!-- Piece 1: Corner / L-Shape (Electric Lime Green) -->
+<div class="group relative cursor-grab active:cursor-grabbing p-1 transition-transform duration-150 hover:scale-105 active:scale-110 active:-translate-y-2">
+<div class="grid grid-cols-2 grid-rows-2 gap-1 w-12 h-12">
+<div class="block-tile block-lime"></div>
+<div class="w-full h-full opacity-0 pointer-events-none"></div>
+<div class="block-tile block-lime"></div>
+<div class="block-tile block-lime"></div>
+</div>
+<!-- Ground Drop Shadow -->
+<div class="w-10 h-2 bg-black/50 rounded-full blur-xs mx-auto mt-1"></div>
+</div>
+<!-- Piece 2: 2x2 Square (Hot Neon Magenta) -->
+<div class="group relative cursor-grab active:cursor-grabbing p-1 transition-transform duration-150 hover:scale-105 active:scale-110 active:-translate-y-2">
+<div class="grid grid-cols-2 grid-rows-2 gap-1 w-12 h-12">
+<div class="block-tile block-pink"></div>
+<div class="block-tile block-pink"></div>
+<div class="block-tile block-pink"></div>
+<div class="block-tile block-pink"></div>
+</div>
+<!-- Ground Drop Shadow -->
+<div class="w-10 h-2 bg-black/50 rounded-full blur-xs mx-auto mt-1"></div>
+</div>
+<!-- Piece 3: 3x1 Vertical Bar (Electric Cyan) -->
+<div class="group relative cursor-grab active:cursor-grabbing p-1 transition-transform duration-150 hover:scale-105 active:scale-110 active:-translate-y-2">
+<div class="grid grid-cols-1 grid-rows-3 gap-1 w-6 h-[72px]">
+<div class="block-tile block-cyan"></div>
+<div class="block-tile block-cyan"></div>
+<div class="block-tile block-cyan"></div>
+</div>
+<!-- Ground Drop Shadow -->
+<div class="w-6 h-2 bg-black/50 rounded-full blur-xs mx-auto mt-1"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- 6. BottomNavBar (Shared Component Execution) -->
+<!-- Destination count: 4, Labels: ["Play", "Rank", "Store", "Quests"] -->
+<!-- Active State Logic: Current page is Play screen, so "Play" is active tab -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-gutter-mobile pb-safe max-w-[480px] mx-auto h-18 bg-surface-container-lowest/95 backdrop-blur-md shadow-[0_-4px_16px_rgba(0,0,0,0.6)]">
+<!-- Item 1: Play (Active Navigation State) -->
+<button aria-label="Play" class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-4 py-1.5 shadow-sm scale-105 active:scale-90 transition-transform duration-150">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+<span class="text-label-sm font-label-sm font-bold">Play</span>
+</button>
+<!-- Item 2: Rank (Inactive Navigation State) -->
+<button aria-label="Rank" class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1.5 hover:text-primary hover:bg-surface-container/50 active:scale-90 transition-transform duration-150">
+<span class="material-symbols-outlined text-xl">leaderboard</span>
+<span class="text-label-sm font-label-sm font-medium">Rank</span>
+</button>
+<!-- Item 3: Store (Inactive Navigation State) -->
+<button aria-label="Store" class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1.5 hover:text-primary hover:bg-surface-container/50 active:scale-90 transition-transform duration-150">
+<span class="material-symbols-outlined text-xl">shopping_bag</span>
+<span class="text-label-sm font-label-sm font-medium">Store</span>
+</button>
+<!-- Item 4: Quests (Inactive Navigation State) -->
+<button aria-label="Quests" class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1.5 hover:text-primary hover:bg-surface-container/50 active:scale-90 transition-transform duration-150">
+<span class="material-symbols-outlined text-xl">military_tech</span>
+<span class="text-label-sm font-label-sm font-medium">Quests</span>
+</button>
+</nav>
+</div>
+</body></html>

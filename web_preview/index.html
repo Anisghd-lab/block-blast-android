@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Block Blast Color - Jouable Android & Web</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@600;700;800;900&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-color: #111223;
+      font-family: 'Rubik', sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: none;
+      overflow: hidden;
+    }
+    .font-num {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    .grid-board {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 4px;
+      padding: 8px;
+      background: #1d1e30;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+    }
+    .cell {
+      aspect-ratio: 1;
+      border-radius: 6px;
+      background: #16172b;
+      border: 1px solid #252742;
+      transition: background-color 0.1s, transform 0.15s;
+      position: relative;
+    }
+    .cell.filled {
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+    .cell.ghost-valid {
+      background: rgba(0, 242, 254, 0.4) !important;
+      border: 1.5px solid #00f2fe !important;
+    }
+    .cell.ghost-invalid {
+      background: rgba(255, 8, 68, 0.4) !important;
+      border: 1.5px solid #ff0844 !important;
+    }
+    .cell.blast {
+      background: #ffffff !important;
+      box-shadow: 0 0 20px #ffffff, 0 0 40px #00f2fe !important;
+      transform: scale(1.1);
+      z-index: 10;
+    }
+    /* Couleurs de blocs */
+    .color-1 { background: linear-gradient(135deg, #6ff6ff, #00f2fe, #008f96); }
+    .color-2 { background: linear-gradient(135deg, #ff708d, #ff0844, #990024); }
+    .color-3 { background: linear-gradient(135deg, #fff085, #fed929, #997f00); }
+    .color-4 { background: linear-gradient(135deg, #7affc8, #00f5a0, #008f5d); }
+    .color-5 { background: linear-gradient(135deg, #c4a1ff, #8b5cf6, #4c1d95); }
+    .color-6 { background: linear-gradient(135deg, #ffa366, #ff6a00, #993f00); }
+    .color-7 { background: linear-gradient(135deg, #8ad8ff, #38bdf8, #0369a1); }
+
+    /* Particules */
+    .particle {
+      position: absolute;
+      pointer-events: none;
+      border-radius: 50%;
+      animation: fly 0.6s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+    }
+    @keyframes fly {
+      0% { transform: translate(0, 0) scale(1); opacity: 1; }
+      100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
+    }
+    .piece-preview {
+      cursor: grab;
+      touch-action: none;
+    }
+  </style>
+</head>
+<body class="w-screen h-screen flex flex-col items-center justify-between p-4 max-w-md mx-auto">
+  
+  <!-- HUD Supérieur -->
+  <header class="w-full flex flex-col items-center pt-2">
+    <div class="w-full flex items-center justify-between px-2">
+      <!-- Pause -->
+      <button id="btnPause" class="w-10 h-10 rounded-full bg-[#1d1e30] border border-white/10 flex items-center justify-center text-white active:scale-95 transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6"/></svg>
+      </button>
+
+      <!-- Record -->
+      <div class="flex items-center space-x-1 px-3 py-1 rounded-full bg-[#1d1e30] border border-amber-400/30 text-amber-400 font-num text-xs font-bold">
+        <span>👑 BEST:</span>
+        <span id="txtHighScore">0</span>
+      </div>
+
+      <!-- Son -->
+      <button id="btnSound" class="w-10 h-10 rounded-full bg-[#1d1e30] border border-white/10 flex items-center justify-center text-white active:scale-95 transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
+      </button>
+    </div>
+
+    <!-- Score Numéral -->
+    <div id="txtScore" class="text-5xl font-black text-white mt-2 tracking-tight drop-shadow-[0_4px_12px_rgba(0,242,254,0.4)]">
+      0
+    </div>
+
+    <!-- Combo Banner -->
+    <div id="comboBanner" class="h-8 mt-1 flex items-center justify-center transition-all duration-200 opacity-0 transform scale-90">
+      <div class="px-4 py-1 rounded-full bg-gradient-to-r from-[#ff0844] via-[#ff6a00] to-[#fed929] text-white text-xs font-black shadow-lg shadow-orange-500/40">
+        🔥 COMBO x2! MEGA BLAST!
+      </div>
+    </div>
+  </header>
+
+  <!-- Grille 8x8 Centrale -->
+  <main class="w-full max-w-[360px] aspect-square relative">
+    <div id="board" class="grid-board w-full h-full"></div>
+    <div id="particleContainer" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
+  </main>
+
+  <!-- Tiroir de 3 Pièces Inférieur -->
+  <footer class="w-full max-w-[360px] pb-4">
+    <div class="w-full h-28 bg-[#1d1e30]/70 border border-white/5 rounded-2xl flex items-center justify-around px-2" id="dock">
+      <!-- 3 Emplacements de formes -->
+      <div class="w-24 h-24 flex items-center justify-center" id="slot-0"></div>
+      <div class="w-24 h-24 flex items-center justify-center" id="slot-1"></div>
+      <div class="w-24 h-24 flex items-center justify-center" id="slot-2"></div>
+    </div>
+  </footer>
+
+  <!-- Élément flottant de glissement (Drag Ghost) -->
+  <div id="dragGhost" class="fixed pointer-events-none z-50 hidden" style="transform: translate(-50%, -100%);"></div>
+
+  <!-- Modal Game Over -->
+  <div id="gameOverModal" class="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-6 z-50 hidden">
+    <div class="w-full max-w-xs bg-[#0c0d1d] border-2 border-[#00f2fe] rounded-3xl p-6 text-center shadow-2xl shadow-cyan-500/30">
+      <div class="text-4xl mb-2">🏆</div>
+      <h2 class="text-2xl font-black text-white mb-4">PARTIE TERMINÉE</h2>
+      <div class="bg-[#1d1e30] rounded-2xl p-4 mb-6">
+        <div class="text-xs font-bold text-gray-400 font-num">SCORE</div>
+        <div id="modalScore" class="text-4xl font-black text-white my-1">0</div>
+        <div class="text-xs font-bold text-amber-400 font-num">MEILLEUR : <span id="modalBest">0</span></div>
+      </div>
+      <button id="btnRestart" class="w-full py-3.5 bg-[#00f2fe] hover:bg-[#00dce6] active:scale-95 text-[#00373a] font-black rounded-xl text-lg shadow-lg shadow-cyan-500/30 transition">
+        REJOUER
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // --- AUDIO SYNTHESIS (Web Audio API) ---
+    let audioCtx = null;
+    let soundEnabled = true;
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    }
+    const comboNotes = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88, 523.25];
+    function playNote(freq) {
+      if (!soundEnabled) return;
+      initAudio();
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.35);
+      } catch(e) {}
+    }
+
+    function playClick() {
+      if (!soundEnabled) return;
+      initAudio();
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.08);
+      } catch(e) {}
+    }
+
+    // --- FORMES DU JEU ---
+    const SHAPES = [
+      [[1]], // 1x1
+      [[1, 1]], [[1], [1]], // 1x2, 2x1
+      [[1, 1, 1]], [[1], [1], [1]], // 1x3, 3x1
+      [[1, 1, 1, 1]], [[1], [1], [1], [1]], // 1x4, 4x1
+      [[1, 1], [1, 1]], // 2x2
+      [[1, 1, 1], [1, 1, 1], [1, 1, 1]], // 3x3
+      [[1, 1], [1, 0]], [[1, 1], [0, 1]], [[1, 0], [1, 1]], [[0, 1], [1, 1]], // L3
+      [[1, 1, 1], [0, 1, 0]], [[0, 1, 0], [1, 1, 1]], [[1, 0], [1, 1], [1, 0]], [[0, 1], [1, 1], [0, 1]] // T
+    ];
+
+    // --- ÉTAT DU JEU ---
+    const SIZE = 8;
+    let grid = Array(SIZE).fill(null).map(() => Array(SIZE).fill(0));
+    let score = 0;
+    let highScore = parseInt(localStorage.getItem('block_blast_best') || '0');
+    let comboStreak = 0;
+    let availablePieces = [null, null, null];
+    let isGameOver = false;
+
+    const boardEl = document.getElementById('board');
+    const txtScore = document.getElementById('txtScore');
+    const txtHighScore = document.getElementById('txtHighScore');
+    const comboBanner = document.getElementById('comboBanner');
+    const dragGhost = document.getElementById('dragGhost');
+    const particleContainer = document.getElementById('particleContainer');
+
+    txtHighScore.textContent = highScore;
+
+    // Initialisation du plateau HTML
+    for (let r = 0; r < SIZE; r++) {
+      for (let c = 0; c < SIZE; c++) {
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        cell.id = `cell-${r}-${c}`;
+        boardEl.appendChild(cell);
+      }
+    }
+
+    function renderBoard() {
+      for (let r = 0; r < SIZE; r++) {
+        for (let c = 0; c < SIZE; c++) {
+          const cell = document.getElementById(`cell-${r}-${c}`);
+          cell.className = 'cell';
+          const val = grid[r][c];
+          if (val > 0) {
+            cell.classList.add('filled', `color-${val}`);
+          }
+        }
+      }
+    }
+
+    // Génération d'un trio de pièces
+    function spawnTrio() {
+      for (let i = 0; i < 3; i++) {
+        const shapeIdx = Math.floor(Math.random() * SHAPES.length);
+        const colorIdx = (Math.floor(Math.random() * 7)) + 1;
+        availablePieces[i] = {
+          matrix: SHAPES[shapeIdx],
+          color: colorIdx
+        };
+      }
+      renderDock();
+      checkGameOver();
+    }
+
+    function renderDock() {
+      for (let i = 0; i < 3; i++) {
+        const slot = document.getElementById(`slot-${i}`);
+        slot.innerHTML = '';
+        const piece = availablePieces[i];
+        if (!piece) continue;
+
+        const pieceEl = createPieceElement(piece, 18);
+        pieceEl.dataset.slot = i;
+        attachDragHandlers(pieceEl, i);
+        slot.appendChild(pieceEl);
+      }
+    }
+
+    function createPieceElement(piece, cellSize) {
+      const container = document.createElement('div');
+      container.className = 'piece-preview flex flex-col items-center justify-center';
+      for (let r = 0; r < piece.matrix.length; r++) {
+        const row = document.createElement('div');
+        row.className = 'flex';
+        for (let c = 0; c < piece.matrix[r].length; c++) {
+          const block = document.createElement('div');
+          block.style.width = `${cellSize}px`;
+          block.style.height = `${cellSize}px`;
+          block.style.margin = '1px';
+          block.style.borderRadius = '4px';
+          if (piece.matrix[r][c] > 0) {
+            block.className = `filled color-${piece.color}`;
+          }
+          row.appendChild(block);
+        }
+        container.appendChild(row);
+      }
+      return container;
+    }
+
+    // --- DRAG & DROP AVEC DÉCALAGE MOBILE (-75px) ---
+    let activeDrag = null;
+
+    function attachDragHandlers(el, slotIndex) {
+      const startDrag = (e) => {
+        if (isGameOver) return;
+        const touch = e.touches ? e.touches[0] : e;
+        const piece = availablePieces[slotIndex];
+        if (!piece) return;
+
+        playClick();
+        if (navigator.vibrate) navigator.vibrate(15);
+
+        activeDrag = {
+          slotIndex: slotIndex,
+          piece: piece,
+          element: el
+        };
+
+        // Rendu dans le dragGhost avec taille réelle du plateau (38px)
+        dragGhost.innerHTML = '';
+        const ghostPiece = createPieceElement(piece, 36);
+        dragGhost.appendChild(ghostPiece);
+        dragGhost.classList.remove('hidden');
+
+        updateDragPosition(touch.clientX, touch.clientY);
+        el.style.opacity = '0.2';
+      };
+
+      el.addEventListener('mousedown', startDrag);
+      el.addEventListener('touchstart', startDrag, { passive: false });
+    }
+
+    function updateDragPosition(clientX, clientY) {
+      // Décalage vertical de -75px pour que le doigt ne cache pas le bloc
+      const visualY = clientY - 75;
+      dragGhost.style.left = `${clientX}px`;
+      dragGhost.style.top = `${visualY}px`;
+
+      // Détecter la case survolée sur le plateau
+      clearGhostPreview();
+      const target = getCellAtPosition(clientX, visualY);
+      if (target && activeDrag) {
+        const isValid = canPlace(activeDrag.piece.matrix, target.r, target.c);
+        highlightGhost(activeDrag.piece.matrix, target.r, target.c, isValid);
+      }
+    }
+
+    function getCellAtPosition(x, y) {
+      const rect = boardEl.getBoundingClientRect();
+      if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) {
+        return null;
+      }
+      const cellW = rect.width / SIZE;
+      const cellH = rect.height / SIZE;
+      const c = Math.floor((x - rect.left) / cellW);
+      const r = Math.floor((y - rect.top) / cellH);
+      if (r >= 0 && r < SIZE && c >= 0 && c < SIZE) {
+        return { r, c };
+      }
+      return null;
+    }
+
+    function clearGhostPreview() {
+      document.querySelectorAll('.cell.ghost-valid, .cell.ghost-invalid').forEach(c => {
+        c.classList.remove('ghost-valid', 'ghost-invalid');
+      });
+    }
+
+    function highlightGhost(matrix, startR, startC, isValid) {
+      const cls = isValid ? 'ghost-valid' : 'ghost-invalid';
+      for (let r = 0; r < matrix.length; r++) {
+        for (let c = 0; c < matrix[r].length; c++) {
+          if (matrix[r][c] > 0) {
+            const tr = startR + r;
+            const tc = startC + c;
+            if (tr < SIZE && tc < SIZE) {
+              const cell = document.getElementById(`cell-${tr}-${tc}`);
+              if (cell) cell.classList.add(cls);
+            }
+          }
+        }
+      }
+    }
+
+    function onDragMove(e) {
+      if (!activeDrag) return;
+      e.preventDefault();
+      const touch = e.touches ? e.touches[0] : e;
+      updateDragPosition(touch.clientX, touch.clientY);
+    }
+
+    function onDragEnd(e) {
+      if (!activeDrag) return;
+      const touch = e.changedTouches ? e.changedTouches[0] : e;
+      const target = getCellAtPosition(touch.clientX, touch.clientY - 75);
+
+      if (target && canPlace(activeDrag.piece.matrix, target.r, target.c)) {
+        // Placement valide
+        placePiece(activeDrag.piece, target.r, target.c, activeDrag.slotIndex);
+      } else {
+        // Rétablir l'affichage dans le dock
+        activeDrag.element.style.opacity = '1';
+      }
+
+      clearGhostPreview();
+      dragGhost.classList.add('hidden');
+      activeDrag = null;
+    }
+
+    window.addEventListener('mousemove', onDragMove);
+    window.addEventListener('touchmove', onDragMove, { passive: false });
+    window.addEventListener('mouseup', onDragEnd);
+    window.addEventListener('touchend', onDragEnd);
+
+    // --- LOGIQUE DU MOTEUR DE JEU ---
+    function canPlace(matrix, startR, startC) {
+      if (startR + matrix.length > SIZE || startC + matrix[0].length > SIZE) return false;
+      for (let r = 0; r < matrix.length; r++) {
+        for (let c = 0; c < matrix[r].length; c++) {
+          if (matrix[r][c] > 0 && grid[startR + r][startC + c] > 0) {
+            return false;
+          }
+        }
+      }
+      return true;
+    }
+
+    function placePiece(piece, startR, startC, slotIndex) {
+      let blocksPlaced = 0;
+      for (let r = 0; r < piece.matrix.length; r++) {
+        for (let c = 0; c < piece.matrix[r].length; c++) {
+          if (piece.matrix[r][c] > 0) {
+            grid[startR + r][startC + c] = piece.color;
+            blocksPlaced++;
+          }
+        }
+      }
+
+      availablePieces[slotIndex] = null;
+      renderDock();
+      renderBoard();
+
+      // Points de pose
+      score += blocksPlaced * 10;
+      updateScore();
+
+      if (navigator.vibrate) navigator.vibrate(30);
+
+      // Vérifier les lignes pleines
+      checkLines();
+    }
+
+    function checkLines() {
+      const fullRows = [];
+      const fullCols = [];
+
+      for (let r = 0; r < SIZE; r++) {
+        if (grid[r].every(c => c > 0)) fullRows.push(r);
+      }
+      for (let c = 0; c < SIZE; c++) {
+        let isFull = true;
+        for (let r = 0; r < SIZE; r++) {
+          if (grid[r][c] === 0) { isFull = false; break; }
+        }
+        if (isFull) fullCols.push(c);
+      }
+
+      const totalLines = fullRows.length + fullCols.length;
+      if (totalLines > 0) {
+        comboStreak++;
+        // Note de musique selon le combo
+        const noteIdx = Math.min(comboStreak - 1, comboNotes.length - 1);
+        playNote(comboNotes[noteIdx]);
+
+        if (navigator.vibrate) navigator.vibrate(totalLines >= 2 ? 100 : 50);
+
+        // Affichage combo banner
+        showComboBanner(comboStreak);
+
+        // Flash blast sur les cases
+        fullRows.forEach(r => {
+          for (let c = 0; c < SIZE; c++) {
+            const el = document.getElementById(`cell-${r}-${c}`);
+            el.classList.add('blast');
+            createParticles(el, grid[r][c]);
+          }
+        });
+        fullCols.forEach(c => {
+          for (let r = 0; r < SIZE; r++) {
+            const el = document.getElementById(`cell-${r}-${c}`);
+            el.classList.add('blast');
+            createParticles(el, grid[r][c]);
+          }
+        });
+
+        // Calcul du score avec multiplicateur
+        let lineBase = totalLines === 1 ? 100 : (totalLines === 2 ? 300 : (totalLines === 3 ? 600 : 1000));
+        let mult = 1.0 + (comboStreak - 1) * 0.5;
+        score += Math.round(lineBase * mult);
+        updateScore();
+
+        setTimeout(() => {
+          fullRows.forEach(r => {
+            for (let c = 0; c < SIZE; c++) grid[r][c] = 0;
+          });
+          fullCols.forEach(c => {
+            for (let r = 0; r < SIZE; r++) grid[r][c] = 0;
+          });
+          renderBoard();
+          afterMove();
+        }, 180);
+      } else {
+        comboStreak = 0;
+        hideComboBanner();
+        afterMove();
+      }
+    }
+
+    function createParticles(cellEl, colorIdx) {
+      const rect = cellEl.getBoundingClientRect();
+      const boardRect = boardEl.getBoundingClientRect();
+      const centerX = rect.left - boardRect.left + rect.width / 2;
+      const centerY = rect.top - boardRect.top + rect.height / 2;
+
+      for (let i = 0; i < 6; i++) {
+        const p = document.createElement('div');
+        p.className = `particle color-${colorIdx}`;
+        p.style.left = `${centerX}px`;
+        p.style.top = `${centerY}px`;
+        p.style.width = '8px';
+        p.style.height = '8px';
+        const angle = Math.random() * Math.PI * 2;
+        const dist = 30 + Math.random() * 40;
+        p.style.setProperty('--dx', `${Math.cos(angle) * dist}px`);
+        p.style.setProperty('--dy', `${Math.sin(angle) * dist}px`);
+        particleContainer.appendChild(p);
+        setTimeout(() => p.remove(), 600);
+      }
+    }
+
+    function showComboBanner(streak) {
+      if (streak < 2) return;
+      comboBanner.firstElementChild.textContent = streak === 2 ? '🔥 COMBO x2! NICE!' : (streak === 3 ? '⚡ COMBO x3! MEGA BLAST!' : `👑 COMBO x${streak}! ULTRA!`);
+      comboBanner.classList.remove('opacity-0', 'scale-90');
+      comboBanner.classList.add('opacity-100', 'scale-100');
+    }
+
+    function hideComboBanner() {
+      comboBanner.classList.remove('opacity-100', 'scale-100');
+      comboBanner.classList.add('opacity-0', 'scale-90');
+    }
+
+    function afterMove() {
+      if (availablePieces.every(p => p === null)) {
+        spawnTrio();
+      } else {
+        checkGameOver();
+      }
+    }
+
+    function checkGameOver() {
+      let canMove = false;
+      for (const piece of availablePieces) {
+        if (!piece) continue;
+        for (let r = 0; r < SIZE; r++) {
+          for (let c = 0; c < SIZE; c++) {
+            if (canPlace(piece.matrix, r, c)) {
+              canMove = true;
+              break;
+            }
+          }
+          if (canMove) break;
+        }
+        if (canMove) break;
+      }
+
+      if (!canMove && availablePieces.some(p => p !== null)) {
+        triggerGameOver();
+      }
+    }
+
+    function triggerGameOver() {
+      isGameOver = true;
+      document.getElementById('modalScore').textContent = score;
+      document.getElementById('modalBest').textContent = highScore;
+      document.getElementById('gameOverModal').classList.remove('hidden');
+    }
+
+    function updateScore() {
+      txtScore.textContent = score;
+      if (score > highScore) {
+        highScore = score;
+        txtHighScore.textContent = highScore;
+        localStorage.setItem('block_blast_best', highScore);
+      }
+    }
+
+    // Boutons
+    document.getElementById('btnRestart').onclick = () => {
+      document.getElementById('gameOverModal').classList.add('hidden');
+      grid = Array(SIZE).fill(null).map(() => Array(SIZE).fill(0));
+      score = 0;
+      comboStreak = 0;
+      isGameOver = false;
+      updateScore();
+      hideComboBanner();
+      renderBoard();
+      spawnTrio();
+    };
+
+    document.getElementById('btnSound').onclick = () => {
+      soundEnabled = !soundEnabled;
+      document.getElementById('btnSound').classList.toggle('opacity-50', !soundEnabled);
+    };
+
+    // Lancement
+    spawnTrio();
+    renderBoard();
+  </script>
+</body>
+</html>
