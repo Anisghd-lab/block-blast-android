@@ -376,49 +376,11 @@
         const piece = availablePieces[i];
         if (!piece) continue;
 
-        // 1. Visuel de la pièce (déplaçable)
-        const pieceEl = createPieceElement(piece, 16);
+        // Rendu épuré et fidèle : toucher la pièce pour la faire pivoter, glisser pour la poser
+        const pieceEl = createPieceElement(piece, 19);
         pieceEl.dataset.slot = i;
         attachDragHandlers(pieceEl, i);
         slot.appendChild(pieceEl);
-
-        // 2. Barre d'outils d'orientation : Pivoter 90° et Miroir
-        const controls = document.createElement('div');
-        controls.className = 'flex items-center gap-1 mt-1';
-
-        // Bouton Pivoter 90°
-        const rotBtn = document.createElement('button');
-        rotBtn.type = 'button';
-        rotBtn.className = 'btn-action flex items-center justify-center gap-0.5 px-2 py-1 bg-[#1a2b42] hover:bg-[#253d5e] border border-cyan-500/40 rounded-full text-[11px] font-bold text-cyan-300 shadow shadow-black/40';
-        rotBtn.innerHTML = '<span>🔄</span><span>90°</span>';
-        rotBtn.title = 'Faire pivoter de 90°';
-
-        const handleRotate = (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          rotateSlotPiece(i);
-        };
-        rotBtn.addEventListener('pointerdown', handleRotate);
-        rotBtn.addEventListener('click', handleRotate);
-        controls.appendChild(rotBtn);
-
-        // Bouton Miroir
-        const mirBtn = document.createElement('button');
-        mirBtn.type = 'button';
-        mirBtn.className = 'btn-action flex items-center justify-center gap-0.5 px-2 py-1 bg-[#2d1b38] hover:bg-[#422552] border border-pink-500/40 rounded-full text-[11px] font-bold text-pink-300 shadow shadow-black/40';
-        mirBtn.innerHTML = '<span>🪞</span><span>Miroir</span>';
-        mirBtn.title = 'Inverser la forme (symétrie miroir)';
-
-        const handleMirror = (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          mirrorSlotPiece(i);
-        };
-        mirBtn.addEventListener('pointerdown', handleMirror);
-        mirBtn.addEventListener('click', handleMirror);
-        controls.appendChild(mirBtn);
-
-        slot.appendChild(controls);
       }
     }
 

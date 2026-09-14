@@ -48,85 +48,16 @@ class PieceDock extends StatelessWidget {
 
           return Expanded(
             child: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  DraggablePiece(
-                    pieceIndex: index,
-                    shape: piece,
-                    theme: theme,
-                    dockCellSize: 18.0,
-                    boardCellSize: 38.0,
-                    isPlaceable: isPlaceable,
-                  ),
-                  const SizedBox(height: 6),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // Bouton Pivoter 90°
-                      GestureDetector(
-                        onTap: () => gameProvider.rotatePiece(index),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF1A2B42),
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: const Color(0xFF00F2FE).withOpacity(0.4),
-                              width: 0.8,
-                            ),
-                          ),
-                          child: const Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(Icons.rotate_right_rounded, color: Color(0xFF00F2FE), size: 14),
-                              SizedBox(width: 2),
-                              Text(
-                                '90°',
-                                style: TextStyle(
-                                  color: Color(0xFF00F2FE),
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 4),
-                      // Bouton Miroir
-                      GestureDetector(
-                        onTap: () => gameProvider.mirrorPiece(index),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF2D1B38),
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: const Color(0xFFFF0844).withOpacity(0.4),
-                              width: 0.8,
-                            ),
-                          ),
-                          child: const Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(Icons.flip_rounded, color: Color(0xFFFF708D), size: 14),
-                              SizedBox(width: 2),
-                              Text(
-                                'Miroir',
-                                style: TextStyle(
-                                  color: Color(0xFFFF708D),
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+              child: GestureDetector(
+                onTap: () => gameProvider.rotatePiece(index),
+                child: DraggablePiece(
+                  pieceIndex: index,
+                  shape: piece,
+                  theme: theme,
+                  dockCellSize: 20.0,
+                  boardCellSize: 38.0,
+                  isPlaceable: isPlaceable,
+                ),
               ),
             ),
           );
