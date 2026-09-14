@@ -48,13 +48,38 @@ class PieceDock extends StatelessWidget {
 
           return Expanded(
             child: Center(
-              child: DraggablePiece(
-                pieceIndex: index,
-                shape: piece,
-                theme: theme,
-                dockCellSize: 20.0,
-                boardCellSize: 38.0,
-                isPlaceable: isPlaceable,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  DraggablePiece(
+                    pieceIndex: index,
+                    shape: piece,
+                    theme: theme,
+                    dockCellSize: 18.0,
+                    boardCellSize: 38.0,
+                    isPlaceable: isPlaceable,
+                  ),
+                  const SizedBox(height: 6),
+                  GestureDetector(
+                    onTap: () => gameProvider.rotatePiece(index),
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.08),
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.white.withOpacity(0.15),
+                          width: 0.8,
+                        ),
+                      ),
+                      child: const Icon(
+                        Icons.rotate_right_rounded,
+                        color: Colors.white70,
+                        size: 16,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           );

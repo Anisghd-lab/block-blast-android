@@ -56,9 +56,9 @@ class _GameBoardState extends State<GameBoard> {
         child: DragTarget<Map<String, dynamic>>(
           onWillAcceptWithDetails: (details) => true,
           onMove: (details) {
-            final target = _calculateTargetCell(details.offset, boardSize, cellSize, spacing, padding);
+            final shape = details.data['shape'] as BlockShape;
+            final target = _calculateTargetCell(details.offset, boardSize, cellSize, spacing, padding, shape);
             if (target != null) {
-              final shape = details.data['shape'] as BlockShape;
               gameProvider.setDragPreview(shape, target.$1, target.$2);
             } else {
               gameProvider.setDragPreview(null, null, null);
@@ -68,7 +68,8 @@ class _GameBoardState extends State<GameBoard> {
             gameProvider.setDragPreview(null, null, null);
           },
           onAcceptWithDetails: (details) {
-            final target = _calculateTargetCell(details.offset, boardSize, cellSize, spacing, padding);
+            final shape = details.data['shape'] as BlockShape;
+            final target = _calculateTargetCell(details.offset, boardSize, cellSize, spacing, padding, shape);
             if (target != null) {
               final pieceIndex = details.data['pieceIndex'] as int;
               gameProvider.tryPlacePiece(pieceIndex, target.$1, target.$2);
@@ -133,22 +134,28 @@ class _GameBoardState extends State<GameBoard> {
     double cellSize,
     double spacing,
     double padding,
+    BlockShape shape,
   ) {
     final renderBox = _boardKey.currentContext?.findRenderObject() as RenderBox?;
     if (renderBox == null) return null;
 
     final localTouch = renderBox.globalToLocal(globalTouchPosition);
-    // Prise en compte du décalage ergonomique pour que la pièce soit au bon endroit
-    final visualPosition = Offset(localTouch.dx, localTouch.dy + fingerVerticalOffset);
+    final visualCenter = Offset(localTouch.dx, localTouch.dy + fingerVerticalOffset);
 
-    final x = visualPosition.dx - padding;
-    final y = visualPosition.dy - padding;
+    // Dimensions exactes de la pièce avec espacement
+    final pieceWidth = shape.cols * cellSize + (shape.cols - 1) * spacing;
+    final pieceHeight = shape.rows * cellSize + (shape.rows - 1) * spacing;
+
+    // Coin supérieur gauche de la pièce
+    final pieceLeft = visualCenter.dx - pieceWidth / 2;
+    final pieceTop = visualCenter.dy - pieceHeight / 2;
 
     final totalStep = cellSize + spacing;
-    final col = (x / totalStep).round();
-    final row = (y / totalStep).round();
+    final col = ((pieceLeft - padding) / totalStep).round();
+    final row = ((pieceTop - padding) / totalStep).round();
 
-    if (row < 0 || row >= BoardState.size || col < 0 || col >= BoardState.size) {
+    if (row < 0 || row + shape.rows > BoardState.size ||
+        col < 0 || col + shape.cols > BoardState.size) {
       return null;
     }
     return (row, col);

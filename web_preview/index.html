@@ -27,7 +27,7 @@
       padding: 8px;
       background: #1d1e30;
       border-radius: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      border: 1.5px solid rgba(255, 255, 255, 0.08);
       box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
     }
     .cell {
@@ -43,11 +43,11 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     }
     .cell.ghost-valid {
-      background: rgba(0, 242, 254, 0.4) !important;
+      background: rgba(0, 242, 254, 0.45) !important;
       border: 1.5px solid #00f2fe !important;
     }
     .cell.ghost-invalid {
-      background: rgba(255, 8, 68, 0.4) !important;
+      background: rgba(255, 8, 68, 0.45) !important;
       border: 1.5px solid #ff0844 !important;
     }
     .cell.blast {
@@ -79,6 +79,12 @@
     .piece-preview {
       cursor: grab;
       touch-action: none;
+    }
+    .rotate-btn {
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .rotate-btn:active {
+      transform: rotate(90deg) scale(0.9);
     }
   </style>
 </head>
@@ -123,18 +129,24 @@
     <div id="particleContainer" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
   </main>
 
+  <!-- Astuce / Contrôle Rotation -->
+  <div class="text-[11px] text-gray-400 flex items-center justify-center gap-1 opacity-80 -mb-2">
+    <span>💡</span>
+    <span>Touchez le bouton 🔄 pour pivoter les blocs</span>
+  </div>
+
   <!-- Tiroir de 3 Pièces Inférieur -->
   <footer class="w-full max-w-[360px] pb-4">
-    <div class="w-full h-28 bg-[#1d1e30]/70 border border-white/5 rounded-2xl flex items-center justify-around px-2" id="dock">
+    <div class="w-full h-32 bg-[#1d1e30]/80 border border-white/10 rounded-2xl flex items-center justify-around px-2" id="dock">
       <!-- 3 Emplacements de formes -->
-      <div class="w-24 h-24 flex items-center justify-center" id="slot-0"></div>
-      <div class="w-24 h-24 flex items-center justify-center" id="slot-1"></div>
-      <div class="w-24 h-24 flex items-center justify-center" id="slot-2"></div>
+      <div class="relative w-28 h-28 flex flex-col items-center justify-center" id="slot-0"></div>
+      <div class="relative w-28 h-28 flex flex-col items-center justify-center" id="slot-1"></div>
+      <div class="relative w-28 h-28 flex flex-col items-center justify-center" id="slot-2"></div>
     </div>
   </footer>
 
   <!-- Élément flottant de glissement (Drag Ghost) -->
-  <div id="dragGhost" class="fixed pointer-events-none z-50 hidden" style="transform: translate(-50%, -100%);"></div>
+  <div id="dragGhost" class="fixed pointer-events-none z-50 hidden"></div>
 
   <!-- Modal Game Over -->
   <div id="gameOverModal" class="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-6 z-50 hidden">
@@ -196,6 +208,24 @@
       } catch(e) {}
     }
 
+    function playRotate() {
+      if (!soundEnabled) return;
+      initAudio();
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(660, audioCtx.currentTime + 0.1);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.1);
+      } catch(e) {}
+    }
+
     // --- FORMES DU JEU ---
     const SHAPES = [
       [[1]], // 1x1
@@ -207,6 +237,19 @@
       [[1, 1], [1, 0]], [[1, 1], [0, 1]], [[1, 0], [1, 1]], [[0, 1], [1, 1]], // L3
       [[1, 1, 1], [0, 1, 0]], [[0, 1, 0], [1, 1, 1]], [[1, 0], [1, 1], [1, 0]], [[0, 1], [1, 1], [0, 1]] // T
     ];
+
+    // Rotation à 90 degrés dans le sens horaire
+    function rotateMatrix(matrix) {
+      const rows = matrix.length;
+      const cols = matrix[0].length;
+      const rotated = Array(cols).fill(null).map(() => Array(rows).fill(0));
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          rotated[c][rows - 1 - r] = matrix[r][c];
+        }
+      }
+      return rotated;
+    }
 
     // --- ÉTAT DU JEU ---
     const SIZE = 8;
@@ -263,6 +306,19 @@
       checkGameOver();
     }
 
+    function rotateSlotPiece(slotIndex) {
+      if (isGameOver) return;
+      const piece = availablePieces[slotIndex];
+      if (!piece) return;
+
+      playRotate();
+      if (navigator.vibrate) navigator.vibrate(20);
+
+      piece.matrix = rotateMatrix(piece.matrix);
+      renderDock();
+      checkGameOver();
+    }
+
     function renderDock() {
       for (let i = 0; i < 3; i++) {
         const slot = document.getElementById(`slot-${i}`);
@@ -270,10 +326,27 @@
         const piece = availablePieces[i];
         if (!piece) continue;
 
+        // Conteneur de pièce
+        const pieceWrapper = document.createElement('div');
+        pieceWrapper.className = 'flex flex-col items-center justify-center gap-1.5 cursor-grab';
+
         const pieceEl = createPieceElement(piece, 18);
         pieceEl.dataset.slot = i;
         attachDragHandlers(pieceEl, i);
-        slot.appendChild(pieceEl);
+        pieceWrapper.appendChild(pieceEl);
+
+        // Bouton de rotation explicite
+        const rotBtn = document.createElement('button');
+        rotBtn.className = 'rotate-btn w-6 h-6 rounded-full bg-[#252742] hover:bg-[#323354] border border-white/20 flex items-center justify-center text-xs text-white/90 shadow';
+        rotBtn.innerHTML = '🔄';
+        rotBtn.title = 'Tourner la pièce';
+        rotBtn.onclick = (e) => {
+          e.stopPropagation();
+          rotateSlotPiece(i);
+        };
+        pieceWrapper.appendChild(rotBtn);
+
+        slot.appendChild(pieceWrapper);
       }
     }
 
@@ -287,7 +360,7 @@
           const block = document.createElement('div');
           block.style.width = `${cellSize}px`;
           block.style.height = `${cellSize}px`;
-          block.style.margin = '1px';
+          block.style.margin = '2px';
           block.style.borderRadius = '4px';
           if (piece.matrix[r][c] > 0) {
             block.className = `filled color-${piece.color}`;
@@ -299,67 +372,90 @@
       return container;
     }
 
-    // --- DRAG & DROP AVEC DÉCALAGE MOBILE (-75px) ---
+    // --- CALCUL GÉOMÉTRIQUE SANS DÉCALAGE ("ZÉRO MARCHE") ---
     let activeDrag = null;
 
     function attachDragHandlers(el, slotIndex) {
-      const startDrag = (e) => {
+      let startX = 0;
+      let startY = 0;
+      let isDragging = false;
+
+      const onStart = (e) => {
         if (isGameOver) return;
         const touch = e.touches ? e.touches[0] : e;
+        startX = touch.clientX;
+        startY = touch.clientY;
+        isDragging = false;
+
         const piece = availablePieces[slotIndex];
         if (!piece) return;
 
-        playClick();
-        if (navigator.vibrate) navigator.vibrate(15);
-
+        // Préparation du drag
         activeDrag = {
           slotIndex: slotIndex,
           piece: piece,
-          element: el
+          element: el,
+          startX: startX,
+          startY: startY,
+          hasMoved: false
         };
-
-        // Rendu dans le dragGhost avec taille réelle du plateau (38px)
-        dragGhost.innerHTML = '';
-        const ghostPiece = createPieceElement(piece, 36);
-        dragGhost.appendChild(ghostPiece);
-        dragGhost.classList.remove('hidden');
-
-        updateDragPosition(touch.clientX, touch.clientY);
-        el.style.opacity = '0.2';
       };
 
-      el.addEventListener('mousedown', startDrag);
-      el.addEventListener('touchstart', startDrag, { passive: false });
+      el.addEventListener('mousedown', onStart);
+      el.addEventListener('touchstart', onStart, { passive: false });
+    }
+
+    function getBoardMetrics() {
+      const firstCell = document.getElementById('cell-0-0').getBoundingClientRect();
+      const secondCell = document.getElementById('cell-0-1').getBoundingClientRect();
+      const stepX = secondCell.left - firstCell.left;
+      const secondRowCell = document.getElementById('cell-1-0').getBoundingClientRect();
+      const stepY = secondRowCell.top - firstCell.top;
+      const cellW = firstCell.width;
+      const cellH = firstCell.height;
+      return { firstCell, cellW, cellH, stepX, stepY };
     }
 
     function updateDragPosition(clientX, clientY) {
-      // Décalage vertical de -75px pour que le doigt ne cache pas le bloc
-      const visualY = clientY - 75;
-      dragGhost.style.left = `${clientX}px`;
-      dragGhost.style.top = `${visualY}px`;
+      if (!activeDrag) return;
 
-      // Détecter la case survolée sur le plateau
+      const metrics = getBoardMetrics();
+      const piece = activeDrag.piece;
+      const rows = piece.matrix.length;
+      const cols = piece.matrix[0].length;
+
+      // Dimensions exactes de la pièce en taille plateau (avec espacements de 4px)
+      const pieceWidth = cols * metrics.cellW + (cols - 1) * 4;
+      const pieceHeight = rows * metrics.cellH + (rows - 1) * 4;
+
+      // La pièce flotte 75px au-dessus du point de contact
+      const visualCenterX = clientX;
+      const visualCenterY = clientY - 75;
+
+      // Position du coin supérieur gauche de la pièce
+      const pieceLeft = visualCenterX - pieceWidth / 2;
+      const pieceTop = visualCenterY - pieceHeight / 2;
+
+      // Mise à jour de l'élément flottant (sans transform qui fausserait l'alignement)
+      dragGhost.style.left = `${pieceLeft}px`;
+      dragGhost.style.top = `${pieceTop}px`;
+      dragGhost.style.transform = 'none';
+
+      // Calcul de la cellule cible sur la grille
+      const targetCol = Math.round((pieceLeft - metrics.firstCell.left) / metrics.stepX);
+      const targetRow = Math.round((pieceTop - metrics.firstCell.top) / metrics.stepY);
+
       clearGhostPreview();
-      const target = getCellAtPosition(clientX, visualY);
-      if (target && activeDrag) {
-        const isValid = canPlace(activeDrag.piece.matrix, target.r, target.c);
-        highlightGhost(activeDrag.piece.matrix, target.r, target.c, isValid);
-      }
-    }
 
-    function getCellAtPosition(x, y) {
-      const rect = boardEl.getBoundingClientRect();
-      if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) {
-        return null;
+      // Vérification des limites de la grille
+      if (targetRow >= 0 && targetRow + rows <= SIZE &&
+          targetCol >= 0 && targetCol + cols <= SIZE) {
+        const isValid = canPlace(piece.matrix, targetRow, targetCol);
+        highlightGhost(piece.matrix, targetRow, targetCol, isValid);
+        activeDrag.target = { r: targetRow, c: targetCol, isValid: isValid };
+      } else {
+        activeDrag.target = null;
       }
-      const cellW = rect.width / SIZE;
-      const cellH = rect.height / SIZE;
-      const c = Math.floor((x - rect.left) / cellW);
-      const r = Math.floor((y - rect.top) / cellH);
-      if (r >= 0 && r < SIZE && c >= 0 && c < SIZE) {
-        return { r, c };
-      }
-      return null;
     }
 
     function clearGhostPreview() {
@@ -386,22 +482,46 @@
 
     function onDragMove(e) {
       if (!activeDrag) return;
-      e.preventDefault();
       const touch = e.touches ? e.touches[0] : e;
-      updateDragPosition(touch.clientX, touch.clientY);
+      const dx = touch.clientX - activeDrag.startX;
+      const dy = touch.clientY - activeDrag.startY;
+
+      // Seuil d'activation du glissement (5px) pour distinguer le clic de rotation du glisser
+      if (!activeDrag.hasMoved && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
+        activeDrag.hasMoved = true;
+        playClick();
+        if (navigator.vibrate) navigator.vibrate(15);
+
+        // Rendu dans dragGhost avec la taille exacte des cases du plateau
+        const metrics = getBoardMetrics();
+        dragGhost.innerHTML = '';
+        const ghostPiece = createPieceElement(activeDrag.piece, metrics.cellW);
+        dragGhost.appendChild(ghostPiece);
+        dragGhost.classList.remove('hidden');
+        activeDrag.element.style.opacity = '0.2';
+      }
+
+      if (activeDrag.hasMoved) {
+        e.preventDefault();
+        updateDragPosition(touch.clientX, touch.clientY);
+      }
     }
 
     function onDragEnd(e) {
       if (!activeDrag) return;
-      const touch = e.changedTouches ? e.changedTouches[0] : e;
-      const target = getCellAtPosition(touch.clientX, touch.clientY - 75);
 
-      if (target && canPlace(activeDrag.piece.matrix, target.r, target.c)) {
-        // Placement valide
-        placePiece(activeDrag.piece, target.r, target.c, activeDrag.slotIndex);
+      if (!activeDrag.hasMoved) {
+        // C'était un simple tap / clic sur la pièce -> on la fait pivoter !
+        rotateSlotPiece(activeDrag.slotIndex);
       } else {
-        // Rétablir l'affichage dans le dock
-        activeDrag.element.style.opacity = '1';
+        // C'était un glisser-déposer
+        if (activeDrag.target && activeDrag.target.isValid) {
+          // Placement au pixel près sans aucun décalage de marche
+          placePiece(activeDrag.piece, activeDrag.target.r, activeDrag.target.c, activeDrag.slotIndex);
+        } else {
+          // Annulation
+          activeDrag.element.style.opacity = '1';
+        }
       }
 
       clearGhostPreview();
@@ -416,6 +536,7 @@
 
     // --- LOGIQUE DU MOTEUR DE JEU ---
     function canPlace(matrix, startR, startC) {
+      if (startR < 0 || startC < 0) return false;
       if (startR + matrix.length > SIZE || startC + matrix[0].length > SIZE) return false;
       for (let r = 0; r < matrix.length; r++) {
         for (let c = 0; c < matrix[r].length; c++) {
@@ -470,16 +591,13 @@
       const totalLines = fullRows.length + fullCols.length;
       if (totalLines > 0) {
         comboStreak++;
-        // Note de musique selon le combo
         const noteIdx = Math.min(comboStreak - 1, comboNotes.length - 1);
         playNote(comboNotes[noteIdx]);
 
         if (navigator.vibrate) navigator.vibrate(totalLines >= 2 ? 100 : 50);
 
-        // Affichage combo banner
         showComboBanner(comboStreak);
 
-        // Flash blast sur les cases
         fullRows.forEach(r => {
           for (let c = 0; c < SIZE; c++) {
             const el = document.getElementById(`cell-${r}-${c}`);
@@ -495,7 +613,6 @@
           }
         });
 
-        // Calcul du score avec multiplicateur
         let lineBase = totalLines === 1 ? 100 : (totalLines === 2 ? 300 : (totalLines === 3 ? 600 : 1000));
         let mult = 1.0 + (comboStreak - 1) * 0.5;
         score += Math.round(lineBase * mult);

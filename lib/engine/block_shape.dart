@@ -24,6 +24,21 @@ class BlockShape {
     return count;
   }
 
+  /// Fait pivoter la forme de 90 degrés dans le sens horaire
+  BlockShape rotate90() {
+    final oldRows = matrix.length;
+    final oldCols = matrix.isEmpty ? 0 : matrix[0].length;
+    final rotatedMatrix = List.generate(
+      oldCols,
+      (c) => List.generate(oldRows, (r) => matrix[oldRows - 1 - r][c]),
+    );
+    return BlockShape(
+      id: '${id}_rot',
+      matrix: rotatedMatrix,
+      colorIndex: colorIndex,
+    );
+  }
+
   /// Crée une copie de la forme avec une couleur différente
   BlockShape withColor(int newColorIndex) {
     return BlockShape(

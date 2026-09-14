@@ -73,6 +73,19 @@ class GameProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Fait pivoter une pièce du tiroir de 90 degrés
+  void rotatePiece(int slotIndex) {
+    if (slotIndex < 0 || slotIndex >= _availablePieces.length) return;
+    final piece = _availablePieces[slotIndex];
+    if (piece == null) return;
+
+    _availablePieces[slotIndex] = piece.rotate90();
+    AudioService.playPiecePlace();
+    HapticService.onPiecePick();
+    _saveCurrentProgress();
+    notifyListeners();
+  }
+
   /// Met à jour l'aperçu du bloc en survol au-dessus de la grille (Ghost Shadow)
   void setDragPreview(BlockShape? shape, int? row, int? col) {
     if (shape == null || row == null || col == null) {
