@@ -154,6 +154,101 @@ class ShapeDefinitions {
     ],
   ];
 
+  static final Map<String, List<List<int>>> namedShapes = {
+    '1x1': [
+      [1]
+    ],
+    '1x2_h': [
+      [1, 1]
+    ],
+    '1x2_v': [
+      [1],
+      [1]
+    ],
+    '1x3_h': [
+      [1, 1, 1]
+    ],
+    '1x3_v': [
+      [1],
+      [1],
+      [1]
+    ],
+    '1x4_h': [
+      [1, 1, 1, 1]
+    ],
+    '1x4_v': [
+      [1],
+      [1],
+      [1],
+      [1]
+    ],
+    '1x5_h': [
+      [1, 1, 1, 1, 1]
+    ],
+    '1x5_v': [
+      [1],
+      [1],
+      [1],
+      [1],
+      [1]
+    ],
+    '2x2': [
+      [1, 1],
+      [1, 1]
+    ],
+    '3x3': [
+      [1, 1, 1],
+      [1, 1, 1],
+      [1, 1, 1]
+    ],
+    'L_normal': [
+      [1, 0],
+      [1, 0],
+      [1, 1]
+    ],
+    'L_inv': [
+      [0, 1],
+      [0, 1],
+      [1, 1]
+    ],
+    'L_giant': [
+      [1, 0, 0],
+      [1, 0, 0],
+      [1, 1, 1]
+    ],
+    'S_shape': [
+      [0, 1, 1],
+      [1, 1, 0]
+    ],
+    'Z_shape': [
+      [1, 1, 0],
+      [0, 1, 1]
+    ],
+    'T_shape': [
+      [1, 1, 1],
+      [0, 1, 0]
+    ],
+    'U_shape': [
+      [1, 0, 1],
+      [1, 1, 1]
+    ],
+    'plus_5': [
+      [0, 1, 0],
+      [1, 1, 1],
+      [0, 1, 0]
+    ],
+  };
+
+  static BlockShape? createShapeByName(String name, int colorIndex) {
+    final matrix = namedShapes[name];
+    if (matrix == null) return null;
+    return BlockShape(
+      id: 'shape_${name}_$colorIndex',
+      matrix: matrix,
+      colorIndex: colorIndex,
+    );
+  }
+
   static BlockShape createShape(int index, int colorIndex) {
     final template = templates[index % templates.length];
     return BlockShape(

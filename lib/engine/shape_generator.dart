@@ -8,8 +8,20 @@ class ShapeGenerator {
   final Random _random = Random();
 
   /// Génère un trio de 3 pièces équilibré et jouable
-  List<BlockShape> generateTrio(BoardState board) {
+  List<BlockShape> generateTrio(BoardState board, {List<String>? allowedShapes}) {
     final List<BlockShape> trio = [];
+
+    // Si des formes spécifiques sont imposées par le niveau
+    if (allowedShapes != null && allowedShapes.isNotEmpty) {
+      for (int i = 0; i < 3; i++) {
+        final key = allowedShapes[_random.nextInt(allowedShapes.length)];
+        final color = (_random.nextInt(7)) + 1;
+        final shape = ShapeDefinitions.createShapeByName(key, color) ??
+            ShapeDefinitions.createShape(0, color);
+        trio.add(shape);
+      }
+      return trio;
+    }
 
     // Indices des formes de petite taille (1x1, 1x2, 2x1, coin 3)
     final smallIndices = [0, 1, 2, 11, 12, 13, 14];

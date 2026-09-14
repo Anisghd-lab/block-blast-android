@@ -1,6 +1,6 @@
 import 'block_shape.dart';
 
-/// Gestionnaire de l'état de la grille 8x8
+/// Gestionnaire de l'état de la grille 8x8 (supportant blocs, joyaux et roches)
 class BoardState {
   static const int size = 8;
   late List<List<int>> grid;
@@ -14,6 +14,7 @@ class BoardState {
   }
 
   /// Vérifie si une pièce peut être posée à la coordonnée (row, col)
+  /// Une cellule est occupée si sa valeur n'est pas 0 (bloc, joyau 2 ou roche -1)
   bool canPlace(BlockShape shape, int startRow, int startCol) {
     if (startRow < 0 || startCol < 0) return false;
     if (startRow + shape.rows > size || startCol + shape.cols > size) {
@@ -23,7 +24,7 @@ class BoardState {
     for (int r = 0; r < shape.rows; r++) {
       for (int c = 0; c < shape.cols; c++) {
         if (shape.matrix[r][c] > 0) {
-          if (grid[startRow + r][startCol + c] > 0) {
+          if (grid[startRow + r][startCol + c] != 0) {
             return false; // Cellule déjà occupée
           }
         }
@@ -48,7 +49,7 @@ class BoardState {
     final List<int> fullRows = [];
     final List<int> fullCols = [];
 
-    // Vérification des lignes horizontales
+    // Vérification des lignes horizontales (aucune case à 0)
     for (int r = 0; r < size; r++) {
       bool isFull = true;
       for (int c = 0; c < size; c++) {
@@ -60,7 +61,7 @@ class BoardState {
       if (isFull) fullRows.add(r);
     }
 
-    // Vérification des colonnes verticales
+    // Vérification des colonnes verticales (aucune case à 0)
     for (int c = 0; c < size; c++) {
       bool isFull = true;
       for (int r = 0; r < size; r++) {
@@ -72,7 +73,37 @@ class BoardState {
       if (isFull) fullCols.add(c);
     }
 
-    return LineClearResult(rows: fullRows, cols: fullCols);
+    // Calcul des joyaux et roches détruits dans les lignes complètes
+    int jewels = 0;
+    int rocks = 0;
+    final Set<String> visited = {};
+
+    void checkCell(int r, int c) {
+      final key = '$r-$c';
+      if (!visited.add(key)) return;
+      final val = grid[r][c];
+      if (val == 2) jewels++;
+      if (val == -1) rocks++;
+    }
+
+    for (final r in fullRows) {
+      for (int c = 0; c < size; c++) {
+        checkCell(r, c);
+      }
+    }
+
+    for (final c in fullCols) {
+      for (int r = 0; r < size; r++) {
+        checkCell(r, c);
+      }
+    }
+
+    return LineClearResult(
+      rows: fullRows,
+      cols: fullCols,
+      jewelsCleared: jewels,
+      rocksCleared: rocks,
+    );
   }
 
   /// Efface les lignes et colonnes indiquées
@@ -121,7 +152,7 @@ class BoardState {
     int count = 0;
     for (int r = 0; r < size; r++) {
       for (int c = 0; c < size; c++) {
-        if (grid[r][c] > 0) count++;
+        if (grid[r][c] != 0) count++;
       }
     }
     return count;
@@ -145,8 +176,15 @@ class BoardState {
 class LineClearResult {
   final List<int> rows;
   final List<int> cols;
+  final int jewelsCleared;
+  final int rocksCleared;
 
-  const LineClearResult({required this.rows, required this.cols});
+  const LineClearResult({
+    required this.rows,
+    required this.cols,
+    this.jewelsCleared = 0,
+    this.rocksCleared = 0,
+  });
 
   int get totalLines => rows.length + cols.length;
   bool get hasClear => totalLines > 0;

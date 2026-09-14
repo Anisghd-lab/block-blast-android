@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import '../../providers/game_provider.dart';
 import '../../providers/settings_provider.dart';
 import '../widgets/dialogs/game_over_dialog.dart';
+import '../widgets/dialogs/level_defeat_dialog.dart';
+import '../widgets/dialogs/level_victory_dialog.dart';
 import '../widgets/dialogs/pause_dialog.dart';
 import '../widgets/game_board.dart';
 import '../widgets/piece_dock.dart';
@@ -42,16 +44,42 @@ class GameScreen extends StatelessWidget {
     );
   }
 
+  void _showLevelVictoryDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => const LevelVictoryDialog(),
+    );
+  }
+
+  void _showLevelDefeatDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => const LevelDefeatDialog(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final gameProvider = context.watch<GameProvider>();
     final settingsProvider = context.watch<SettingsProvider>();
     final theme = settingsProvider.currentTheme;
 
-    // Déclencher le dialogue de fin de partie dès que l'état bascule
+    // Déclencher les dialogues de fin de niveau ou de partie dès que l'état bascule
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (gameProvider.isGameOver && ModalRoute.of(context)?.isCurrent == true) {
-        _showGameOverDialog(context, gameProvider);
+      if (ModalRoute.of(context)?.isCurrent != true) return;
+
+      if (gameProvider.gameMode == GameMode.adventure) {
+        if (gameProvider.isLevelWon) {
+          _showLevelVictoryDialog(context);
+        } else if (gameProvider.isLevelFailed) {
+          _showLevelDefeatDialog(context);
+        }
+      } else {
+        if (gameProvider.isGameOver) {
+          _showGameOverDialog(context, gameProvider);
+        }
       }
     });
 
