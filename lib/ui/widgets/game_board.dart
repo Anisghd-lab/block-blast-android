@@ -26,8 +26,11 @@ class _GameBoardState extends State<GameBoard> {
     final settingsProvider = context.watch<SettingsProvider>();
     final theme = settingsProvider.currentTheme;
 
-    final screenWidth = MediaQuery.of(context).size.width;
-    final boardSize = (screenWidth - 32.0).clamp(280.0, 440.0);
+    final screenSize = MediaQuery.of(context).size;
+    final availableWidth = screenSize.width - 32.0;
+    final availableHeight = screenSize.height * 0.48;
+    final boardSize = (availableWidth < availableHeight ? availableWidth : availableHeight)
+        .clamp(240.0, 420.0);
     const double padding = 10.0;
     const double spacing = 4.0;
     final cellSize = (boardSize - (padding * 2) - (spacing * 7)) / BoardState.size;

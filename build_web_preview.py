@@ -10,8 +10,8 @@ html_template = """<!DOCTYPE html>
 <html lang="fr" class="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Block Blast Color - Jouable Android & Web</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Block Blast Color - Responsive Mobile, Tablette & Desktop</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@500;600;700;800;900&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
@@ -21,8 +21,13 @@ html_template = """<!DOCTYPE html>
       box-sizing: border-box;
       -webkit-tap-highlight-color: transparent;
     }
-    body {
-      background-color: #0c0d1d;
+    html, body {
+      width: 100%;
+      height: 100%;
+      min-height: 100%;
+      margin: 0;
+      padding: 0;
+      background-color: #070814;
       font-family: 'Rubik', sans-serif;
       user-select: none;
       -webkit-user-select: none;
@@ -33,21 +38,28 @@ html_template = """<!DOCTYPE html>
     .font-num {
       font-family: 'Space Grotesk', sans-serif;
     }
+
+    /* Grille 8x8 Responsive Ultra-Fluide (s'adapte à la hauteur ET à la largeur de l'écran) */
     .grid-board {
       display: grid;
       grid-template-columns: repeat(8, 1fr);
-      gap: 4px;
-      padding: 8px;
+      aspect-ratio: 1 / 1;
+      width: min(92vw, calc(100dvh - 275px), 375px);
+      height: min(92vw, calc(100dvh - 275px), 375px);
+      gap: clamp(2px, 0.9vw, 4px);
+      padding: clamp(5px, 1.8vw, 8px);
       background: #17182b;
-      border-radius: 18px;
+      border-radius: clamp(12px, 3vw, 18px);
       border: 1.5px solid rgba(255, 255, 255, 0.09);
-      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.65);
       touch-action: none;
       position: relative;
+      margin: auto;
     }
+
     .cell {
       aspect-ratio: 1;
-      border-radius: 6px;
+      border-radius: clamp(4px, 1.2vw, 6px);
       background: #111224;
       border: 1px solid #1f213b;
       transition: background-color 0.1s, transform 0.15s;
@@ -196,169 +208,167 @@ html_template = """<!DOCTYPE html>
     }
   </style>
 </head>
-<body class="w-screen h-screen flex flex-col items-center justify-between p-3.5 max-w-md mx-auto">
+<body class="flex items-center justify-center min-h-[100dvh] bg-[#080915]">
   
-  <!-- HUD Supérieur -->
-  <header class="w-full flex flex-col items-center pt-1">
-    <!-- Barre de boutons hauts -->
-    <div class="w-full flex items-center justify-between px-1 mb-1.5">
-      <!-- Bouton Pause -->
-      <button id="btnPause" type="button" class="btn-action w-10 h-10 rounded-full bg-[#1b1c31] border border-white/15 flex items-center justify-center text-white shadow-lg">
-        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-      </button>
+  <!-- Conteneur Principal Responsive (Fluidité mobile & Frame élégant desktop) -->
+  <div id="appContainer" class="w-full h-[100dvh] max-h-[100dvh] flex flex-col justify-between p-2.5 sm:p-4 max-w-md mx-auto md:max-w-[430px] md:h-[94dvh] md:max-h-[850px] md:border md:border-cyan-500/25 md:rounded-[36px] md:shadow-[0_0_60px_rgba(0,242,254,0.18)] md:bg-[#0c0d1d] relative overflow-hidden">
 
-      <!-- Switcher Mode : Classique / Aventure -->
-      <div class="flex items-center bg-[#15162a] p-1 rounded-full border border-white/10 shadow-inner">
-        <button id="tabModeLevels" type="button" class="btn-action px-3.5 py-1.5 rounded-full text-xs font-bold transition-all bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md">
-          🗺️ Niveaux (50)
+    <!-- HUD Supérieur (Flexible et compact) -->
+    <header class="w-full flex-shrink-0 flex flex-col items-center pt-0.5">
+      <!-- Barre de boutons hauts -->
+      <div class="w-full flex items-center justify-between px-0.5 mb-1.5">
+        <!-- Bouton Pause -->
+        <button id="btnPause" type="button" class="btn-action w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#1b1c31] border border-white/15 flex items-center justify-center text-white shadow-lg">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
         </button>
-        <button id="tabModeClassic" type="button" class="btn-action px-3.5 py-1.5 rounded-full text-xs font-bold transition-all text-gray-400 hover:text-white">
-          ⚡ Classique
-        </button>
-      </div>
 
-      <!-- Bouton Son -->
-      <button id="btnSound" type="button" class="btn-action w-10 h-10 rounded-full bg-[#1b1c31] border border-white/15 flex items-center justify-center text-white shadow-lg">
-        <span id="soundIcon" class="text-base">🔊</span>
-      </button>
-    </div>
-
-    <!-- HUD Mode Aventure (Niveaux) -->
-    <div id="hudLevels" class="w-full flex flex-col items-center">
-      <!-- Titre Niveau & Bouton Choix de Niveau -->
-      <div class="w-full flex items-center justify-between px-1">
-        <button id="btnOpenLevelSelect" type="button" class="btn-action flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-cyan-300 text-xs font-bold">
-          <span id="txtLevelBadge">Niveau 1</span>
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-        </button>
-        <div class="flex flex-col items-end">
-          <span id="txtLevelWorld" class="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">Monde Initiation</span>
-          <span id="txtLevelTitle" class="text-xs font-semibold text-gray-300 truncate max-w-[190px]">Apprentissage 1</span>
+        <!-- Switcher Mode : Classique / Aventure -->
+        <div class="flex items-center bg-[#15162a] p-1 rounded-full border border-white/10 shadow-inner">
+          <button id="tabModeLevels" type="button" class="btn-action px-3 sm:px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-bold transition-all bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md">
+            🗺️ Niveaux (50)
+          </button>
+          <button id="tabModeClassic" type="button" class="btn-action px-3 sm:px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-bold transition-all text-gray-400 hover:text-white">
+            ⚡ Classique
+          </button>
         </div>
+
+        <!-- Bouton Son -->
+        <button id="btnSound" type="button" class="btn-action w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#1b1c31] border border-white/15 flex items-center justify-center text-white shadow-lg">
+          <span id="soundIcon" class="text-sm sm:text-base">🔊</span>
+        </button>
       </div>
 
-      <!-- Cartes Objectif & Coups Restants -->
-      <div class="w-full grid grid-cols-2 gap-2 mt-2">
-        <!-- Objectif -->
-        <div class="bg-[#17182b] border border-white/10 rounded-2xl p-2 flex items-center gap-2.5 shadow-md">
-          <div id="goalIconBox" class="w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-xl shrink-0">
-            🎯
-          </div>
-          <div class="flex flex-col min-w-0">
-            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Objectif</span>
-            <span id="txtGoalProgress" class="font-num text-sm font-extrabold text-white truncate">0 / 420</span>
+      <!-- HUD Mode Aventure (Niveaux) -->
+      <div id="hudLevels" class="w-full flex flex-col items-center">
+        <!-- Titre Niveau & Bouton Choix de Niveau -->
+        <div class="w-full flex items-center justify-between px-0.5">
+          <button id="btnOpenLevelSelect" type="button" class="btn-action flex items-center gap-1 px-2.5 sm:px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-cyan-300 text-[11px] sm:text-xs font-bold">
+            <span id="txtLevelBadge">Niveau 1</span>
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="flex flex-col items-end">
+            <span id="txtLevelWorld" class="text-[9px] sm:text-[10px] font-bold text-cyan-400 uppercase tracking-wider">Monde Initiation</span>
+            <span id="txtLevelTitle" class="text-xs sm:text-sm font-semibold text-gray-300 truncate max-w-[180px] sm:max-w-[210px]">Apprentissage 1</span>
           </div>
         </div>
 
-        <!-- Coups Restants -->
-        <div class="bg-[#17182b] border border-white/10 rounded-2xl p-2 flex items-center gap-2.5 shadow-md">
-          <div id="movesIconBox" class="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-xl shrink-0">
-            👣
+        <!-- Cartes Objectif & Coups Restants -->
+        <div class="w-full grid grid-cols-2 gap-1.5 sm:gap-2 mt-1.5">
+          <!-- Objectif -->
+          <div class="bg-[#17182b] border border-white/10 rounded-xl sm:rounded-2xl p-1.5 sm:p-2 flex items-center gap-2 shadow-md min-h-[46px]">
+            <div id="goalIconBox" class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-lg sm:text-xl shrink-0">
+              🎯
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span class="text-[9px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-wider">Objectif</span>
+              <span id="txtGoalProgress" class="font-num text-xs sm:text-sm font-extrabold text-white truncate">0 / 420</span>
+            </div>
           </div>
-          <div class="flex flex-col min-w-0">
-            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Coups</span>
-            <span id="txtMovesRemaining" class="font-num text-sm font-extrabold text-amber-300 truncate">Illimité</span>
+
+          <!-- Coups Restants -->
+          <div class="bg-[#17182b] border border-white/10 rounded-xl sm:rounded-2xl p-1.5 sm:p-2 flex items-center gap-2 shadow-md min-h-[46px]">
+            <div id="movesIconBox" class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-lg sm:text-xl shrink-0">
+              👣
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span class="text-[9px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-wider">Coups</span>
+              <span id="txtMovesRemaining" class="font-num text-xs sm:text-sm font-extrabold text-amber-300 truncate">Illimité</span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- HUD Mode Classique -->
-    <div id="hudClassic" class="w-full flex-col items-center hidden">
-      <div class="flex items-center space-x-1.5 px-3 py-1 rounded-full bg-[#1b1c31] border border-amber-400/30 text-amber-400 font-num text-xs font-bold shadow-md">
-        <span>👑 RECORD :</span>
-        <span id="txtHighScore">0</span>
+      <!-- HUD Mode Classique -->
+      <div id="hudClassic" class="w-full flex-col items-center hidden">
+        <div class="flex items-center space-x-1.5 px-3 py-1 rounded-full bg-[#1b1c31] border border-amber-400/30 text-amber-400 font-num text-xs font-bold shadow-md">
+          <span>👑 RECORD :</span>
+          <span id="txtHighScore">0</span>
+        </div>
+        <div id="txtScoreClassic" class="text-3xl sm:text-4xl font-black text-white mt-1 tracking-tight drop-shadow-[0_4px_12px_rgba(0,242,254,0.4)]">
+          0
+        </div>
       </div>
-      <div id="txtScoreClassic" class="text-4xl font-black text-white mt-1 tracking-tight drop-shadow-[0_4px_12px_rgba(0,242,254,0.4)]">
-        0
+
+      <!-- Combo Banner -->
+      <div id="comboBanner" class="h-5 sm:h-6 mt-1 flex items-center justify-center transition-all duration-200 opacity-0 transform scale-90">
+        <div class="px-3 py-0.5 rounded-full bg-gradient-to-r from-[#ff0844] via-[#ff6a00] to-[#fed929] text-white text-[10px] sm:text-[11px] font-black shadow-lg shadow-orange-500/40">
+          🔥 COMBO x2! MEGA BLAST!
+        </div>
       </div>
-    </div>
+    </header>
 
-    <!-- Combo Banner -->
-    <div id="comboBanner" class="h-6 mt-1 flex items-center justify-center transition-all duration-200 opacity-0 transform scale-90">
-      <div class="px-3.5 py-0.5 rounded-full bg-gradient-to-r from-[#ff0844] via-[#ff6a00] to-[#fed929] text-white text-[11px] font-black shadow-lg shadow-orange-500/40">
-        🔥 COMBO x2! MEGA BLAST!
+    <!-- Grille 8x8 Centrale Auto-Centrée & Responsive -->
+    <main class="w-full flex items-center justify-center my-auto flex-1 min-h-0 relative">
+      <div id="board" class="grid-board"></div>
+      <div id="particleContainer" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
+    </main>
+
+    <!-- Tiroir de 3 Pièces Inférieur Dynamique -->
+    <footer class="w-full flex-shrink-0 pb-1 sm:pb-2">
+      <div class="w-full h-26 sm:h-32 bg-[#17182b]/90 border border-white/10 rounded-2xl flex items-center justify-around px-1 py-1" id="dock">
+        <div class="dock-slot flex-1 h-full flex flex-col items-center justify-center p-0.5 sm:p-1" id="slot-0"></div>
+        <div class="dock-slot flex-1 h-full flex flex-col items-center justify-center p-0.5 sm:p-1" id="slot-1"></div>
+        <div class="dock-slot flex-1 h-full flex flex-col items-center justify-center p-0.5 sm:p-1" id="slot-2"></div>
       </div>
-    </div>
-  </header>
+    </footer>
 
-  <!-- Grille 8x8 Centrale -->
-  <main class="w-full max-w-[360px] aspect-square relative my-auto">
-    <div id="board" class="grid-board w-full h-full"></div>
-    <div id="particleContainer" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
-  </main>
-
-  <!-- Tiroir de 3 Pièces Inférieur -->
-  <footer class="w-full max-w-[380px] pb-2">
-    <div class="w-full h-34 bg-[#17182b]/90 border border-white/10 rounded-2xl flex items-center justify-around px-1 py-1" id="dock">
-      <div class="w-28 h-32 flex flex-col items-center justify-center" id="slot-0"></div>
-      <div class="w-28 h-32 flex flex-col items-center justify-center" id="slot-1"></div>
-      <div class="w-28 h-32 flex flex-col items-center justify-center" id="slot-2"></div>
-    </div>
-  </footer>
+  </div>
 
   <!-- Élément flottant de glissement (Drag Ghost) -->
   <div id="dragGhost" class="fixed pointer-events-none z-50 hidden"></div>
 
-  <!-- Modal Choix de Niveau (1 à 50) classé par Mondes -->
-  <div id="levelSelectModal" class="fixed inset-0 bg-black/85 backdrop-blur-md flex flex-col items-center justify-center p-4 z-50 hidden">
-    <div class="w-full max-w-md max-h-[90vh] bg-[#111224] border-2 border-white/20 rounded-3xl p-5 flex flex-col shadow-2xl">
-      <!-- En-tête modal -->
-      <div class="flex items-center justify-between pb-3 border-b border-white/10">
+  <!-- Modal Choix de Niveau Responsive (1 à 50 classé par Mondes) -->
+  <div id="levelSelectModal" class="fixed inset-0 bg-black/85 backdrop-blur-md flex flex-col items-center justify-center p-3 sm:p-5 z-50 hidden">
+    <div class="w-full max-w-sm sm:max-w-md max-h-[90dvh] bg-[#111224] border-2 border-white/20 rounded-3xl p-4 sm:p-5 flex flex-col shadow-2xl">
+      <div class="flex items-center justify-between pb-2 sm:pb-3 border-b border-white/10">
         <div>
-          <h2 class="text-xl font-black text-white">CHOIX DU NIVEAU</h2>
-          <p class="text-xs text-gray-400 font-semibold">5 Mondes • 50 Paliers Stratégiques</p>
+          <h2 class="text-lg sm:text-xl font-black text-white">CHOIX DU NIVEAU</h2>
+          <p class="text-[11px] sm:text-xs text-gray-400 font-semibold">5 Mondes • 50 Paliers Stratégiques</p>
         </div>
-        <button id="btnCloseLevelSelect" type="button" class="btn-action w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20">
+        <button id="btnCloseLevelSelect" type="button" class="btn-action w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20">
           ✕
         </button>
       </div>
 
-      <!-- Onglets Mondes -->
-      <div class="flex overflow-x-auto no-scrollbar gap-1.5 my-3 py-1">
-        <button id="worldTab-0" type="button" class="world-tab btn-action px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap bg-cyan-500 text-black">
+      <div class="flex overflow-x-auto no-scrollbar gap-1.5 my-2.5 py-1">
+        <button id="worldTab-0" type="button" class="world-tab btn-action px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-bold whitespace-nowrap bg-cyan-500 text-black">
           🌟 Initiation (1-10)
         </button>
-        <button id="worldTab-1" type="button" class="world-tab btn-action px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap bg-[#1d1e30] text-gray-300">
+        <button id="worldTab-1" type="button" class="world-tab btn-action px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-bold whitespace-nowrap bg-[#1d1e30] text-gray-300">
           💎 Pierres (11-20)
         </button>
-        <button id="worldTab-2" type="button" class="world-tab btn-action px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap bg-[#1d1e30] text-gray-300">
+        <button id="worldTab-2" type="button" class="world-tab btn-action px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-bold whitespace-nowrap bg-[#1d1e30] text-gray-300">
           🗿 Poids Lourd (21-30)
         </button>
-        <button id="worldTab-3" type="button" class="world-tab btn-action px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap bg-[#1d1e30] text-gray-300">
+        <button id="worldTab-3" type="button" class="world-tab btn-action px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-bold whitespace-nowrap bg-[#1d1e30] text-gray-300">
           ⚡ Combos (31-40)
         </button>
-        <button id="worldTab-4" type="button" class="world-tab btn-action px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap bg-[#1d1e30] text-gray-300">
+        <button id="worldTab-4" type="button" class="world-tab btn-action px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-bold whitespace-nowrap bg-[#1d1e30] text-gray-300">
           👑 Master (41-50)
         </button>
       </div>
 
-      <!-- Grille des niveaux -->
-      <div id="levelCardsGrid" class="flex-1 overflow-y-auto no-scrollbar grid grid-cols-5 gap-2.5 p-1">
-        <!-- Rempli dynamiquement en JS -->
+      <div id="levelCardsGrid" class="flex-1 overflow-y-auto no-scrollbar grid grid-cols-5 gap-2 sm:gap-2.5 p-1">
       </div>
     </div>
   </div>
 
-  <!-- Modal Victoire de Niveau Enrichi -->
-  <div id="victoryModal" class="fixed inset-0 bg-black/85 backdrop-blur-md flex items-center justify-center p-5 z-50 hidden">
-    <div class="w-full max-w-sm bg-[#111224] border-2 border-emerald-400 rounded-3xl p-6 text-center shadow-2xl shadow-emerald-500/30">
+  <!-- Modal Victoire Responsive -->
+  <div id="victoryModal" class="fixed inset-0 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 z-50 hidden">
+    <div class="w-full max-w-xs sm:max-w-sm max-h-[92dvh] overflow-y-auto no-scrollbar bg-[#111224] border-2 border-emerald-400 rounded-3xl p-5 sm:p-6 text-center shadow-2xl shadow-emerald-500/30">
       
-      <!-- Bannière de Bravoure Dynamique -->
-      <div id="txtVictoryBanner" class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 via-yellow-200 to-amber-400 mb-0.5 animate-pulse">
+      <div id="txtVictoryBanner" class="text-xl sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 via-yellow-200 to-amber-400 mb-0.5 animate-pulse">
         ÉCLATANT !
       </div>
       <div id="txtVictoryLevelTitle" class="text-xs font-semibold text-gray-300 mb-3">Niveau Réussi</div>
 
-      <!-- 3 Étoiles Animées Séquentielles -->
-      <div id="victoryStars" class="flex justify-center gap-2.5 text-4xl mb-4">
+      <div id="victoryStars" class="flex justify-center gap-2 text-3xl sm:text-4xl mb-3 sm:mb-4">
         <span id="vStar-1" class="text-gray-600 transition-all duration-300">★</span>
         <span id="vStar-2" class="text-gray-600 transition-all duration-300">★</span>
         <span id="vStar-3" class="text-gray-600 transition-all duration-300">★</span>
       </div>
 
-      <!-- Détails des Paliers d'Étoiles -->
-      <div class="bg-[#181a30] rounded-2xl p-3 mb-4 border border-white/10 text-left space-y-1.5 text-xs">
+      <div class="bg-[#181a30] rounded-2xl p-2.5 sm:p-3 mb-3 border border-white/10 text-left space-y-1 text-[11px] sm:text-xs">
         <div class="flex justify-between items-center text-gray-300">
           <span>⭐ 1 : Objectif complété</span>
           <span class="text-emerald-400 font-bold">✓ Acquis</span>
@@ -373,84 +383,82 @@ html_template = """<!DOCTYPE html>
         </div>
       </div>
 
-      <!-- Score Obtenu -->
-      <div class="bg-[#181a30] rounded-xl px-4 py-2 mb-4 flex justify-between items-center border border-white/5">
+      <div class="bg-[#181a30] rounded-xl px-3 py-1.5 sm:py-2 mb-3 flex justify-between items-center border border-white/5">
         <span class="text-xs font-bold text-gray-400">Score Niveau</span>
-        <span id="txtVictoryScore" class="font-num text-white text-base font-black">0</span>
+        <span id="txtVictoryScore" class="font-num text-white text-sm sm:text-base font-black">0</span>
       </div>
 
-      <!-- Boutons d'Action -->
-      <button id="btnNextLevel" type="button" class="btn-action w-full py-3.5 bg-gradient-to-r from-emerald-400 to-cyan-400 text-[#002f20] font-black rounded-xl text-base mb-2.5 shadow-lg shadow-emerald-500/30">
+      <button id="btnNextLevel" type="button" class="btn-action w-full py-3 sm:py-3.5 bg-gradient-to-r from-emerald-400 to-cyan-400 text-[#002f20] font-black rounded-xl text-sm sm:text-base mb-2 shadow-lg shadow-emerald-500/30">
         NIVEAU SUIVANT ▶
       </button>
       <div class="grid grid-cols-2 gap-2">
-        <button id="btnReplayVictory" type="button" class="btn-action py-2.5 bg-[#1e2038] hover:bg-[#282a48] text-white font-bold rounded-xl text-xs border border-white/10">
+        <button id="btnReplayVictory" type="button" class="btn-action py-2 sm:py-2.5 bg-[#1e2038] hover:bg-[#282a48] text-white font-bold rounded-xl text-xs border border-white/10">
           REJOUER ↺
         </button>
-        <button id="btnLevelsFromVictory" type="button" class="btn-action py-2.5 bg-[#1e2038] hover:bg-[#282a48] text-white font-bold rounded-xl text-xs border border-white/10">
+        <button id="btnLevelsFromVictory" type="button" class="btn-action py-2 sm:py-2.5 bg-[#1e2038] hover:bg-[#282a48] text-white font-bold rounded-xl text-xs border border-white/10">
           NIVEAUX 🗺️
         </button>
       </div>
     </div>
   </div>
 
-  <!-- Modal Défaite de Niveau -->
-  <div id="defeatModal" class="fixed inset-0 bg-black/85 backdrop-blur-md flex items-center justify-center p-6 z-50 hidden">
-    <div class="w-full max-w-xs bg-[#111224] border-2 border-rose-500 rounded-3xl p-6 text-center shadow-2xl shadow-rose-500/30">
-      <div class="text-4xl mb-2">💔</div>
-      <h2 class="text-2xl font-black text-rose-500 mb-1">NIVEAU ÉCHOUÉ</h2>
-      <div id="txtDefeatReason" class="text-xs text-gray-400 font-semibold mb-4">Plus de coups disponibles</div>
+  <!-- Modal Défaite Responsive -->
+  <div id="defeatModal" class="fixed inset-0 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 z-50 hidden">
+    <div class="w-full max-w-xs sm:max-w-sm max-h-[92dvh] overflow-y-auto no-scrollbar bg-[#111224] border-2 border-rose-500 rounded-3xl p-5 sm:p-6 text-center shadow-2xl shadow-rose-500/30">
+      <div class="text-3xl sm:text-4xl mb-2">💔</div>
+      <h2 class="text-xl sm:text-2xl font-black text-rose-500 mb-1">NIVEAU ÉCHOUÉ</h2>
+      <div id="txtDefeatReason" class="text-xs text-gray-400 font-semibold mb-3">Plus de coups disponibles</div>
 
-      <div class="bg-[#181a30] rounded-2xl p-4 mb-5 border border-white/5">
-        <div class="text-[11px] font-bold text-gray-400 mb-1">Progression atteinte</div>
-        <div id="txtDefeatProgress" class="font-num text-2xl font-black text-white">0 / 0</div>
+      <div class="bg-[#181a30] rounded-2xl p-3 sm:p-4 mb-4 border border-white/5">
+        <div class="text-[10px] sm:text-[11px] font-bold text-gray-400 mb-1">Progression atteinte</div>
+        <div id="txtDefeatProgress" class="font-num text-xl sm:text-2xl font-black text-white">0 / 0</div>
       </div>
 
-      <button id="btnRetryDefeat" type="button" class="btn-action w-full py-3.5 bg-gradient-to-r from-rose-500 to-orange-500 text-white font-black rounded-xl text-base mb-2.5 shadow-lg shadow-rose-500/30">
+      <button id="btnRetryDefeat" type="button" class="btn-action w-full py-3 sm:py-3.5 bg-gradient-to-r from-rose-500 to-orange-500 text-white font-black rounded-xl text-sm sm:text-base mb-2 shadow-lg shadow-rose-500/30">
         RÉESSAYER ↺
       </button>
-      <button id="btnLevelsFromDefeat" type="button" class="btn-action w-full py-2.5 bg-[#1e2038] hover:bg-[#282a48] text-white font-bold rounded-xl text-xs border border-white/10">
+      <button id="btnLevelsFromDefeat" type="button" class="btn-action w-full py-2 sm:py-2.5 bg-[#1e2038] hover:bg-[#282a48] text-white font-bold rounded-xl text-xs border border-white/10">
         CHOIX DU NIVEAU 🗺️
       </button>
     </div>
   </div>
 
-  <!-- Modal Pause -->
-  <div id="pauseModal" class="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-6 z-50 hidden">
-    <div class="w-full max-w-xs bg-[#111224] border-2 border-white/20 rounded-3xl p-6 text-center shadow-2xl">
-      <h2 class="text-2xl font-black text-white mb-6">PARTIE EN PAUSE</h2>
-      <div class="flex justify-center mb-6">
-        <button id="btnToggleSoundPause" type="button" class="btn-action px-4 py-2.5 rounded-xl bg-[#1d1e30] border border-white/15 text-white font-bold text-sm flex items-center gap-2">
+  <!-- Modal Pause Responsive -->
+  <div id="pauseModal" class="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-50 hidden">
+    <div class="w-full max-w-xs bg-[#111224] border-2 border-white/20 rounded-3xl p-5 sm:p-6 text-center shadow-2xl">
+      <h2 class="text-xl sm:text-2xl font-black text-white mb-5">PARTIE EN PAUSE</h2>
+      <div class="flex justify-center mb-5">
+        <button id="btnToggleSoundPause" type="button" class="btn-action px-3.5 py-2 rounded-xl bg-[#1d1e30] border border-white/15 text-white font-bold text-xs sm:text-sm flex items-center gap-2">
           <span id="soundIconPause">🔊</span> Son : <span id="soundStatusPause">ACTIF</span>
         </button>
       </div>
-      <button id="btnResume" type="button" class="btn-action w-full py-3.5 bg-[#00f2fe] hover:bg-[#00dce6] text-[#00373a] font-black rounded-xl text-lg mb-3 shadow-lg shadow-cyan-500/30 transition">
+      <button id="btnResume" type="button" class="btn-action w-full py-3 bg-[#00f2fe] hover:bg-[#00dce6] text-[#00373a] font-black rounded-xl text-base mb-2.5 shadow-lg shadow-cyan-500/30 transition">
         REPRENDRE
       </button>
-      <button id="btnRestartFromPause" type="button" class="btn-action w-full py-3 bg-[#1d1e30] hover:bg-[#252742] text-white font-bold rounded-xl text-sm border border-white/10 transition">
+      <button id="btnRestartFromPause" type="button" class="btn-action w-full py-2.5 bg-[#1d1e30] hover:bg-[#252742] text-white font-bold rounded-xl text-xs sm:text-sm border border-white/10 transition">
         RECOMMENCER
       </button>
     </div>
   </div>
 
-  <!-- Modal Game Over Classique -->
-  <div id="gameOverModal" class="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-6 z-50 hidden">
-    <div class="w-full max-w-xs bg-[#111224] border-2 border-[#00f2fe] rounded-3xl p-6 text-center shadow-2xl shadow-cyan-500/30">
-      <div class="text-4xl mb-2">🏆</div>
-      <h2 class="text-2xl font-black text-white mb-4">PARTIE TERMINÉE</h2>
-      <div class="bg-[#181a30] rounded-2xl p-4 mb-6">
+  <!-- Modal Game Over Classique Responsive -->
+  <div id="gameOverModal" class="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-50 hidden">
+    <div class="w-full max-w-xs bg-[#111224] border-2 border-[#00f2fe] rounded-3xl p-5 sm:p-6 text-center shadow-2xl shadow-cyan-500/30">
+      <div class="text-3xl sm:text-4xl mb-2">🏆</div>
+      <h2 class="text-xl sm:text-2xl font-black text-white mb-3">PARTIE TERMINÉE</h2>
+      <div class="bg-[#181a30] rounded-2xl p-3 sm:p-4 mb-4">
         <div class="text-xs font-bold text-gray-400 font-num">SCORE</div>
-        <div id="modalScore" class="text-4xl font-black text-white my-1">0</div>
+        <div id="modalScore" class="text-3xl sm:text-4xl font-black text-white my-1">0</div>
         <div class="text-xs font-bold text-amber-400 font-num">RECORD : <span id="modalBest">0</span></div>
       </div>
-      <button id="btnRestart" type="button" class="btn-action w-full py-3.5 bg-[#00f2fe] hover:bg-[#00dce6] text-[#00373a] font-black rounded-xl text-lg shadow-lg shadow-cyan-500/30 transition">
+      <button id="btnRestart" type="button" class="btn-action w-full py-3 bg-[#00f2fe] hover:bg-[#00dce6] text-[#00373a] font-black rounded-xl text-base shadow-lg shadow-cyan-500/30 transition">
         REJOUER
       </button>
     </div>
   </div>
 
   <script>
-    // --- DONNÉES DES 50 NIVEAUX ENRICHIS (Star thresholds & Finisher presentation) ---
+    // --- DONNÉES DES 50 NIVEAUX ---
     const ALL_LEVELS = """ + levels_json_str + """;
 
     // --- DICTIONNAIRE DES FORMES ---
@@ -493,7 +501,7 @@ html_template = """<!DOCTYPE html>
       [[1, 1, 1], [1, 0, 0], [1, 0, 0]] // Grand coin 3x3
     ];
 
-    // --- MOTEUR AUDIO AVANCÉ (Web Audio API) ---
+    // --- MOTEUR AUDIO (Web Audio API) ---
     let audioCtx = null;
     let soundEnabled = true;
 
@@ -596,14 +604,13 @@ html_template = """<!DOCTYPE html>
       } catch(e) {}
     }
 
-    // Effet sonore spécifique : Révélation d'une Étoile (1, 2, ou 3)
     function playStarRevealSound(starNum) {
       if (!soundEnabled) return;
       initAudio();
       const chords = {
-        1: [523.25, 659.25], // C5, E5
-        2: [659.25, 783.99, 987.77], // E5, G5, B5
-        3: [523.25, 659.25, 783.99, 1046.50, 1318.51] // C5 -> E6
+        1: [523.25, 659.25],
+        2: [659.25, 783.99, 987.77],
+        3: [523.25, 659.25, 783.99, 1046.50, 1318.51]
       };
       const notes = chords[starNum] || [523.25];
       notes.forEach((f, idx) => {
@@ -624,14 +631,12 @@ html_template = """<!DOCTYPE html>
       });
     }
 
-    // Effet sonore Finisher 1 : missile_shower
     function playMissileShowerSound() {
       if (!soundEnabled) return;
       initAudio();
       for (let i = 0; i < 4; i++) {
         setTimeout(() => {
           try {
-            // Sifflement montant
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             osc.type = 'sawtooth';
@@ -644,7 +649,6 @@ html_template = """<!DOCTYPE html>
             osc.start();
             osc.stop(audioCtx.currentTime + 0.18);
 
-            // Explosion basse
             setTimeout(() => {
               try {
                 const bOsc = audioCtx.createOscillator();
@@ -665,7 +669,6 @@ html_template = """<!DOCTYPE html>
       }
     }
 
-    // Effet sonore Finisher 2 : gem_explosion
     function playGemExplosionSound() {
       if (!soundEnabled) return;
       initAudio();
@@ -688,7 +691,6 @@ html_template = """<!DOCTYPE html>
       });
     }
 
-    // Effet sonore Finisher 3 : grid_rainbow_sweep
     function playRainbowSweepSound() {
       if (!soundEnabled) return;
       initAudio();
@@ -711,7 +713,6 @@ html_template = """<!DOCTYPE html>
       });
     }
 
-    // --- ROTATION 90° ---
     function rotateMatrix(matrix) {
       const rows = matrix.length;
       const cols = matrix[0].length;
@@ -726,8 +727,8 @@ html_template = """<!DOCTYPE html>
 
     // --- ÉTAT DU JEU ---
     const SIZE = 8;
-    let gameMode = 'levels'; // 'levels' ou 'classic'
-    let currentLevelIndex = 0; // 0 à 49 (Niveau 1 à 50)
+    let gameMode = 'levels';
+    let currentLevelIndex = 0;
     
     let grid = Array(SIZE).fill(null).map(() => Array(SIZE).fill(0));
     
@@ -778,7 +779,7 @@ html_template = """<!DOCTYPE html>
     const txtHighScore = document.getElementById('txtHighScore');
     txtHighScore.textContent = classicHighScore;
 
-    // Initialisation du DOM de la grille
+    // Initialisation du DOM de la grille 8x8
     for (let r = 0; r < SIZE; r++) {
       for (let c = 0; c < SIZE; c++) {
         const cell = document.createElement('div');
@@ -788,7 +789,6 @@ html_template = """<!DOCTYPE html>
       }
     }
 
-    // --- RENDU DE LA GRILLE ---
     function renderBoard() {
       for (let r = 0; r < SIZE; r++) {
         for (let c = 0; c < SIZE; c++) {
@@ -799,10 +799,10 @@ html_template = """<!DOCTYPE html>
 
           if (val === 2) {
             cell.classList.add('jewel');
-            cell.innerHTML = '<div class="jewel-icon text-sm">💎</div>';
+            cell.innerHTML = '<div class="jewel-icon text-xs sm:text-sm">💎</div>';
           } else if (val === -1) {
             cell.classList.add('rock');
-            cell.innerHTML = '<div class="rock-icon text-sm">🪨</div>';
+            cell.innerHTML = '<div class="rock-icon text-xs sm:text-sm">🪨</div>';
           } else if (val > 0) {
             const colorClass = val === 1 ? 'color-1' : `color-${val}`;
             cell.classList.add('filled', colorClass);
@@ -811,7 +811,6 @@ html_template = """<!DOCTYPE html>
       }
     }
 
-    // --- CHARGEMENT D'UN NIVEAU ---
     function loadLevel(levelIndex) {
       if (levelIndex < 0) levelIndex = 0;
       if (levelIndex >= ALL_LEVELS.length) levelIndex = ALL_LEVELS.length - 1;
@@ -844,7 +843,6 @@ html_template = """<!DOCTYPE html>
       txtLevelWorld.textContent = `Monde ${level.world || 'Aventure'}`;
       txtLevelTitle.textContent = level.title;
 
-      // Objectif
       if (level.goal === 'clear_jewels') {
         goalIconBox.textContent = '💎';
         txtGoalProgress.textContent = `${levelJewelsCollected} / ${level.target_value}`;
@@ -856,24 +854,22 @@ html_template = """<!DOCTYPE html>
         txtGoalProgress.textContent = `${levelScore} / ${level.target_value} Pts`;
       }
 
-      // Coups restants
       if (movesRemaining !== null) {
         txtMovesRemaining.textContent = `${movesRemaining}`;
         if (movesRemaining <= 3) {
-          movesIconBox.className = 'w-9 h-9 rounded-xl bg-rose-500/20 border border-rose-400/40 flex items-center justify-center text-xl shrink-0 animate-pulse';
-          txtMovesRemaining.className = 'font-num text-sm font-extrabold text-rose-400 truncate';
+          movesIconBox.className = 'w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl bg-rose-500/20 border border-rose-400/40 flex items-center justify-center text-lg sm:text-xl shrink-0 animate-pulse';
+          txtMovesRemaining.className = 'font-num text-xs sm:text-sm font-extrabold text-rose-400 truncate';
         } else {
-          movesIconBox.className = 'w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-xl shrink-0';
-          txtMovesRemaining.className = 'font-num text-sm font-extrabold text-amber-300 truncate';
+          movesIconBox.className = 'w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-lg sm:text-xl shrink-0';
+          txtMovesRemaining.className = 'font-num text-xs sm:text-sm font-extrabold text-amber-300 truncate';
         }
       } else {
         txtMovesRemaining.textContent = 'Illimité';
-        movesIconBox.className = 'w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-xl shrink-0';
-        txtMovesRemaining.className = 'font-num text-sm font-extrabold text-amber-300 truncate';
+        movesIconBox.className = 'w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-lg sm:text-xl shrink-0';
+        txtMovesRemaining.className = 'font-num text-xs sm:text-sm font-extrabold text-amber-300 truncate';
       }
     }
 
-    // --- GÉNÉRATION DES PIÈCES (DOCK) ---
     function spawnTrio() {
       const level = ALL_LEVELS[currentLevelIndex];
       const allowedKeys = (gameMode === 'levels' && level && level.allowed_shapes && level.allowed_shapes.length > 0)
@@ -912,6 +908,7 @@ html_template = """<!DOCTYPE html>
       checkGameOver();
     }
 
+    // Rendu Dynamique et Responsive des pièces dans le dock
     function renderDock() {
       for (let i = 0; i < 3; i++) {
         const slot = document.getElementById(`slot-${i}`);
@@ -919,7 +916,18 @@ html_template = """<!DOCTYPE html>
         const piece = availablePieces[i];
         if (!piece) continue;
 
-        const pieceEl = createPieceElement(piece, 18);
+        // Calcul dynamique de la taille optimale de chaque bloc pour s'adapter à la largeur et hauteur du slot
+        const slotRect = slot.getBoundingClientRect();
+        const availableW = slotRect.width > 0 ? slotRect.width - 12 : 90;
+        const availableH = slotRect.height > 0 ? slotRect.height - 12 : 90;
+
+        const rows = piece.matrix.length;
+        const cols = piece.matrix[0].length;
+        const maxCellW = Math.floor(availableW / cols) - 2;
+        const maxCellH = Math.floor(availableH / rows) - 2;
+        const cellSize = Math.max(10, Math.min(maxCellW, maxCellH, 20));
+
+        const pieceEl = createPieceElement(piece, cellSize);
         pieceEl.dataset.slot = i;
         attachDragHandlers(pieceEl, i);
         slot.appendChild(pieceEl);
@@ -948,7 +956,7 @@ html_template = """<!DOCTYPE html>
       return container;
     }
 
-    // --- DRAG & DROP GÉOMÉTRIQUE SANS DÉCALAGE ---
+    // --- DRAG & DROP GÉOMÉTRIQUE SANS DÉCALAGE RESPONSIVE ---
     let activeDrag = null;
 
     function getBoardMetrics() {
@@ -1016,8 +1024,10 @@ html_template = """<!DOCTYPE html>
       const pieceWidth = cols * metrics.cellW + (cols - 1) * 4;
       const pieceHeight = rows * metrics.cellH + (rows - 1) * 4;
 
+      // Décalage vertical adaptatif proportionnel à l'écran (ne déborde jamais hors champ)
+      const verticalOffset = Math.min(75, Math.max(50, window.innerHeight * 0.1));
       const visualCenterX = clientX;
-      const visualCenterY = clientY - 70;
+      const visualCenterY = clientY - verticalOffset;
 
       const pieceLeft = visualCenterX - pieceWidth / 2;
       const pieceTop = visualCenterY - pieceHeight / 2;
@@ -1125,6 +1135,11 @@ html_template = """<!DOCTYPE html>
     window.addEventListener('mouseup', (e) => {
       if (!activeDrag) return;
       handleEnd();
+    });
+
+    // Écouteur de redimensionnement de fenêtre pour réajuster le dock
+    window.addEventListener('resize', () => {
+      renderDock();
     });
 
     // --- MOTEUR DE JEU ---
@@ -1288,7 +1303,6 @@ html_template = """<!DOCTYPE html>
       }
     }
 
-    // --- ANIMATIONS DE FIN DE NIVEAU (FINISHER ANIMATIONS & THÈMES DE PARTICULES) ---
     function runFinisherAnimation(animType, particleTheme, callback) {
       const colors = {
         neon: ['#00f2fe', '#ff00ff', '#00ff66', '#ffff00'],
@@ -1299,7 +1313,6 @@ html_template = """<!DOCTYPE html>
 
       if (animType === 'missile_shower') {
         playMissileShowerSound();
-        // Lancement de 4 missiles successifs vers le haut de la grille
         for (let m = 0; m < 4; m++) {
           setTimeout(() => {
             const missile = document.createElement('div');
@@ -1331,7 +1344,6 @@ html_template = """<!DOCTYPE html>
           spawnThemeConfetti(boardRect.width / 2, boardRect.height / 2, colors, 35);
         }, 300);
       } else {
-        // grid_rainbow_sweep
         playRainbowSweepSound();
         const sweepColors = ['#ff0844', '#ff6a00', '#fed929', '#00f5a0', '#00f2fe', '#38bdf8', '#8b5cf6', '#ff708d'];
         for (let c = 0; c < 8; c++) {
@@ -1439,29 +1451,24 @@ html_template = """<!DOCTYPE html>
       }
     }
 
-    // --- VICTOIRE DE NIVEAU ENRICHI AVEC STAR THRESHOLDS & EFFETS SONORES ---
     function triggerLevelVictory() {
       isGameOver = true;
       const level = ALL_LEVELS[currentLevelIndex];
       const thresholds = level.star_thresholds || {};
       const presentation = level.end_level_presentation || {};
 
-      // Calcul précis des étoiles selon star_thresholds
-      // Étoile 1 : toujours acquise lors de la complétion du goal
       let stars = 1;
 
-      // Étoile 2 : vérification des coups restants (two_stars_moves_left)
       let star2Achieved = false;
       if (thresholds.two_stars_moves_left !== null && thresholds.two_stars_moves_left !== undefined) {
         if (movesRemaining !== null && movesRemaining >= thresholds.two_stars_moves_left) {
           star2Achieved = true;
         }
       } else {
-        star2Achieved = true; // pas de limite de coups -> 2e étoile accordée
+        star2Achieved = true;
       }
       if (star2Achieved) stars++;
 
-      // Étoile 3 : vérification du palier de score élevé (three_stars_score)
       let star3Achieved = false;
       const scoreReq = thresholds.three_stars_score || 1000;
       if (levelScore >= scoreReq) {
@@ -1469,7 +1476,6 @@ html_template = """<!DOCTYPE html>
       }
       if (star3Achieved) stars++;
 
-      // Sauvegarde de la progression locale
       if (!levelProgress.completed[level.level_id] || levelProgress.completed[level.level_id].stars < stars) {
         levelProgress.completed[level.level_id] = { stars, score: levelScore };
       }
@@ -1478,17 +1484,14 @@ html_template = """<!DOCTYPE html>
       }
       localStorage.setItem('block_blast_level_progress', JSON.stringify(levelProgress));
 
-      // Lancement de l'animation de fin (Finisher anim) et sons associés
       const animType = presentation.finisher_anim || 'grid_rainbow_sweep';
       const pTheme = presentation.particle_theme || 'neon';
 
       runFinisherAnimation(animType, pTheme, () => {
-        // Configuration de la Modal Victoire
         document.getElementById('txtVictoryBanner').textContent = presentation.victory_banner || 'VICTOIRE !';
         document.getElementById('txtVictoryLevelTitle').textContent = `Niveau ${level.level_id} : ${level.title} (${level.world})`;
         document.getElementById('txtVictoryScore').textContent = levelScore;
 
-        // Mise à jour des conditions visuelles d'étoiles
         if (thresholds.two_stars_moves_left !== null) {
           document.getElementById('reqMovesStar2').textContent = `≥ ${thresholds.two_stars_moves_left} coups`;
           document.getElementById('statusStar2').textContent = star2Achieved ? '✓ Validé' : '✗ Non atteint';
@@ -1503,7 +1506,6 @@ html_template = """<!DOCTYPE html>
         document.getElementById('statusStar3').textContent = star3Achieved ? '✓ Validé' : '✗ Non atteint';
         document.getElementById('statusStar3').className = star3Achieved ? 'font-bold text-amber-400' : 'font-bold text-gray-500';
 
-        // Reset étoiles visuelles
         for (let s = 1; s <= 3; s++) {
           const starEl = document.getElementById(`vStar-${s}`);
           starEl.className = 'text-gray-600 transition-all duration-300 transform scale-75';
@@ -1511,7 +1513,6 @@ html_template = """<!DOCTYPE html>
 
         document.getElementById('victoryModal').classList.remove('hidden');
 
-        // Animation séquentielle d'apparition des étoiles avec effet sonore distinct pour chaque palier
         setTimeout(() => {
           document.getElementById('vStar-1').className = 'text-amber-400 transition-all duration-300 transform scale-110';
           playStarRevealSound(1);
@@ -1584,8 +1585,7 @@ html_template = """<!DOCTYPE html>
       }
     }
 
-    // --- SÉLECTION DES NIVEAUX (5 MONDES) ---
-    let selectedWorldIndex = 0; // 0: Initiation (1-10), 1: Pierres (11-20), 2: Poids Lourd (21-30), 3: Combos (31-40), 4: Master (41-50)
+    let selectedWorldIndex = 0;
 
     function openLevelSelect() {
       isPaused = true;
@@ -1605,9 +1605,9 @@ html_template = """<!DOCTYPE html>
         const btn = document.getElementById(`worldTab-${w}`);
         if (!btn) continue;
         if (w === selectedWorldIndex) {
-          btn.className = 'world-tab btn-action px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap bg-cyan-500 text-black shadow-md shadow-cyan-500/30';
+          btn.className = 'world-tab btn-action px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-bold whitespace-nowrap bg-cyan-500 text-black shadow-md shadow-cyan-500/30';
         } else {
-          btn.className = 'world-tab btn-action px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap bg-[#1d1e30] text-gray-300 hover:bg-[#252742]';
+          btn.className = 'world-tab btn-action px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-bold whitespace-nowrap bg-[#1d1e30] text-gray-300 hover:bg-[#252742]';
         }
       }
     }
@@ -1627,7 +1627,7 @@ html_template = """<!DOCTYPE html>
 
         const card = document.createElement('button');
         card.type = 'button';
-        card.className = `btn-action flex flex-col items-center justify-center p-2 rounded-2xl border transition-all ${
+        card.className = `btn-action flex flex-col items-center justify-center p-1.5 sm:p-2 rounded-xl sm:rounded-2xl border transition-all ${
           isCurrent
             ? 'bg-cyan-500/25 border-cyan-400 shadow-md shadow-cyan-500/30'
             : isUnlocked
@@ -1636,13 +1636,13 @@ html_template = """<!DOCTYPE html>
         }`;
 
         const numSpan = document.createElement('span');
-        numSpan.className = 'font-black text-sm font-num';
+        numSpan.className = 'font-black text-xs sm:text-sm font-num';
         numSpan.textContent = isUnlocked ? lvl.level_id : '🔒';
         card.appendChild(numSpan);
 
         if (isUnlocked) {
           const starBox = document.createElement('div');
-          starBox.className = 'flex text-[9px] mt-1';
+          starBox.className = 'flex text-[8px] sm:text-[9px] mt-0.5 sm:mt-1';
           for (let s = 1; s <= 3; s++) {
             const star = document.createElement('span');
             star.textContent = '★';
@@ -1665,14 +1665,14 @@ html_template = """<!DOCTYPE html>
     function switchMode(mode) {
       gameMode = mode;
       if (mode === 'levels') {
-        tabModeLevels.className = 'btn-action px-3.5 py-1.5 rounded-full text-xs font-bold transition-all bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md';
-        tabModeClassic.className = 'btn-action px-3.5 py-1.5 rounded-full text-xs font-bold transition-all text-gray-400 hover:text-white';
+        tabModeLevels.className = 'btn-action px-3 sm:px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-bold transition-all bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md';
+        tabModeClassic.className = 'btn-action px-3 sm:px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-bold transition-all text-gray-400 hover:text-white';
         hudLevels.classList.remove('hidden');
         hudClassic.classList.add('hidden');
         loadLevel(currentLevelIndex);
       } else {
-        tabModeClassic.className = 'btn-action px-3.5 py-1.5 rounded-full text-xs font-bold transition-all bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-md';
-        tabModeLevels.className = 'btn-action px-3.5 py-1.5 rounded-full text-xs font-bold transition-all text-gray-400 hover:text-white';
+        tabModeClassic.className = 'btn-action px-3 sm:px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-bold transition-all bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-md';
+        tabModeLevels.className = 'btn-action px-3 sm:px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-bold transition-all text-gray-400 hover:text-white';
         hudLevels.classList.add('hidden');
         hudClassic.classList.remove('hidden');
         restartCurrentGame();
@@ -1689,7 +1689,6 @@ html_template = """<!DOCTYPE html>
       document.getElementById('btnSound').classList.toggle('opacity-50', !soundEnabled);
     }
 
-    // Gestionnaires d'événements
     const attachButtonHandler = (id, handler) => {
       const el = document.getElementById(id);
       if (!el) return;
@@ -1758,4 +1757,4 @@ html_template = """<!DOCTYPE html>
 with open('/root/block_blast_android/web_preview/index.html', 'w', encoding='utf-8') as f:
     f.write(html_template)
 
-print("web_preview/index.html successfully updated with enriched levels, finisher animations and sound effects!")
+print("web_preview/index.html successfully updated with responsive design!")

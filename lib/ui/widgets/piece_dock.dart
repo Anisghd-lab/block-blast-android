@@ -17,12 +17,13 @@ class PieceDock extends StatelessWidget {
     final pieces = gameProvider.availablePieces;
     final board = gameProvider.board;
 
-    final screenWidth = MediaQuery.of(context).size.width;
-    final dockWidth = (screenWidth - 32.0).clamp(280.0, 440.0);
+    final screenSize = MediaQuery.of(context).size;
+    final dockWidth = (screenSize.width - 32.0).clamp(280.0, 440.0);
+    final dockHeight = (screenSize.height * 0.16).clamp(95.0, 125.0);
 
     return Container(
       width: dockWidth,
-      height: 120,
+      height: dockHeight,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
         color: theme.surfaceColor.withOpacity(0.6),
@@ -45,6 +46,8 @@ class PieceDock extends StatelessWidget {
           }
 
           final isPlaceable = board.canFitAnywhere(piece);
+          final maxDim = piece.rows > piece.cols ? piece.rows : piece.cols;
+          final dynamicCellSize = maxDim >= 5 ? 13.0 : (maxDim >= 4 ? 16.0 : (maxDim >= 3 ? 18.5 : 22.0));
 
           return Expanded(
             child: Center(
@@ -54,7 +57,7 @@ class PieceDock extends StatelessWidget {
                   pieceIndex: index,
                   shape: piece,
                   theme: theme,
-                  dockCellSize: 20.0,
+                  dockCellSize: dynamicCellSize,
                   boardCellSize: 38.0,
                   isPlaceable: isPlaceable,
                 ),
