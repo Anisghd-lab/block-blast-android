@@ -89,18 +89,91 @@ class GameProvider extends ChangeNotifier {
 
   Future<void> _initLevelsAndStart() async {
     await _levelManager.init();
+    final savedState = GameStorage.getSavedGameState();
+    if (savedState != null) {
+      final success = _restoreGameState(savedState);
+      if (success) return;
+    }
+
     if (_levelManager.levels.isNotEmpty) {
-      loadLevel(1);
+      final unlocked = _levelManager.progress.unlockedLevel.clamp(1, 50);
+      loadLevel(unlocked);
     } else {
       _initializeClassicGame();
     }
   }
 
+  bool _restoreGameState(Map<String, dynamic> state) {
+    try {
+      final modeStr = state['gameMode'] as String?;
+      _gameMode = modeStr == 'classic' ? GameMode.classic : GameMode.adventure;
+      _currentLevelId = (state['currentLevelId'] as num?)?.toInt() ?? 1;
+      _currentLevel = _levelManager.getLevel(_currentLevelId);
+
+      final rawGrid = state['grid'] as List?;
+      if (rawGrid != null && rawGrid.length == BoardState.size) {
+        final parsedGrid = rawGrid
+            .map((r) => (r as List).map((c) => (c as num).toInt()).toList())
+            .toList();
+        _board = BoardState.fromGrid(parsedGrid);
+      } else {
+        return false;
+      }
+
+      final rawPieces = state['availablePieces'] as List?;
+      if (rawPieces != null && rawPieces.length == 3) {
+        _availablePieces = rawPieces.map((p) {
+          if (p == null) return null;
+          return BlockShape.fromJson(Map<String, dynamic>.from(p as Map));
+        }).toList();
+      } else {
+        _availablePieces = [null, null, null];
+      }
+
+      _score = (state['score'] as num?)?.toInt() ?? 0;
+      _levelScore = (state['levelScore'] as num?)?.toInt() ?? 0;
+      _levelLinesCleared = (state['levelLinesCleared'] as num?)?.toInt() ?? 0;
+      _levelJewelsCollected = (state['levelJewelsCollected'] as num?)?.toInt() ?? 0;
+      _movesRemaining = (state['movesRemaining'] as num?)?.toInt();
+      _comboStreak = (state['comboStreak'] as num?)?.toInt() ?? 0;
+      _isLevelWon = false;
+      _isLevelFailed = false;
+      _isGameOver = false;
+      _isPaused = false;
+
+      notifyListeners();
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  Future<void> saveCurrentState() async {
+    if (_isGameOver || _isLevelWon || _isLevelFailed) return;
+    try {
+      final state = {
+        'gameMode': _gameMode == GameMode.adventure ? 'adventure' : 'classic',
+        'currentLevelId': _currentLevelId,
+        'grid': _board.grid,
+        'availablePieces': _availablePieces.map((p) => p?.toJson()).toList(),
+        'score': _score,
+        'levelScore': _levelScore,
+        'levelLinesCleared': _levelLinesCleared,
+        'levelJewelsCollected': _levelJewelsCollected,
+        'movesRemaining': _movesRemaining,
+        'comboStreak': _comboStreak,
+      };
+      await GameStorage.saveGameState(state);
+    } catch (_) {}
+  }
+
   void switchMode(GameMode mode) {
     if (_gameMode == mode) return;
     _gameMode = mode;
+    GameStorage.clearSavedGameState();
     if (_gameMode == GameMode.adventure) {
-      loadLevel(_currentLevelId);
+      final unlocked = _levelManager.progress.unlockedLevel.clamp(1, 50);
+      loadLevel(unlocked);
     } else {
       _initializeClassicGame();
     }
@@ -131,14 +204,17 @@ class GameProvider extends ChangeNotifier {
     _isPaused = false;
 
     _spawnNewTrio();
+    saveCurrentState();
     notifyListeners();
   }
 
   void restartCurrentLevel() {
+    GameStorage.clearSavedGameState();
     loadLevel(_currentLevelId);
   }
 
   void nextLevel() {
+    GameStorage.clearSavedGameState();
     if (_currentLevelId < 50) {
       loadLevel(_currentLevelId + 1);
     } else {
@@ -153,10 +229,12 @@ class GameProvider extends ChangeNotifier {
     _isPaused = false;
     _board.reset();
     _spawnNewTrio();
+    saveCurrentState();
     notifyListeners();
   }
 
   void startNewGame() {
+    GameStorage.clearSavedGameState();
     if (_gameMode == GameMode.adventure) {
       restartCurrentLevel();
     } else {
@@ -179,6 +257,7 @@ class GameProvider extends ChangeNotifier {
     _availablePieces[slotIndex] = piece.rotate90();
     AudioService.playPiecePlace();
     HapticService.onPiecePick();
+    saveCurrentState();
     notifyListeners();
   }
 
@@ -191,6 +270,7 @@ class GameProvider extends ChangeNotifier {
     _availablePieces[slotIndex] = piece.mirror();
     AudioService.playPiecePlace();
     HapticService.onPiecePick();
+    saveCurrentState();
     notifyListeners();
   }
 
@@ -325,6 +405,7 @@ class GameProvider extends ChangeNotifier {
 
       if (victory) {
         _isLevelWon = true;
+        GameStorage.clearSavedGameState();
         // Calcul des étoiles selon star_thresholds
         int stars = 1;
         final thresholds = lvl.starThresholds;
@@ -353,6 +434,7 @@ class GameProvider extends ChangeNotifier {
       if (_movesRemaining != null && _movesRemaining! <= 0) {
         _isLevelFailed = true;
         _defeatReason = "Limite de coups atteinte !";
+        GameStorage.clearSavedGameState();
         AudioService.playGameOver();
         HapticService.onGameOver();
         notifyListeners();
@@ -370,12 +452,15 @@ class GameProvider extends ChangeNotifier {
       if (_gameMode == GameMode.adventure) {
         _isLevelFailed = true;
         _defeatReason = "Aucun placement possible sur la grille !";
+        GameStorage.clearSavedGameState();
       } else {
         _isGameOver = true;
         GameStorage.clearSavedGameState();
       }
       AudioService.playGameOver();
       HapticService.onGameOver();
+    } else {
+      saveCurrentState();
     }
 
     notifyListeners();

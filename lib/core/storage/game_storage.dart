@@ -100,4 +100,41 @@ class GameStorage {
   static Future<void> clearSavedGameState() async {
     await _prefs?.remove(_keySavedGame);
   }
+
+  // Persistance du niveau atteint et progression
+  static const String _keyLevelUnlocked = 'level_unlocked';
+  static const String _keyLevelStars = 'level_stars_map';
+
+  static int getUnlockedLevel() {
+    return _prefs?.getInt(_keyLevelUnlocked) ?? 1;
+  }
+
+  static Future<void> saveUnlockedLevel(int level) async {
+    final current = getUnlockedLevel();
+    if (level > current) {
+      await _prefs?.setInt(_keyLevelUnlocked, level);
+    }
+  }
+
+  static Map<int, int> getLevelStars() {
+    final raw = _prefs?.getString(_keyLevelStars);
+    if (raw == null) return {};
+    try {
+      final decoded = jsonDecode(raw) as Map<String, dynamic>;
+      final Map<int, int> result = {};
+      decoded.forEach((key, val) {
+        final id = int.tryParse(key);
+        if (id != null) result[id] = val as int;
+      });
+      return result;
+    } catch (_) {
+      return {};
+    }
+  }
+
+  static Future<void> saveLevelStars(Map<int, int> starsMap) async {
+    final Map<String, int> exportMap = {};
+    starsMap.forEach((k, v) => exportMap[k.toString()] = v);
+    await _prefs?.setString(_keyLevelStars, jsonEncode(exportMap));
+  }
 }

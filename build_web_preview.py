@@ -44,8 +44,10 @@ html_template = """<!DOCTYPE html>
       display: grid;
       grid-template-columns: repeat(8, 1fr);
       aspect-ratio: 1 / 1;
-      width: min(92vw, calc(100dvh - 275px), 375px);
-      height: min(92vw, calc(100dvh - 275px), 375px);
+      width: min(88vw, calc(100dvh - 295px), 360px);
+      height: min(88vw, calc(100dvh - 295px), 360px);
+      max-width: 360px;
+      max-height: 360px;
       gap: clamp(2px, 0.9vw, 4px);
       padding: clamp(5px, 1.8vw, 8px);
       background: #17182b;
@@ -55,6 +57,35 @@ html_template = """<!DOCTYPE html>
       touch-action: none;
       position: relative;
       margin: auto;
+      flex-shrink: 0;
+    }
+
+    /* Deck des blocs strictement fixe et inaltérable par la forme des blocs */
+    .fixed-dock-container {
+      height: 104px !important;
+      min-height: 104px !important;
+      max-height: 104px !important;
+      flex-shrink: 0 !important;
+      box-sizing: border-box !important;
+      overflow: hidden !important;
+    }
+    .fixed-dock-slot {
+      width: 33.333% !important;
+      height: 100% !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      box-sizing: border-box !important;
+      position: relative !important;
+    }
+    .piece-slot-box {
+      width: 76px !important;
+      height: 76px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      position: relative !important;
+      flex-shrink: 0 !important;
     }
 
     .cell {
@@ -303,12 +334,12 @@ html_template = """<!DOCTYPE html>
       <div id="particleContainer" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
     </main>
 
-    <!-- Tiroir de 3 Pièces Inférieur Dynamique -->
+    <!-- Tiroir de 3 Pièces Inférieur Fixe (Dimensions constantes, ne sort jamais de l'écran) -->
     <footer class="w-full flex-shrink-0 pb-1 sm:pb-2">
-      <div class="w-full h-26 sm:h-32 bg-[#17182b]/90 border border-white/10 rounded-2xl flex items-center justify-around px-1 py-1" id="dock">
-        <div class="dock-slot flex-1 h-full flex flex-col items-center justify-center p-0.5 sm:p-1" id="slot-0"></div>
-        <div class="dock-slot flex-1 h-full flex flex-col items-center justify-center p-0.5 sm:p-1" id="slot-1"></div>
-        <div class="dock-slot flex-1 h-full flex flex-col items-center justify-center p-0.5 sm:p-1" id="slot-2"></div>
+      <div class="fixed-dock-container w-full bg-[#17182b]/95 border border-white/10 rounded-2xl flex items-center justify-around px-1 py-1 shadow-2xl" id="dock">
+        <div class="dock-slot fixed-dock-slot" id="slot-0"></div>
+        <div class="dock-slot fixed-dock-slot" id="slot-1"></div>
+        <div class="dock-slot fixed-dock-slot" id="slot-2"></div>
       </div>
     </footer>
 
@@ -725,26 +756,145 @@ html_template = """<!DOCTYPE html>
       return rotated;
     }
 
+    // --- BASE DE DONNÉES LOCALE DU TÉLÉPHONE (LocalStorage + IndexedDB Miroir) ---
+    const LocalGameDB = {
+      KEYS: {
+        STATE: 'block_blast_ongoing_state_v2',
+        PROGRESS: 'block_blast_level_progress_v2',
+        HIGH_SCORE: 'block_blast_classic_high_v2',
+        SETTINGS: 'block_blast_settings_v2'
+      },
+
+      // Sauvegarder l'état complet en cours (grille, pièces, scores, etc.)
+      saveCurrentState(state) {
+        try {
+          localStorage.setItem(this.KEYS.STATE, JSON.stringify({
+            ...state,
+            savedAt: Date.now()
+          }));
+          this.syncToIndexedDB('ongoing_state', state);
+        } catch (e) {}
+      },
+
+      loadCurrentState() {
+        try {
+          const raw = localStorage.getItem(this.KEYS.STATE);
+          if (!raw) return null;
+          return JSON.parse(raw);
+        } catch (e) {
+          return null;
+        }
+      },
+
+      clearCurrentState() {
+        try {
+          localStorage.removeItem(this.KEYS.STATE);
+          this.deleteFromIndexedDB('ongoing_state');
+        } catch (e) {}
+      },
+
+      saveLevelProgress(prog) {
+        try {
+          localStorage.setItem(this.KEYS.PROGRESS, JSON.stringify(prog));
+          this.syncToIndexedDB('level_progress', prog);
+        } catch (e) {}
+      },
+
+      loadLevelProgress() {
+        try {
+          const raw = localStorage.getItem(this.KEYS.PROGRESS) || localStorage.getItem('block_blast_level_progress');
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (!parsed.unlockedLevel) parsed.unlockedLevel = 1;
+            if (!parsed.completed) parsed.completed = {};
+            return parsed;
+          }
+        } catch (e) {}
+        return { unlockedLevel: 1, completed: {} };
+      },
+
+      saveHighScore(score) {
+        try {
+          const current = this.loadHighScore();
+          if (score > current) {
+            localStorage.setItem(this.KEYS.HIGH_SCORE, score.toString());
+            this.syncToIndexedDB('high_score', score);
+          }
+        } catch (e) {}
+      },
+
+      loadHighScore() {
+        try {
+          const raw = localStorage.getItem(this.KEYS.HIGH_SCORE) || localStorage.getItem('block_blast_best');
+          return parseInt(raw || '0', 10);
+        } catch (e) {
+          return 0;
+        }
+      },
+
+      saveSettings(settings) {
+        try {
+          const cur = this.loadSettings();
+          const merged = { ...cur, ...settings };
+          localStorage.setItem(this.KEYS.SETTINGS, JSON.stringify(merged));
+          this.syncToIndexedDB('settings', merged);
+        } catch (e) {}
+      },
+
+      loadSettings() {
+        try {
+          const raw = localStorage.getItem(this.KEYS.SETTINGS);
+          if (raw) return JSON.parse(raw);
+        } catch (e) {}
+        return { soundEnabled: true };
+      },
+
+      // Persistance IndexedDB native sur le smartphone
+      _db: null,
+      initIndexedDB() {
+        if (!window.indexedDB) return;
+        try {
+          const req = indexedDB.open('BlockBlastDeviceDB', 1);
+          req.onupgradeneeded = (e) => {
+            const db = e.target.result;
+            if (!db.objectStoreNames.contains('game_records')) {
+              db.createObjectStore('game_records', { keyPath: 'key' });
+            }
+          };
+          req.onsuccess = (e) => {
+            this._db = e.target.result;
+          };
+        } catch (e) {}
+      },
+
+      syncToIndexedDB(key, data) {
+        if (!this._db) return;
+        try {
+          const tx = this._db.transaction('game_records', 'readwrite');
+          tx.objectStore('game_records').put({ key, data, updatedAt: Date.now() });
+        } catch (e) {}
+      },
+
+      deleteFromIndexedDB(key) {
+        if (!this._db) return;
+        try {
+          const tx = this._db.transaction('game_records', 'readwrite');
+          tx.objectStore('game_records').delete(key);
+        } catch (e) {}
+      }
+    };
+    LocalGameDB.initIndexedDB();
+
     // --- ÉTAT DU JEU ---
     const SIZE = 8;
     let gameMode = 'levels';
     let currentLevelIndex = 0;
     
     let grid = Array(SIZE).fill(null).map(() => Array(SIZE).fill(0));
-    
-    let levelProgress = {
-      unlockedLevel: 1,
-      completed: {}
-    };
-    try {
-      const saved = localStorage.getItem('block_blast_level_progress');
-      if (saved) levelProgress = JSON.parse(saved);
-      if (!levelProgress.unlockedLevel) levelProgress.unlockedLevel = 1;
-      if (!levelProgress.completed) levelProgress.completed = {};
-    } catch(e) {}
+    let levelProgress = LocalGameDB.loadLevelProgress();
 
     let classicScore = 0;
-    let classicHighScore = parseInt(localStorage.getItem('block_blast_best') || '0');
+    let classicHighScore = LocalGameDB.loadHighScore();
     
     let levelScore = 0;
     let levelLinesCleared = 0;
@@ -811,21 +961,49 @@ html_template = """<!DOCTYPE html>
       }
     }
 
-    function loadLevel(levelIndex) {
+    function persistCurrentGame() {
+      if (isGameOver) return;
+      LocalGameDB.saveCurrentState({
+        gameMode,
+        currentLevelIndex,
+        grid,
+        availablePieces,
+        levelScore,
+        levelLinesCleared,
+        levelJewelsCollected,
+        movesRemaining,
+        classicScore,
+        comboStreak,
+        isGameOver: false
+      });
+    }
+
+    function loadLevel(levelIndex, restoreData = null) {
       if (levelIndex < 0) levelIndex = 0;
       if (levelIndex >= ALL_LEVELS.length) levelIndex = ALL_LEVELS.length - 1;
       currentLevelIndex = levelIndex;
       const level = ALL_LEVELS[levelIndex];
 
-      grid = level.initial_grid.map(row => [...row]);
-
-      levelScore = 0;
-      levelLinesCleared = 0;
-      levelJewelsCollected = 0;
-      comboStreak = 0;
-      isGameOver = false;
-      isPaused = false;
-      movesRemaining = level.move_limit !== null ? level.move_limit : null;
+      if (restoreData) {
+        grid = restoreData.grid.map(row => [...row]);
+        levelScore = restoreData.levelScore || 0;
+        levelLinesCleared = restoreData.levelLinesCleared || 0;
+        levelJewelsCollected = restoreData.levelJewelsCollected || 0;
+        comboStreak = restoreData.comboStreak || 0;
+        isGameOver = false;
+        isPaused = false;
+        movesRemaining = restoreData.movesRemaining !== undefined ? restoreData.movesRemaining : null;
+        availablePieces = restoreData.availablePieces ? restoreData.availablePieces.map(p => p ? { matrix: p.matrix.map(r => [...r]), color: p.color } : null) : [null, null, null];
+      } else {
+        grid = level.initial_grid.map(row => [...row]);
+        levelScore = 0;
+        levelLinesCleared = 0;
+        levelJewelsCollected = 0;
+        comboStreak = 0;
+        isGameOver = false;
+        isPaused = false;
+        movesRemaining = level.move_limit !== null ? level.move_limit : null;
+      }
 
       document.getElementById('victoryModal').classList.add('hidden');
       document.getElementById('defeatModal').classList.add('hidden');
@@ -834,7 +1012,13 @@ html_template = """<!DOCTYPE html>
 
       updateLevelHUD();
       renderBoard();
-      spawnTrio();
+      if (restoreData) {
+        renderDock();
+        checkGameOver();
+      } else {
+        spawnTrio();
+        persistCurrentGame();
+      }
     }
 
     function updateLevelHUD() {
@@ -893,6 +1077,7 @@ html_template = """<!DOCTYPE html>
       }
       renderDock();
       checkGameOver();
+      persistCurrentGame();
     }
 
     function rotateSlotPiece(slotIndex) {
@@ -906,31 +1091,40 @@ html_template = """<!DOCTYPE html>
       piece.matrix = rotateMatrix(piece.matrix);
       renderDock();
       checkGameOver();
+      persistCurrentGame();
     }
 
-    // Rendu Dynamique et Responsive des pièces dans le dock
+    // Rendu Fixe et Uniforme des pièces dans le dock (dimensions strictement constantes)
     function renderDock() {
       for (let i = 0; i < 3; i++) {
         const slot = document.getElementById(`slot-${i}`);
+        if (!slot) continue;
         slot.innerHTML = '';
         const piece = availablePieces[i];
-        if (!piece) continue;
 
-        // Calcul dynamique de la taille optimale de chaque bloc pour s'adapter à la largeur et hauteur du slot
-        const slotRect = slot.getBoundingClientRect();
-        const availableW = slotRect.width > 0 ? slotRect.width - 12 : 90;
-        const availableH = slotRect.height > 0 ? slotRect.height - 12 : 90;
+        const box = document.createElement('div');
+        box.className = 'piece-slot-box';
+
+        if (!piece) {
+          const placeholder = document.createElement('div');
+          placeholder.className = 'w-[72px] h-[72px] rounded-xl border border-white/5 bg-white/[0.015] flex items-center justify-center';
+          box.appendChild(placeholder);
+          slot.appendChild(box);
+          continue;
+        }
 
         const rows = piece.matrix.length;
         const cols = piece.matrix[0].length;
-        const maxCellW = Math.floor(availableW / cols) - 2;
-        const maxCellH = Math.floor(availableH / rows) - 2;
-        const cellSize = Math.max(10, Math.min(maxCellW, maxCellH, 20));
+        const maxDim = Math.max(rows, cols);
+        // Échelle uniforme pour chaque bloc : 14px (ou 12px pour forme de 5) pour loger sans déformation
+        const cellSize = maxDim >= 5 ? 12 : 14;
 
         const pieceEl = createPieceElement(piece, cellSize);
         pieceEl.dataset.slot = i;
         attachDragHandlers(pieceEl, i);
-        slot.appendChild(pieceEl);
+
+        box.appendChild(pieceEl);
+        slot.appendChild(box);
       }
     }
 
@@ -1423,6 +1617,7 @@ html_template = """<!DOCTYPE html>
         spawnTrio();
       } else {
         checkGameOver();
+        persistCurrentGame();
       }
     }
 
@@ -1476,13 +1671,14 @@ html_template = """<!DOCTYPE html>
       }
       if (star3Achieved) stars++;
 
+      LocalGameDB.clearCurrentState();
       if (!levelProgress.completed[level.level_id] || levelProgress.completed[level.level_id].stars < stars) {
         levelProgress.completed[level.level_id] = { stars, score: levelScore };
       }
       if (currentLevelIndex + 2 > levelProgress.unlockedLevel && levelProgress.unlockedLevel < ALL_LEVELS.length) {
         levelProgress.unlockedLevel = currentLevelIndex + 2;
       }
-      localStorage.setItem('block_blast_level_progress', JSON.stringify(levelProgress));
+      LocalGameDB.saveLevelProgress(levelProgress);
 
       const animType = presentation.finisher_anim || 'grid_rainbow_sweep';
       const pTheme = presentation.particle_theme || 'neon';
@@ -1536,6 +1732,7 @@ html_template = """<!DOCTYPE html>
 
     function triggerLevelDefeat(reason) {
       isGameOver = true;
+      LocalGameDB.clearCurrentState();
       const level = ALL_LEVELS[currentLevelIndex];
       document.getElementById('txtDefeatReason').textContent = reason;
 
@@ -1550,6 +1747,8 @@ html_template = """<!DOCTYPE html>
 
     function triggerClassicGameOver() {
       isGameOver = true;
+      LocalGameDB.clearCurrentState();
+      LocalGameDB.saveHighScore(classicHighScore);
       document.getElementById('modalScore').textContent = classicScore;
       document.getElementById('modalBest').textContent = classicHighScore;
       document.getElementById('gameOverModal').classList.remove('hidden');
@@ -1565,6 +1764,7 @@ html_template = """<!DOCTYPE html>
     }
 
     function restartCurrentGame() {
+      LocalGameDB.clearCurrentState();
       document.getElementById('gameOverModal').classList.add('hidden');
       document.getElementById('pauseModal').classList.add('hidden');
       document.getElementById('victoryModal').classList.add('hidden');
@@ -1662,46 +1862,66 @@ html_template = """<!DOCTYPE html>
       }
     }
 
-    function switchMode(mode) {
+    function switchMode(mode, fromRestore = false) {
       gameMode = mode;
       if (mode === 'levels') {
         tabModeLevels.className = 'btn-action px-3 sm:px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-bold transition-all bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md';
         tabModeClassic.className = 'btn-action px-3 sm:px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-bold transition-all text-gray-400 hover:text-white';
         hudLevels.classList.remove('hidden');
         hudClassic.classList.add('hidden');
-        loadLevel(currentLevelIndex);
+        if (!fromRestore) {
+          LocalGameDB.clearCurrentState();
+          loadLevel(currentLevelIndex);
+        }
       } else {
         tabModeClassic.className = 'btn-action px-3 sm:px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-bold transition-all bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-md';
         tabModeLevels.className = 'btn-action px-3 sm:px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-bold transition-all text-gray-400 hover:text-white';
         hudLevels.classList.add('hidden');
         hudClassic.classList.remove('hidden');
-        restartCurrentGame();
+        if (!fromRestore) {
+          LocalGameDB.clearCurrentState();
+          restartCurrentGame();
+        }
       }
     }
 
+    // Réglage instantané du son (action immédiate dès le premier appui tactile)
     function toggleSound() {
+      initAudio();
       soundEnabled = !soundEnabled;
-      const icon = soundEnabled ? '🔊' : '🔇';
-      const status = soundEnabled ? 'ACTIF' : 'MUET';
-      document.getElementById('soundIcon').textContent = icon;
-      document.getElementById('soundIconPause').textContent = icon;
-      document.getElementById('soundStatusPause').textContent = status;
-      document.getElementById('btnSound').classList.toggle('opacity-50', !soundEnabled);
+      LocalGameDB.saveSettings({ soundEnabled });
+      updateSoundUI();
     }
 
+    function updateSoundUI() {
+      const icon = soundEnabled ? '🔊' : '🔇';
+      const status = soundEnabled ? 'ACTIF' : 'MUET';
+      const soundIcon = document.getElementById('soundIcon');
+      const soundIconPause = document.getElementById('soundIconPause');
+      const soundStatusPause = document.getElementById('soundStatusPause');
+      const btnSound = document.getElementById('btnSound');
+
+      if (soundIcon) soundIcon.textContent = icon;
+      if (soundIconPause) soundIconPause.textContent = icon;
+      if (soundStatusPause) soundStatusPause.textContent = status;
+      if (btnSound) btnSound.classList.toggle('opacity-50', !soundEnabled);
+    }
+
+    // Gestionnaire d'action réactif sans double-clic parasite (fonctionnement instantané)
     const attachButtonHandler = (id, handler) => {
       const el = document.getElementById(id);
       if (!el) return;
-      el.addEventListener('pointerdown', (e) => {
+      let lastTrigger = 0;
+      const trigger = (e) => {
+        const now = Date.now();
+        if (now - lastTrigger < 320) return; // Ignore l'événement synthétique ultérieur
+        lastTrigger = now;
         e.preventDefault();
         e.stopPropagation();
         handler(e);
-      });
-      el.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        handler(e);
-      });
+      };
+      el.addEventListener('pointerdown', trigger, { passive: false });
+      el.addEventListener('click', trigger, { passive: false });
     };
 
     attachButtonHandler('tabModeLevels', () => switchMode('levels'));
@@ -1747,14 +1967,64 @@ html_template = """<!DOCTYPE html>
     attachButtonHandler('btnSound', () => toggleSound());
     attachButtonHandler('btnToggleSoundPause', () => toggleSound());
 
-    // Démarrage initial
-    loadLevel(0);
+    function restoreSavedGame(saved) {
+      gameMode = saved.gameMode || 'levels';
+      currentLevelIndex = saved.currentLevelIndex || 0;
+      grid = saved.grid.map(row => [...row]);
+      comboStreak = saved.comboStreak || 0;
+      isGameOver = false;
+      isPaused = false;
+
+      if (saved.availablePieces && Array.isArray(saved.availablePieces)) {
+        availablePieces = saved.availablePieces.map(p => {
+          if (!p || !p.matrix) return null;
+          return {
+            matrix: p.matrix.map(r => [...r]),
+            color: p.color
+          };
+        });
+      } else {
+        availablePieces = [null, null, null];
+      }
+
+      if (gameMode === 'levels') {
+        levelScore = saved.levelScore || 0;
+        levelLinesCleared = saved.levelLinesCleared || 0;
+        levelJewelsCollected = saved.levelJewelsCollected || 0;
+        movesRemaining = saved.movesRemaining !== undefined ? saved.movesRemaining : null;
+        switchMode('levels', true);
+        updateLevelHUD();
+      } else {
+        classicScore = saved.classicScore || 0;
+        switchMode('classic', true);
+        updateClassicScore();
+      }
+
+      renderBoard();
+      renderDock();
+      checkGameOver();
+    }
+
+    // Initialisation et démarrage via la base de données locale
+    const savedSettings = LocalGameDB.loadSettings();
+    soundEnabled = savedSettings.soundEnabled !== false;
+    updateSoundUI();
+
+    const savedGame = LocalGameDB.loadCurrentState();
+    if (savedGame && !savedGame.isGameOver && savedGame.grid && Array.isArray(savedGame.grid)) {
+      restoreSavedGame(savedGame);
+    } else {
+      // Démarrer automatiquement au niveau atteint (plus haut niveau débloqué)
+      const targetLevel = Math.min(Math.max(0, (levelProgress.unlockedLevel || 1) - 1), ALL_LEVELS.length - 1);
+      loadLevel(targetLevel);
+    }
   </script>
 </body>
 </html>
 """
 
-with open('/root/block_blast_android/web_preview/index.html', 'w', encoding='utf-8') as f:
-    f.write(html_template)
+for p in ['/root/block-blast-android/web_preview/index.html', '/root/block_blast_android/web_preview/index.html']:
+    with open(p, 'w', encoding='utf-8') as f:
+        f.write(html_template)
 
 print("web_preview/index.html successfully updated with responsive design!")

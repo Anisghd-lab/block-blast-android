@@ -19,12 +19,12 @@ class PieceDock extends StatelessWidget {
 
     final screenSize = MediaQuery.of(context).size;
     final dockWidth = (screenSize.width - 32.0).clamp(280.0, 440.0);
-    final dockHeight = (screenSize.height * 0.16).clamp(95.0, 125.0);
+    const double fixedDockHeight = 106.0;
 
     return Container(
       width: dockWidth,
-      height: dockHeight,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      height: fixedDockHeight,
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
       decoration: BoxDecoration(
         color: theme.surfaceColor.withOpacity(0.6),
         borderRadius: BorderRadius.circular(20.0),
@@ -39,27 +39,39 @@ class PieceDock extends StatelessWidget {
         children: List.generate(3, (index) {
           final piece = pieces[index];
           if (piece == null) {
-            // Emplacement vide
+            // Emplacement vide avec dimensions fixes pour ne jamais modifier la taille du dock
             return const Expanded(
-              child: SizedBox(),
+              child: Center(
+                child: SizedBox(
+                  width: 76.0,
+                  height: 76.0,
+                ),
+              ),
             );
           }
 
           final isPlaceable = board.canFitAnywhere(piece);
           final maxDim = piece.rows > piece.cols ? piece.rows : piece.cols;
-          final dynamicCellSize = maxDim >= 5 ? 13.0 : (maxDim >= 4 ? 16.0 : (maxDim >= 3 ? 18.5 : 22.0));
+          final uniformCellSize = maxDim >= 5 ? 12.5 : 14.0;
 
           return Expanded(
             child: Center(
-              child: GestureDetector(
-                onTap: () => gameProvider.rotatePiece(index),
-                child: DraggablePiece(
-                  pieceIndex: index,
-                  shape: piece,
-                  theme: theme,
-                  dockCellSize: dynamicCellSize,
-                  boardCellSize: 38.0,
-                  isPlaceable: isPlaceable,
+              child: SizedBox(
+                width: 76.0,
+                height: 76.0,
+                child: Center(
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () => gameProvider.rotatePiece(index),
+                    child: DraggablePiece(
+                      pieceIndex: index,
+                      shape: piece,
+                      theme: theme,
+                      dockCellSize: uniformCellSize,
+                      boardCellSize: 38.0,
+                      isPlaceable: isPlaceable,
+                    ),
+                  ),
                 ),
               ),
             ),

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../engine/level_model.dart';
 import '../../providers/game_provider.dart';
+import '../../providers/settings_provider.dart';
 import '../screens/level_select_screen.dart';
 import 'combo_banner.dart';
 
@@ -19,6 +20,7 @@ class ScoreHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final gameProvider = context.watch<GameProvider>();
+    final settingsProvider = context.watch<SettingsProvider>();
     final isAdventure = gameProvider.gameMode == GameMode.adventure;
     final level = gameProvider.currentLevel;
 
@@ -95,9 +97,21 @@ class ScoreHeader extends StatelessWidget {
                 ),
               ),
 
-              _buildIconButton(
-                icon: Icons.palette_rounded,
-                onPressed: onSettingsPressed,
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildIconButton(
+                    icon: settingsProvider.soundEnabled
+                        ? Icons.volume_up_rounded
+                        : Icons.volume_off_rounded,
+                    onPressed: () => settingsProvider.toggleSound(),
+                  ),
+                  const SizedBox(width: 8),
+                  _buildIconButton(
+                    icon: Icons.palette_rounded,
+                    onPressed: onSettingsPressed,
+                  ),
+                ],
               ),
             ],
           ),

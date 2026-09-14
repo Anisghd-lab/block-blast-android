@@ -99,20 +99,23 @@ class GameScreen extends StatelessWidget {
               },
             ),
 
-            const Spacer(flex: 1),
-
             // 2. Grille de jeu 8x8 centrale
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: GameBoard(),
+            const Expanded(
+              child: Center(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  child: GameBoard(),
+                ),
+              ),
             ),
 
-            const Spacer(flex: 2),
-
-            // 3. Tiroir de pièces du bas
-            const Padding(
-              padding: EdgeInsets.only(bottom: 24.0),
-              child: PieceDock(),
+            // 3. Tiroir de pièces du bas fixé à l'écran
+            const SafeArea(
+              top: false,
+              child: Padding(
+                padding: EdgeInsets.only(bottom: 12.0),
+                child: PieceDock(),
+              ),
             ),
           ],
         ),
