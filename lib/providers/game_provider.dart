@@ -325,25 +325,22 @@ class GameProvider extends ChangeNotifier {
 
       if (victory) {
         _isLevelWon = true;
-        // Calcul des étoiles
-        if (lvl.moveLimit != null) {
-          final ratio = (_movesRemaining ?? 0) / lvl.moveLimit!;
-          if (ratio >= 0.35) {
-            _starsEarned = 3;
-          } else if (ratio >= 0.1) {
-            _starsEarned = 2;
-          } else {
-            _starsEarned = 1;
+        // Calcul des étoiles selon star_thresholds
+        int stars = 1;
+        final thresholds = lvl.starThresholds;
+
+        if (thresholds.twoStarsMovesLeft != null) {
+          if ((_movesRemaining ?? 0) >= thresholds.twoStarsMovesLeft!) {
+            stars++;
           }
         } else {
-          if (_levelScore >= lvl.targetValue * 1.4) {
-            _starsEarned = 3;
-          } else if (_levelScore >= lvl.targetValue * 1.15) {
-            _starsEarned = 2;
-          } else {
-            _starsEarned = 1;
-          }
+          stars++;
         }
+
+        if (_levelScore >= thresholds.threeStarsScore) {
+          stars++;
+        }
+        _starsEarned = stars;
 
         _levelManager.recordCompletion(lvl.levelId, _starsEarned, _levelScore);
         AudioService.playLineClear(4);

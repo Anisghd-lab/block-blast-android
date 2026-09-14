@@ -39,24 +39,94 @@ enum LevelGoal {
   }
 }
 
-/// Modèle d'un niveau du jeu (compatible avec le format JSON BlockPuzzle8x8)
+/// Paliers d'étoiles pour la fin de niveau
+class StarThresholds {
+  final String oneStar;
+  final int? twoStarsMovesLeft;
+  final int threeStarsScore;
+
+  const StarThresholds({
+    this.oneStar = 'goal_completed',
+    this.twoStarsMovesLeft,
+    required this.threeStarsScore,
+  });
+
+  factory StarThresholds.fromJson(Map<String, dynamic>? json) {
+    if (json == null) {
+      return const StarThresholds(threeStarsScore: 1000);
+    }
+    return StarThresholds(
+      oneStar: json['one_star']?.toString() ?? 'goal_completed',
+      twoStarsMovesLeft: json['two_stars_moves_left'] as int?,
+      threeStarsScore: json['three_stars_score'] as int? ?? 1000,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'one_star': oneStar,
+        'two_stars_moves_left': twoStarsMovesLeft,
+        'three_stars_score': threeStarsScore,
+      };
+}
+
+/// Présentation de fin de niveau (Bannière de bravoure, animation et thème de particules)
+class EndLevelPresentation {
+  final String victoryBanner;
+  final String finisherAnim; // missile_shower | gem_explosion | grid_rainbow_sweep
+  final String particleTheme; // neon | gold | crystal | fireworks
+
+  const EndLevelPresentation({
+    required this.victoryBanner,
+    required this.finisherAnim,
+    required this.particleTheme,
+  });
+
+  factory EndLevelPresentation.fromJson(Map<String, dynamic>? json) {
+    if (json == null) {
+      return const EndLevelPresentation(
+        victoryBanner: 'VICTOIRE !',
+        finisherAnim: 'grid_rainbow_sweep',
+        particleTheme: 'neon',
+      );
+    }
+    return EndLevelPresentation(
+      victoryBanner: json['victory_banner']?.toString() ?? 'VICTOIRE !',
+      finisherAnim: json['finisher_anim']?.toString() ?? 'grid_rainbow_sweep',
+      particleTheme: json['particle_theme']?.toString() ?? 'neon',
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'victory_banner': victoryBanner,
+        'finisher_anim': finisherAnim,
+        'particle_theme': particleTheme,
+      };
+}
+
+/// Modèle d'un niveau du jeu (compatible avec le format JSON BlockPuzzle8x8 enrichi)
 class GameLevel {
   final int levelId;
   final String title;
+  final String world;
   final LevelGoal goal;
   final int targetValue;
   final int? moveLimit;
   final List<List<int>> initialGrid;
   final List<String> allowedShapes;
+  final StarThresholds starThresholds;
+  final EndLevelPresentation endLevelPresentation;
 
   const GameLevel({
     required this.levelId,
     required this.title,
+    this.world = 'Initiation',
     required this.goal,
     required this.targetValue,
     this.moveLimit,
     required this.initialGrid,
     this.allowedShapes = const [],
+    required this.starThresholds,
+    required this.endLevelPresentation,
   });
 
   factory GameLevel.fromJson(Map<String, dynamic> json) {
@@ -73,11 +143,14 @@ class GameLevel {
     return GameLevel(
       levelId: json['level_id'] as int,
       title: json['title'] as String,
+      world: json['world'] as String? ?? 'Initiation',
       goal: LevelGoal.fromString(json['goal'] as String),
       targetValue: json['target_value'] as int,
       moveLimit: json['move_limit'] as int?,
       initialGrid: parsedGrid,
       allowedShapes: parsedShapes,
+      starThresholds: StarThresholds.fromJson(json['star_thresholds'] as Map<String, dynamic>?),
+      endLevelPresentation: EndLevelPresentation.fromJson(json['end_level_presentation'] as Map<String, dynamic>?),
     );
   }
 
@@ -85,11 +158,14 @@ class GameLevel {
     return {
       'level_id': levelId,
       'title': title,
+      'world': world,
       'goal': goal.name,
       'target_value': targetValue,
       'move_limit': moveLimit,
       'initial_grid': initialGrid,
       'allowed_shapes': allowedShapes,
+      'star_thresholds': starThresholds.toJson(),
+      'end_level_presentation': endLevelPresentation.toJson(),
     };
   }
 

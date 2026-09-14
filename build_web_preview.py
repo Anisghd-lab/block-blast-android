@@ -43,6 +43,7 @@ html_template = """<!DOCTYPE html>
       border: 1.5px solid rgba(255, 255, 255, 0.09);
       box-shadow: 0 14px 35px rgba(0, 0, 0, 0.6);
       touch-action: none;
+      position: relative;
     }
     .cell {
       aspect-ratio: 1;
@@ -116,6 +117,13 @@ html_template = """<!DOCTYPE html>
       transform: scale(1.1);
       z-index: 10;
     }
+    /* Balayage Arc-en-ciel Finisher */
+    .cell.rainbow-sweep {
+      background: var(--sweep-color, #ffffff) !important;
+      box-shadow: 0 0 24px var(--sweep-color, #ffffff) !important;
+      transform: scale(1.15);
+      z-index: 20;
+    }
     /* Couleurs de blocs vifs */
     .color-1 { background: linear-gradient(135deg, #6ff6ff, #00f2fe, #008f96); }
     .color-2 { background: linear-gradient(135deg, #ff708d, #ff0844, #990024); }
@@ -125,17 +133,53 @@ html_template = """<!DOCTYPE html>
     .color-6 { background: linear-gradient(135deg, #ffa366, #ff6a00, #993f00); }
     .color-7 { background: linear-gradient(135deg, #8ad8ff, #38bdf8, #0369a1); }
 
-    /* Particules */
+    /* Particules & Confettis */
     .particle {
       position: absolute;
       pointer-events: none;
       border-radius: 50%;
-      animation: fly 0.6s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+      animation: fly 0.65s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
     }
     @keyframes fly {
       0% { transform: translate(0, 0) scale(1); opacity: 1; }
       100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
     }
+    /* Missiles Finisher */
+    .finisher-missile {
+      position: absolute;
+      width: 14px;
+      height: 36px;
+      border-radius: 8px;
+      background: linear-gradient(to top, #ff0844, #ff6a00, #fed929);
+      box-shadow: 0 0 18px #ff6a00, 0 0 30px #ff0844;
+      pointer-events: none;
+      z-index: 40;
+      animation: missileFly 0.4s cubic-bezier(0.2, 0.8, 0.4, 1) forwards;
+    }
+    @keyframes missileFly {
+      0% { transform: translateY(180px) scale(0.6); opacity: 1; }
+      80% { opacity: 1; }
+      100% { transform: translateY(var(--target-y)) scale(1.3); opacity: 0; }
+    }
+    /* Gem Explosion Finisher */
+    .giant-gem-shockwave {
+      position: absolute;
+      inset: 0;
+      margin: auto;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0, 242, 254, 0.9), transparent 70%);
+      box-shadow: 0 0 45px #00f2fe;
+      animation: shockwave 0.6s ease-out forwards;
+      pointer-events: none;
+      z-index: 30;
+    }
+    @keyframes shockwave {
+      0% { transform: scale(0.2); opacity: 1; }
+      100% { transform: scale(3.5); opacity: 0; }
+    }
+
     .btn-action {
       cursor: pointer;
       touch-action: manipulation;
@@ -143,7 +187,6 @@ html_template = """<!DOCTYPE html>
     .btn-action:active {
       transform: scale(0.93);
     }
-    /* Masquer la scrollbar tout en permettant le scroll */
     .no-scrollbar::-webkit-scrollbar {
       display: none;
     }
@@ -188,8 +231,9 @@ html_template = """<!DOCTYPE html>
           <span id="txtLevelBadge">Niveau 1</span>
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
         </button>
-        <div id="txtLevelTitle" class="text-xs font-semibold text-gray-300 truncate max-w-[200px]">
-          Apprentissage 1
+        <div class="flex flex-col items-end">
+          <span id="txtLevelWorld" class="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">Monde Initiation</span>
+          <span id="txtLevelTitle" class="text-xs font-semibold text-gray-300 truncate max-w-[190px]">Apprentissage 1</span>
         </div>
       </div>
 
@@ -247,7 +291,6 @@ html_template = """<!DOCTYPE html>
   <!-- Tiroir de 3 Pièces Inférieur -->
   <footer class="w-full max-w-[380px] pb-2">
     <div class="w-full h-34 bg-[#17182b]/90 border border-white/10 rounded-2xl flex items-center justify-around px-1 py-1" id="dock">
-      <!-- 3 Emplacements de formes -->
       <div class="w-28 h-32 flex flex-col items-center justify-center" id="slot-0"></div>
       <div class="w-28 h-32 flex flex-col items-center justify-center" id="slot-1"></div>
       <div class="w-28 h-32 flex flex-col items-center justify-center" id="slot-2"></div>
@@ -257,62 +300,86 @@ html_template = """<!DOCTYPE html>
   <!-- Élément flottant de glissement (Drag Ghost) -->
   <div id="dragGhost" class="fixed pointer-events-none z-50 hidden"></div>
 
-  <!-- Modal Choix de Niveau (1 à 50) -->
+  <!-- Modal Choix de Niveau (1 à 50) classé par Mondes -->
   <div id="levelSelectModal" class="fixed inset-0 bg-black/85 backdrop-blur-md flex flex-col items-center justify-center p-4 z-50 hidden">
     <div class="w-full max-w-md max-h-[90vh] bg-[#111224] border-2 border-white/20 rounded-3xl p-5 flex flex-col shadow-2xl">
       <!-- En-tête modal -->
       <div class="flex items-center justify-between pb-3 border-b border-white/10">
         <div>
           <h2 class="text-xl font-black text-white">CHOIX DU NIVEAU</h2>
-          <p class="text-xs text-gray-400 font-semibold">50 Niveaux Aventure Défi</p>
+          <p class="text-xs text-gray-400 font-semibold">5 Mondes • 50 Paliers Stratégiques</p>
         </div>
         <button id="btnCloseLevelSelect" type="button" class="btn-action w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20">
           ✕
         </button>
       </div>
 
-      <!-- Onglets de sections (1-25 / 26-50) -->
-      <div class="flex gap-2 my-3">
-        <button id="tabPart1" type="button" class="btn-action flex-1 py-2 rounded-xl text-xs font-bold bg-cyan-500 text-black">
-          Partie 1 (1 - 25)
+      <!-- Onglets Mondes -->
+      <div class="flex overflow-x-auto no-scrollbar gap-1.5 my-3 py-1">
+        <button id="worldTab-0" type="button" class="world-tab btn-action px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap bg-cyan-500 text-black">
+          🌟 Initiation (1-10)
         </button>
-        <button id="tabPart2" type="button" class="btn-action flex-1 py-2 rounded-xl text-xs font-bold bg-[#1d1e30] text-gray-300">
-          Partie 2 (26 - 50)
+        <button id="worldTab-1" type="button" class="world-tab btn-action px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap bg-[#1d1e30] text-gray-300">
+          💎 Pierres (11-20)
+        </button>
+        <button id="worldTab-2" type="button" class="world-tab btn-action px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap bg-[#1d1e30] text-gray-300">
+          🗿 Poids Lourd (21-30)
+        </button>
+        <button id="worldTab-3" type="button" class="world-tab btn-action px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap bg-[#1d1e30] text-gray-300">
+          ⚡ Combos (31-40)
+        </button>
+        <button id="worldTab-4" type="button" class="world-tab btn-action px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap bg-[#1d1e30] text-gray-300">
+          👑 Master (41-50)
         </button>
       </div>
 
-      <!-- Grille des niveaux (scrollable) -->
+      <!-- Grille des niveaux -->
       <div id="levelCardsGrid" class="flex-1 overflow-y-auto no-scrollbar grid grid-cols-5 gap-2.5 p-1">
         <!-- Rempli dynamiquement en JS -->
       </div>
     </div>
   </div>
 
-  <!-- Modal Victoire de Niveau -->
-  <div id="victoryModal" class="fixed inset-0 bg-black/85 backdrop-blur-md flex items-center justify-center p-6 z-50 hidden">
-    <div class="w-full max-w-xs bg-[#111224] border-2 border-emerald-400 rounded-3xl p-6 text-center shadow-2xl shadow-emerald-500/30">
-      <div class="text-5xl mb-2 animate-bounce">🎉</div>
-      <h2 class="text-2xl font-black text-emerald-400 mb-1">VICTOIRE !</h2>
-      <div id="txtVictoryLevelTitle" class="text-xs font-semibold text-gray-300 mb-4">Niveau Réussi</div>
+  <!-- Modal Victoire de Niveau Enrichi -->
+  <div id="victoryModal" class="fixed inset-0 bg-black/85 backdrop-blur-md flex items-center justify-center p-5 z-50 hidden">
+    <div class="w-full max-w-sm bg-[#111224] border-2 border-emerald-400 rounded-3xl p-6 text-center shadow-2xl shadow-emerald-500/30">
+      
+      <!-- Bannière de Bravoure Dynamique -->
+      <div id="txtVictoryBanner" class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 via-yellow-200 to-amber-400 mb-0.5 animate-pulse">
+        ÉCLATANT !
+      </div>
+      <div id="txtVictoryLevelTitle" class="text-xs font-semibold text-gray-300 mb-3">Niveau Réussi</div>
 
-      <!-- Étoiles gagnées -->
-      <div id="victoryStars" class="flex justify-center gap-2 text-3xl mb-5">
-        <span class="text-amber-400">★</span>
-        <span class="text-amber-400">★</span>
-        <span class="text-amber-400">★</span>
+      <!-- 3 Étoiles Animées Séquentielles -->
+      <div id="victoryStars" class="flex justify-center gap-2.5 text-4xl mb-4">
+        <span id="vStar-1" class="text-gray-600 transition-all duration-300">★</span>
+        <span id="vStar-2" class="text-gray-600 transition-all duration-300">★</span>
+        <span id="vStar-3" class="text-gray-600 transition-all duration-300">★</span>
       </div>
 
-      <div class="bg-[#181a30] rounded-2xl p-3.5 mb-5 border border-white/5">
-        <div class="flex justify-between items-center text-xs font-bold text-gray-400 py-1">
-          <span>Score Niveau</span>
-          <span id="txtVictoryScore" class="font-num text-white text-sm font-black">0</span>
+      <!-- Détails des Paliers d'Étoiles -->
+      <div class="bg-[#181a30] rounded-2xl p-3 mb-4 border border-white/10 text-left space-y-1.5 text-xs">
+        <div class="flex justify-between items-center text-gray-300">
+          <span>⭐ 1 : Objectif complété</span>
+          <span class="text-emerald-400 font-bold">✓ Acquis</span>
         </div>
-        <div id="rowVictoryMoves" class="flex justify-between items-center text-xs font-bold text-gray-400 py-1 border-t border-white/5">
-          <span>Coups restants</span>
-          <span id="txtVictoryMoves" class="font-num text-amber-300 text-sm font-black">0</span>
+        <div id="rowStar2" class="flex justify-between items-center text-gray-300">
+          <span>⭐ 2 : Coups restants (<span id="reqMovesStar2">≥ 5</span>)</span>
+          <span id="statusStar2" class="font-bold text-amber-400">✓ Validé</span>
+        </div>
+        <div id="rowStar3" class="flex justify-between items-center text-gray-300">
+          <span>⭐ 3 : Score élevé (<span id="reqScoreStar3">≥ 1200</span>)</span>
+          <span id="statusStar3" class="font-bold text-amber-400">✓ Validé</span>
         </div>
       </div>
 
+      <!-- Score Obtenu -->
+      <div class="bg-[#181a30] rounded-xl px-4 py-2 mb-4 flex justify-between items-center border border-white/5">
+        <span class="text-xs font-bold text-gray-400">Score Niveau</span>
+        <span id="txtVictoryScore" class="font-num text-white text-base font-black">0</span>
+      </div>
+
+      <!-- Boutons d'Action -->
       <button id="btnNextLevel" type="button" class="btn-action w-full py-3.5 bg-gradient-to-r from-emerald-400 to-cyan-400 text-[#002f20] font-black rounded-xl text-base mb-2.5 shadow-lg shadow-emerald-500/30">
         NIVEAU SUIVANT ▶
       </button>
@@ -352,13 +419,11 @@ html_template = """<!DOCTYPE html>
   <div id="pauseModal" class="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-6 z-50 hidden">
     <div class="w-full max-w-xs bg-[#111224] border-2 border-white/20 rounded-3xl p-6 text-center shadow-2xl">
       <h2 class="text-2xl font-black text-white mb-6">PARTIE EN PAUSE</h2>
-      
       <div class="flex justify-center mb-6">
         <button id="btnToggleSoundPause" type="button" class="btn-action px-4 py-2.5 rounded-xl bg-[#1d1e30] border border-white/15 text-white font-bold text-sm flex items-center gap-2">
           <span id="soundIconPause">🔊</span> Son : <span id="soundStatusPause">ACTIF</span>
         </button>
       </div>
-
       <button id="btnResume" type="button" class="btn-action w-full py-3.5 bg-[#00f2fe] hover:bg-[#00dce6] text-[#00373a] font-black rounded-xl text-lg mb-3 shadow-lg shadow-cyan-500/30 transition">
         REPRENDRE
       </button>
@@ -385,10 +450,10 @@ html_template = """<!DOCTYPE html>
   </div>
 
   <script>
-    // --- DONNÉES DES 50 NIVEAUX INTÉGRÉES ---
+    // --- DONNÉES DES 50 NIVEAUX ENRICHIS (Star thresholds & Finisher presentation) ---
     const ALL_LEVELS = """ + levels_json_str + """;
 
-    // --- DICTIONNAIRE DES FORMES DU JEU ---
+    // --- DICTIONNAIRE DES FORMES ---
     const SHAPE_DICTIONARY = {
       "1x1": [[1]],
       "1x2_h": [[1, 1]],
@@ -428,7 +493,7 @@ html_template = """<!DOCTYPE html>
       [[1, 1, 1], [1, 0, 0], [1, 0, 0]] // Grand coin 3x3
     ];
 
-    // --- AUDIO SYNTHESIS ---
+    // --- MOTEUR AUDIO AVANCÉ (Web Audio API) ---
     let audioCtx = null;
     let soundEnabled = true;
 
@@ -502,7 +567,7 @@ html_template = """<!DOCTYPE html>
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(987.77, audioCtx.currentTime);
         osc.frequency.exponentialRampToValueAtTime(1760, audioCtx.currentTime + 0.25);
         gain.gain.setValueAtTime(0.35, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
@@ -513,14 +578,140 @@ html_template = """<!DOCTYPE html>
       } catch(e) {}
     }
 
-    function playVictorySound() {
+    function playRockCrush() {
       if (!soundEnabled) return;
-      [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
-        setTimeout(() => playNote(freq), i * 110);
+      initAudio();
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(120, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.25);
+        gain.gain.setValueAtTime(0.35, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.25);
+      } catch(e) {}
+    }
+
+    // Effet sonore spécifique : Révélation d'une Étoile (1, 2, ou 3)
+    function playStarRevealSound(starNum) {
+      if (!soundEnabled) return;
+      initAudio();
+      const chords = {
+        1: [523.25, 659.25], // C5, E5
+        2: [659.25, 783.99, 987.77], // E5, G5, B5
+        3: [523.25, 659.25, 783.99, 1046.50, 1318.51] // C5 -> E6
+      };
+      const notes = chords[starNum] || [523.25];
+      notes.forEach((f, idx) => {
+        setTimeout(() => {
+          try {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(f, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.24, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.45);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.45);
+          } catch(e) {}
+        }, idx * 65);
       });
     }
 
-    // --- ROTATION 90° ET MIROIR ---
+    // Effet sonore Finisher 1 : missile_shower
+    function playMissileShowerSound() {
+      if (!soundEnabled) return;
+      initAudio();
+      for (let i = 0; i < 4; i++) {
+        setTimeout(() => {
+          try {
+            // Sifflement montant
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(200, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(850, audioCtx.currentTime + 0.18);
+            gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.18);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.18);
+
+            // Explosion basse
+            setTimeout(() => {
+              try {
+                const bOsc = audioCtx.createOscillator();
+                const bGain = audioCtx.createGain();
+                bOsc.type = 'sine';
+                bOsc.frequency.setValueAtTime(130, audioCtx.currentTime);
+                bOsc.frequency.exponentialRampToValueAtTime(35, audioCtx.currentTime + 0.22);
+                bGain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                bGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.22);
+                bOsc.connect(bGain);
+                bGain.connect(audioCtx.destination);
+                bOsc.start();
+                bOsc.stop(audioCtx.currentTime + 0.22);
+              } catch(e) {}
+            }, 160);
+          } catch(e) {}
+        }, i * 140);
+      }
+    }
+
+    // Effet sonore Finisher 2 : gem_explosion
+    function playGemExplosionSound() {
+      if (!soundEnabled) return;
+      initAudio();
+      const freqs = [880, 1108.73, 1318.51, 1760, 2093.00];
+      freqs.forEach((f, idx) => {
+        setTimeout(() => {
+          try {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(f, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.55);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.55);
+          } catch(e) {}
+        }, idx * 60);
+      });
+    }
+
+    // Effet sonore Finisher 3 : grid_rainbow_sweep
+    function playRainbowSweepSound() {
+      if (!soundEnabled) return;
+      initAudio();
+      const notes = [392.00, 440.00, 523.25, 587.33, 659.25, 783.99, 880.00, 1046.50];
+      notes.forEach((f, i) => {
+        setTimeout(() => {
+          try {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(f, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.22, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.3);
+          } catch(e) {}
+        }, i * 50);
+      });
+    }
+
+    // --- ROTATION 90° ---
     function rotateMatrix(matrix) {
       const rows = matrix.length;
       const cols = matrix[0].length;
@@ -538,10 +729,8 @@ html_template = """<!DOCTYPE html>
     let gameMode = 'levels'; // 'levels' ou 'classic'
     let currentLevelIndex = 0; // 0 à 49 (Niveau 1 à 50)
     
-    // Grille : 0: vide, 1-7: bloc de couleur, 2: joyau (initial), -1: roche
     let grid = Array(SIZE).fill(null).map(() => Array(SIZE).fill(0));
     
-    // Progression & Stockage
     let levelProgress = {
       unlockedLevel: 1,
       completed: {}
@@ -556,7 +745,6 @@ html_template = """<!DOCTYPE html>
     let classicScore = 0;
     let classicHighScore = parseInt(localStorage.getItem('block_blast_best') || '0');
     
-    // Statistiques du niveau en cours
     let levelScore = 0;
     let levelLinesCleared = 0;
     let levelJewelsCollected = 0;
@@ -579,6 +767,7 @@ html_template = """<!DOCTYPE html>
     const tabModeClassic = document.getElementById('tabModeClassic');
     
     const txtLevelBadge = document.getElementById('txtLevelBadge');
+    const txtLevelWorld = document.getElementById('txtLevelWorld');
     const txtLevelTitle = document.getElementById('txtLevelTitle');
     const goalIconBox = document.getElementById('goalIconBox');
     const txtGoalProgress = document.getElementById('txtGoalProgress');
@@ -589,7 +778,7 @@ html_template = """<!DOCTYPE html>
     const txtHighScore = document.getElementById('txtHighScore');
     txtHighScore.textContent = classicHighScore;
 
-    // Initialisation du DOM de la grille 8x8
+    // Initialisation du DOM de la grille
     for (let r = 0; r < SIZE; r++) {
       for (let c = 0; c < SIZE; c++) {
         const cell = document.createElement('div');
@@ -609,15 +798,12 @@ html_template = """<!DOCTYPE html>
           const val = grid[r][c];
 
           if (val === 2) {
-            // Joyau
             cell.classList.add('jewel');
             cell.innerHTML = '<div class="jewel-icon text-sm">💎</div>';
           } else if (val === -1) {
-            // Roche
             cell.classList.add('rock');
             cell.innerHTML = '<div class="rock-icon text-sm">🪨</div>';
           } else if (val > 0) {
-            // Bloc normal ou coloré
             const colorClass = val === 1 ? 'color-1' : `color-${val}`;
             cell.classList.add('filled', colorClass);
           }
@@ -632,10 +818,8 @@ html_template = """<!DOCTYPE html>
       currentLevelIndex = levelIndex;
       const level = ALL_LEVELS[levelIndex];
 
-      // Clone de la grille initiale
       grid = level.initial_grid.map(row => [...row]);
 
-      // Réinitialisation des stats du niveau
       levelScore = 0;
       levelLinesCleared = 0;
       levelJewelsCollected = 0;
@@ -644,7 +828,6 @@ html_template = """<!DOCTYPE html>
       isPaused = false;
       movesRemaining = level.move_limit !== null ? level.move_limit : null;
 
-      // Fermeture des modals
       document.getElementById('victoryModal').classList.add('hidden');
       document.getElementById('defeatModal').classList.add('hidden');
       document.getElementById('levelSelectModal').classList.add('hidden');
@@ -658,6 +841,7 @@ html_template = """<!DOCTYPE html>
     function updateLevelHUD() {
       const level = ALL_LEVELS[currentLevelIndex];
       txtLevelBadge.textContent = `Niveau ${level.level_id}`;
+      txtLevelWorld.textContent = `Monde ${level.world || 'Aventure'}`;
       txtLevelTitle.textContent = level.title;
 
       // Objectif
@@ -668,7 +852,6 @@ html_template = """<!DOCTYPE html>
         goalIconBox.textContent = '📏';
         txtGoalProgress.textContent = `${levelLinesCleared} / ${level.target_value} Lig.`;
       } else {
-        // Score
         goalIconBox.textContent = '🎯';
         txtGoalProgress.textContent = `${levelScore} / ${level.target_value} Pts`;
       }
@@ -833,7 +1016,6 @@ html_template = """<!DOCTYPE html>
       const pieceWidth = cols * metrics.cellW + (cols - 1) * 4;
       const pieceHeight = rows * metrics.cellH + (rows - 1) * 4;
 
-      // Décalage vertical de 70px au-dessus du doigt pour une visibilité totale
       const visualCenterX = clientX;
       const visualCenterY = clientY - 70;
 
@@ -903,7 +1085,6 @@ html_template = """<!DOCTYPE html>
       if (!activeDrag) return;
 
       if (!activeDrag.hasMoved) {
-        // Tap simple : rotation immédiate de 90° de la pièce
         rotateSlotPiece(activeDrag.slotIndex);
       } else {
         if (activeDrag.target && activeDrag.target.isValid) {
@@ -918,7 +1099,6 @@ html_template = """<!DOCTYPE html>
       activeDrag = null;
     }
 
-    // Événements globaux tactiles et souris
     window.addEventListener('touchmove', (e) => {
       if (!activeDrag) return;
       e.preventDefault();
@@ -954,7 +1134,6 @@ html_template = """<!DOCTYPE html>
       for (let r = 0; r < matrix.length; r++) {
         for (let c = 0; c < matrix[r].length; c++) {
           if (matrix[r][c] > 0) {
-            // Une cellule est bloquée si elle n'est pas vide (bloc, roche -1 ou joyau 2)
             if (grid[startR + r][startC + c] !== 0) {
               return false;
             }
@@ -1000,7 +1179,6 @@ html_template = """<!DOCTYPE html>
       const fullRows = [];
       const fullCols = [];
 
-      // Une ligne est pleine si aucune cellule n'est 0
       for (let r = 0; r < SIZE; r++) {
         if (grid[r].every(c => c !== 0)) fullRows.push(r);
       }
@@ -1025,7 +1203,6 @@ html_template = """<!DOCTYPE html>
         let jewelsCleared = 0;
         let rocksCleared = 0;
 
-        // Effets d'explosion sur les lignes
         const blastCell = (r, c) => {
           const el = document.getElementById(`cell-${r}-${c}`);
           const val = grid[r][c];
@@ -1038,6 +1215,7 @@ html_template = """<!DOCTYPE html>
             rocksCleared++;
             el.classList.add('blast-rock');
             createParticles(el, 'rock');
+            playRockCrush();
           } else {
             el.classList.add('blast');
             createParticles(el, val);
@@ -1051,7 +1229,6 @@ html_template = """<!DOCTYPE html>
           for (let r = 0; r < SIZE; r++) blastCell(r, c);
         });
 
-        // Calcul des points
         let lineBase = totalLines === 1 ? 100 : (totalLines === 2 ? 300 : (totalLines === 3 ? 600 : 1000));
         let mult = 1.0 + (comboStreak - 1) * 0.5;
         let pointsWon = Math.round(lineBase * mult) + (jewelsCleared * 50) + (rocksCleared * 30);
@@ -1107,7 +1284,94 @@ html_template = """<!DOCTYPE html>
         p.style.setProperty('--dx', `${Math.cos(angle) * dist}px`);
         p.style.setProperty('--dy', `${Math.sin(angle) * dist}px`);
         particleContainer.appendChild(p);
-        setTimeout(() => p.remove(), 600);
+        setTimeout(() => p.remove(), 650);
+      }
+    }
+
+    // --- ANIMATIONS DE FIN DE NIVEAU (FINISHER ANIMATIONS & THÈMES DE PARTICULES) ---
+    function runFinisherAnimation(animType, particleTheme, callback) {
+      const colors = {
+        neon: ['#00f2fe', '#ff00ff', '#00ff66', '#ffff00'],
+        gold: ['#ffd700', '#ffb700', '#fff085', '#ff8c00'],
+        crystal: ['#80ffff', '#00c6ff', '#0072ff', '#e0f7fa'],
+        fireworks: ['#ff0844', '#ff6a00', '#fed929', '#8b5cf6', '#00f2fe']
+      }[particleTheme] || ['#00f2fe', '#ffd700'];
+
+      if (animType === 'missile_shower') {
+        playMissileShowerSound();
+        // Lancement de 4 missiles successifs vers le haut de la grille
+        for (let m = 0; m < 4; m++) {
+          setTimeout(() => {
+            const missile = document.createElement('div');
+            missile.className = 'finisher-missile';
+            const col = Math.floor(Math.random() * 8);
+            const targetRow = Math.floor(Math.random() * 4);
+            const colCell = document.getElementById(`cell-${targetRow}-${col}`);
+            if (colCell) {
+              const rect = colCell.getBoundingClientRect();
+              const boardRect = boardEl.getBoundingClientRect();
+              missile.style.left = `${rect.left - boardRect.left + rect.width / 2 - 7}px`;
+              missile.style.setProperty('--target-y', `${rect.top - boardRect.top}px`);
+              particleContainer.appendChild(missile);
+              setTimeout(() => {
+                missile.remove();
+                spawnThemeConfetti(rect.left - boardRect.left + rect.width/2, rect.top - boardRect.top, colors);
+              }, 400);
+            }
+          }, m * 140);
+        }
+      } else if (animType === 'gem_explosion') {
+        playGemExplosionSound();
+        const shockwave = document.createElement('div');
+        shockwave.className = 'giant-gem-shockwave';
+        particleContainer.appendChild(shockwave);
+        setTimeout(() => {
+          shockwave.remove();
+          const boardRect = boardEl.getBoundingClientRect();
+          spawnThemeConfetti(boardRect.width / 2, boardRect.height / 2, colors, 35);
+        }, 300);
+      } else {
+        // grid_rainbow_sweep
+        playRainbowSweepSound();
+        const sweepColors = ['#ff0844', '#ff6a00', '#fed929', '#00f5a0', '#00f2fe', '#38bdf8', '#8b5cf6', '#ff708d'];
+        for (let c = 0; c < 8; c++) {
+          setTimeout(() => {
+            for (let r = 0; r < 8; r++) {
+              const cell = document.getElementById(`cell-${r}-${c}`);
+              if (cell) {
+                cell.style.setProperty('--sweep-color', sweepColors[c]);
+                cell.classList.add('rainbow-sweep');
+                setTimeout(() => cell.classList.remove('rainbow-sweep'), 300);
+              }
+            }
+          }, c * 60);
+        }
+        setTimeout(() => {
+          const boardRect = boardEl.getBoundingClientRect();
+          spawnThemeConfetti(boardRect.width / 2, boardRect.height / 2, colors, 25);
+        }, 500);
+      }
+
+      setTimeout(callback, 850);
+    }
+
+    function spawnThemeConfetti(cx, cy, colors, count = 20) {
+      for (let i = 0; i < count; i++) {
+        const p = document.createElement('div');
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        p.className = 'particle';
+        p.style.backgroundColor = color;
+        p.style.boxShadow = `0 0 10px ${color}`;
+        p.style.left = `${cx}px`;
+        p.style.top = `${cy}px`;
+        p.style.width = '8px';
+        p.style.height = '8px';
+        const angle = Math.random() * Math.PI * 2;
+        const dist = 35 + Math.random() * 85;
+        p.style.setProperty('--dx', `${Math.cos(angle) * dist}px`);
+        p.style.setProperty('--dy', `${Math.sin(angle) * dist}px`);
+        particleContainer.appendChild(p);
+        setTimeout(() => p.remove(), 650);
       }
     }
 
@@ -1127,7 +1391,6 @@ html_template = """<!DOCTYPE html>
       if (gameMode === 'levels') {
         const level = ALL_LEVELS[currentLevelIndex];
         
-        // 1. Vérification de la victoire
         let victory = false;
         if (level.goal === 'clear_jewels' && levelJewelsCollected >= level.target_value) victory = true;
         if (level.goal === 'clear_lines' && levelLinesCleared >= level.target_value) victory = true;
@@ -1138,14 +1401,12 @@ html_template = """<!DOCTYPE html>
           return;
         }
 
-        // 2. Vérification de la limite de coups
         if (movesRemaining !== null && movesRemaining <= 0) {
           triggerLevelDefeat("Limite de coups atteinte !");
           return;
         }
       }
 
-      // 3. Recharge le tiroir si les 3 pièces ont été jouées
       if (availablePieces.every(p => p === null)) {
         spawnTrio();
       } else {
@@ -1178,26 +1439,37 @@ html_template = """<!DOCTYPE html>
       }
     }
 
-    // --- VICTOIRE & DÉFAITE EN MODE NIVEAU ---
+    // --- VICTOIRE DE NIVEAU ENRICHI AVEC STAR THRESHOLDS & EFFETS SONORES ---
     function triggerLevelVictory() {
       isGameOver = true;
-      playVictorySound();
       const level = ALL_LEVELS[currentLevelIndex];
+      const thresholds = level.star_thresholds || {};
+      const presentation = level.end_level_presentation || {};
 
-      // Calcul des étoiles
+      // Calcul précis des étoiles selon star_thresholds
+      // Étoile 1 : toujours acquise lors de la complétion du goal
       let stars = 1;
-      if (level.move_limit !== null) {
-        const ratio = movesRemaining / level.move_limit;
-        if (ratio >= 0.35) stars = 3;
-        else if (ratio >= 0.1) stars = 2;
-        else stars = 1;
-      } else {
-        if (levelScore >= level.target_value * 1.4) stars = 3;
-        else if (levelScore >= level.target_value * 1.15) stars = 2;
-        else stars = 1;
-      }
 
-      // Sauvegarde de la progression
+      // Étoile 2 : vérification des coups restants (two_stars_moves_left)
+      let star2Achieved = false;
+      if (thresholds.two_stars_moves_left !== null && thresholds.two_stars_moves_left !== undefined) {
+        if (movesRemaining !== null && movesRemaining >= thresholds.two_stars_moves_left) {
+          star2Achieved = true;
+        }
+      } else {
+        star2Achieved = true; // pas de limite de coups -> 2e étoile accordée
+      }
+      if (star2Achieved) stars++;
+
+      // Étoile 3 : vérification du palier de score élevé (three_stars_score)
+      let star3Achieved = false;
+      const scoreReq = thresholds.three_stars_score || 1000;
+      if (levelScore >= scoreReq) {
+        star3Achieved = true;
+      }
+      if (star3Achieved) stars++;
+
+      // Sauvegarde de la progression locale
       if (!levelProgress.completed[level.level_id] || levelProgress.completed[level.level_id].stars < stars) {
         levelProgress.completed[level.level_id] = { stars, score: levelScore };
       }
@@ -1206,28 +1478,59 @@ html_template = """<!DOCTYPE html>
       }
       localStorage.setItem('block_blast_level_progress', JSON.stringify(levelProgress));
 
-      // Affichage modal
-      document.getElementById('txtVictoryLevelTitle').textContent = `Niveau ${level.level_id} : ${level.title}`;
-      document.getElementById('txtVictoryScore').textContent = levelScore;
-      
-      const rowMoves = document.getElementById('rowVictoryMoves');
-      if (level.move_limit !== null) {
-        rowMoves.classList.remove('hidden');
-        document.getElementById('txtVictoryMoves').textContent = movesRemaining;
-      } else {
-        rowMoves.classList.add('hidden');
-      }
+      // Lancement de l'animation de fin (Finisher anim) et sons associés
+      const animType = presentation.finisher_anim || 'grid_rainbow_sweep';
+      const pTheme = presentation.particle_theme || 'neon';
 
-      const starsEl = document.getElementById('victoryStars');
-      starsEl.innerHTML = '';
-      for (let s = 1; s <= 3; s++) {
-        const starSpan = document.createElement('span');
-        starSpan.textContent = '★';
-        starSpan.className = s <= stars ? 'text-amber-400 animate-pulse' : 'text-gray-600';
-        starsEl.appendChild(starSpan);
-      }
+      runFinisherAnimation(animType, pTheme, () => {
+        // Configuration de la Modal Victoire
+        document.getElementById('txtVictoryBanner').textContent = presentation.victory_banner || 'VICTOIRE !';
+        document.getElementById('txtVictoryLevelTitle').textContent = `Niveau ${level.level_id} : ${level.title} (${level.world})`;
+        document.getElementById('txtVictoryScore').textContent = levelScore;
 
-      document.getElementById('victoryModal').classList.remove('hidden');
+        // Mise à jour des conditions visuelles d'étoiles
+        if (thresholds.two_stars_moves_left !== null) {
+          document.getElementById('reqMovesStar2').textContent = `≥ ${thresholds.two_stars_moves_left} coups`;
+          document.getElementById('statusStar2').textContent = star2Achieved ? '✓ Validé' : '✗ Non atteint';
+          document.getElementById('statusStar2').className = star2Achieved ? 'font-bold text-amber-400' : 'font-bold text-gray-500';
+        } else {
+          document.getElementById('reqMovesStar2').textContent = 'Complété';
+          document.getElementById('statusStar2').textContent = '✓ Validé';
+          document.getElementById('statusStar2').className = 'font-bold text-amber-400';
+        }
+
+        document.getElementById('reqScoreStar3').textContent = `≥ ${scoreReq} pts`;
+        document.getElementById('statusStar3').textContent = star3Achieved ? '✓ Validé' : '✗ Non atteint';
+        document.getElementById('statusStar3').className = star3Achieved ? 'font-bold text-amber-400' : 'font-bold text-gray-500';
+
+        // Reset étoiles visuelles
+        for (let s = 1; s <= 3; s++) {
+          const starEl = document.getElementById(`vStar-${s}`);
+          starEl.className = 'text-gray-600 transition-all duration-300 transform scale-75';
+        }
+
+        document.getElementById('victoryModal').classList.remove('hidden');
+
+        // Animation séquentielle d'apparition des étoiles avec effet sonore distinct pour chaque palier
+        setTimeout(() => {
+          document.getElementById('vStar-1').className = 'text-amber-400 transition-all duration-300 transform scale-110';
+          playStarRevealSound(1);
+        }, 220);
+
+        if (stars >= 2) {
+          setTimeout(() => {
+            document.getElementById('vStar-2').className = 'text-amber-400 transition-all duration-300 transform scale-110';
+            playStarRevealSound(2);
+          }, 520);
+        }
+
+        if (stars >= 3) {
+          setTimeout(() => {
+            document.getElementById('vStar-3').className = 'text-amber-400 transition-all duration-300 transform scale-125 drop-shadow-[0_0_12px_#ffd700]';
+            playStarRevealSound(3);
+          }, 820);
+        }
+      });
     }
 
     function triggerLevelDefeat(reason) {
@@ -1281,11 +1584,13 @@ html_template = """<!DOCTYPE html>
       }
     }
 
-    // --- SÉLECTION DES NIVEAUX ---
-    let currentPart = 1; // 1: Niveaux 1-25, 2: Niveaux 26-50
+    // --- SÉLECTION DES NIVEAUX (5 MONDES) ---
+    let selectedWorldIndex = 0; // 0: Initiation (1-10), 1: Pierres (11-20), 2: Poids Lourd (21-30), 3: Combos (31-40), 4: Master (41-50)
 
     function openLevelSelect() {
       isPaused = true;
+      selectedWorldIndex = Math.floor(currentLevelIndex / 10);
+      updateWorldTabsUI();
       renderLevelGrid();
       document.getElementById('levelSelectModal').classList.remove('hidden');
     }
@@ -1295,11 +1600,23 @@ html_template = """<!DOCTYPE html>
       isPaused = false;
     }
 
+    function updateWorldTabsUI() {
+      for (let w = 0; w < 5; w++) {
+        const btn = document.getElementById(`worldTab-${w}`);
+        if (!btn) continue;
+        if (w === selectedWorldIndex) {
+          btn.className = 'world-tab btn-action px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap bg-cyan-500 text-black shadow-md shadow-cyan-500/30';
+        } else {
+          btn.className = 'world-tab btn-action px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap bg-[#1d1e30] text-gray-300 hover:bg-[#252742]';
+        }
+      }
+    }
+
     function renderLevelGrid() {
       const gridContainer = document.getElementById('levelCardsGrid');
       gridContainer.innerHTML = '';
-      const startIdx = (currentPart - 1) * 25;
-      const endIdx = startIdx + 25;
+      const startIdx = selectedWorldIndex * 10;
+      const endIdx = startIdx + 10;
 
       for (let i = startIdx; i < endIdx && i < ALL_LEVELS.length; i++) {
         const lvl = ALL_LEVELS[i];
@@ -1318,13 +1635,11 @@ html_template = """<!DOCTYPE html>
             : 'bg-[#131422] border-white/5 opacity-40 cursor-not-allowed text-gray-500'
         }`;
 
-        // Badge niveau
         const numSpan = document.createElement('span');
         numSpan.className = 'font-black text-sm font-num';
         numSpan.textContent = isUnlocked ? lvl.level_id : '🔒';
         card.appendChild(numSpan);
 
-        // Étoiles ou icône
         if (isUnlocked) {
           const starBox = document.createElement('div');
           starBox.className = 'flex text-[9px] mt-1';
@@ -1336,7 +1651,6 @@ html_template = """<!DOCTYPE html>
           }
           card.appendChild(starBox);
 
-          // Clic pour lancer le niveau
           card.addEventListener('click', () => {
             closeLevelSelect();
             switchMode('levels');
@@ -1375,7 +1689,7 @@ html_template = """<!DOCTYPE html>
       document.getElementById('btnSound').classList.toggle('opacity-50', !soundEnabled);
     }
 
-    // Gestionnaires des boutons
+    // Gestionnaires d'événements
     const attachButtonHandler = (id, handler) => {
       const el = document.getElementById(id);
       if (!el) return;
@@ -1396,19 +1710,13 @@ html_template = """<!DOCTYPE html>
     attachButtonHandler('btnOpenLevelSelect', () => openLevelSelect());
     attachButtonHandler('btnCloseLevelSelect', () => closeLevelSelect());
 
-    attachButtonHandler('tabPart1', () => {
-      currentPart = 1;
-      document.getElementById('tabPart1').className = 'btn-action flex-1 py-2 rounded-xl text-xs font-bold bg-cyan-500 text-black';
-      document.getElementById('tabPart2').className = 'btn-action flex-1 py-2 rounded-xl text-xs font-bold bg-[#1d1e30] text-gray-300';
-      renderLevelGrid();
-    });
-
-    attachButtonHandler('tabPart2', () => {
-      currentPart = 2;
-      document.getElementById('tabPart2').className = 'btn-action flex-1 py-2 rounded-xl text-xs font-bold bg-cyan-500 text-black';
-      document.getElementById('tabPart1').className = 'btn-action flex-1 py-2 rounded-xl text-xs font-bold bg-[#1d1e30] text-gray-300';
-      renderLevelGrid();
-    });
+    for (let w = 0; w < 5; w++) {
+      attachButtonHandler(`worldTab-${w}`, () => {
+        selectedWorldIndex = w;
+        updateWorldTabsUI();
+        renderLevelGrid();
+      });
+    }
 
     attachButtonHandler('btnPause', () => {
       if (isGameOver) return;
@@ -1440,7 +1748,7 @@ html_template = """<!DOCTYPE html>
     attachButtonHandler('btnSound', () => toggleSound());
     attachButtonHandler('btnToggleSoundPause', () => toggleSound());
 
-    // Démarrage initial en Mode Niveaux au Niveau 1
+    // Démarrage initial
     loadLevel(0);
   </script>
 </body>
@@ -1450,4 +1758,4 @@ html_template = """<!DOCTYPE html>
 with open('/root/block_blast_android/web_preview/index.html', 'w', encoding='utf-8') as f:
     f.write(html_template)
 
-print("web_preview/index.html successfully generated!")
+print("web_preview/index.html successfully updated with enriched levels, finisher animations and sound effects!")

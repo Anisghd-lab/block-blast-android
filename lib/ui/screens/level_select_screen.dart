@@ -11,7 +11,22 @@ class LevelSelectScreen extends StatefulWidget {
 }
 
 class _LevelSelectScreenState extends State<LevelSelectScreen> {
-  int _currentPart = 1; // 1: Niveaux 1 à 25, 2: Niveaux 26 à 50
+  int _selectedWorld = 0; // 0: Initiation, 1: Pierres, 2: Poids Lourd, 3: Combos, 4: Master
+
+  final List<Map<String, String>> _worlds = [
+    {'title': '🌟 Initiation', 'range': '1 - 10'},
+    {'title': '💎 Pierres', 'range': '11 - 20'},
+    {'title': '🗿 Poids Lourd', 'range': '21 - 30'},
+    {'title': '⚡ Combos', 'range': '31 - 40'},
+    {'title': '👑 Master', 'range': '41 - 50'},
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    final gameProvider = Provider.of<GameProvider>(context, listen: false);
+    _selectedWorld = ((gameProvider.currentLevelId - 1) ~/ 10).clamp(0, 4);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +35,9 @@ class _LevelSelectScreenState extends State<LevelSelectScreen> {
     final levels = levelManager.levels;
     final progress = levelManager.progress;
 
-    final startIdx = (_currentPart - 1) * 25;
-    final endIdx = (startIdx + 25).clamp(0, levels.length);
-    final currentLevels = levels.sublist(startIdx, endIdx);
+    final startIdx = _selectedWorld * 10;
+    final endIdx = (startIdx + 10).clamp(0, levels.length);
+    final currentLevels = levels.isNotEmpty ? levels.sublist(startIdx, endIdx) : [];
 
     return Scaffold(
       backgroundColor: const Color(0xFF0C0D1D),
@@ -46,83 +61,70 @@ class _LevelSelectScreenState extends State<LevelSelectScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // Onglets de sélection de parties
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: const Color(0xFF15162A),
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.white10),
-                ),
-                padding: const EdgeInsets.all(4),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () => setState(() => _currentPart = 1),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          decoration: BoxDecoration(
-                            gradient: _currentPart == 1
-                                ? const LinearGradient(
-                                    colors: [Color(0xFF00F2FE), Color(0xFF0072FF)],
-                                  )
-                                : null,
-                            borderRadius: BorderRadius.circular(12),
+            // Onglets des 5 Mondes (scrollables horizontalement)
+            SizedBox(
+              height: 48,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 14),
+                itemCount: _worlds.length,
+                itemBuilder: (context, idx) {
+                  final world = _worlds[idx];
+                  final isSelected = _selectedWorld == idx;
+
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: GestureDetector(
+                      onTap: () => setState(() => _selectedWorld = idx),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                        decoration: BoxDecoration(
+                          gradient: isSelected
+                              ? const LinearGradient(
+                                  colors: [Color(0xFF00F2FE), Color(0xFF0072FF)],
+                                )
+                              : null,
+                          color: isSelected ? null : const Color(0xFF1B1C31),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: isSelected ? const Color(0xFF00F2FE) : Colors.white12,
                           ),
-                          child: Center(
-                            child: Text(
-                              'Partie 1 (1 - 25)',
-                              style: TextStyle(
-                                color: _currentPart == 1 ? Colors.white : Colors.white60,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 13,
-                              ),
+                          boxShadow: isSelected
+                              ? [
+                                  BoxShadow(
+                                    color: const Color(0xFF00F2FE).withOpacity(0.35),
+                                    blurRadius: 8,
+                                  ),
+                                ]
+                              : null,
+                        ),
+                        child: Center(
+                          child: Text(
+                            '${world['title']} (${world['range']})',
+                            style: TextStyle(
+                              color: isSelected ? Colors.white : Colors.white60,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
                             ),
                           ),
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () => setState(() => _currentPart = 2),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          decoration: BoxDecoration(
-                            gradient: _currentPart == 2
-                                ? const LinearGradient(
-                                    colors: [Color(0xFF00F2FE), Color(0xFF0072FF)],
-                                  )
-                                : null,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'Partie 2 (26 - 50)',
-                              style: TextStyle(
-                                color: _currentPart == 2 ? Colors.white : Colors.white60,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 13,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                  );
+                },
               ),
             ),
 
-            // Grille 5 colonnes des niveaux
+            const SizedBox(height: 12),
+
+            // Grille des niveaux du monde sélectionné (5 colonnes x 2 lignes)
             Expanded(
               child: GridView.builder(
                 padding: const EdgeInsets.all(16),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 5,
                   crossAxisSpacing: 10,
-                  mainAxisSpacing: 12,
+                  mainAxisSpacing: 14,
                   childAspectRatio: 0.85,
                 ),
                 itemCount: currentLevels.length,
@@ -143,9 +145,9 @@ class _LevelSelectScreenState extends State<LevelSelectScreen> {
                     child: Container(
                       decoration: BoxDecoration(
                         color: isCurrent
-                            ? const Color(0xFF00F2FE).withOpacity(0.2)
+                            ? const Color(0xFF00F2FE).withOpacity(0.25)
                             : (isUnlocked ? const Color(0xFF1B1C31) : const Color(0xFF121320)),
-                        borderRadius: BorderRadius.circular(14),
+                        borderRadius: BorderRadius.circular(16),
                         border: Border.all(
                           color: isCurrent
                               ? const Color(0xFF00F2FE)
@@ -156,7 +158,7 @@ class _LevelSelectScreenState extends State<LevelSelectScreen> {
                             ? [
                                 BoxShadow(
                                   color: const Color(0xFF00F2FE).withOpacity(0.4),
-                                  blurRadius: 8,
+                                  blurRadius: 10,
                                 ),
                               ]
                             : null,
@@ -178,14 +180,14 @@ class _LevelSelectScreenState extends State<LevelSelectScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: List.generate(3, (s) {
                                 return Icon(
-                                  Icons.star,
-                                  size: 11,
-                                  color: s < stars ? Colors.amber : Colors.white24,
+                                  Icons.star_rounded,
+                                  size: 13,
+                                  color: s < stars ? const Color(0xFFFFD700) : Colors.white24,
                                 );
                               }),
                             )
                           else
-                            const SizedBox(height: 11),
+                            const SizedBox(height: 13),
                         ],
                       ),
                     ),

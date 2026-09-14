@@ -2,7 +2,12 @@
   "game": "BlockPuzzle8x8",
   "version": "1.0",
   "total_levels": 50,
-  "grid_legend": { "0": "empty", "1": "block", "2": "jewel", "-1": "rock" },
+  "grid_legend": {
+    "0": "empty",
+    "1": "block",
+    "2": "jewel",
+    "-1": "rock"
+  },
   "levels": [
     {
       "level_id": 1,
@@ -11,16 +16,106 @@
       "target_value": 420,
       "move_limit": null,
       "initial_grid": [
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0]
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
       ],
-      "allowed_shapes": ["1x1", "1x2_h", "1x2_v", "1x3_h", "1x3_v", "2x2"]
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "2x2"
+      ],
+      "world": "Initiation",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": null,
+        "three_stars_score": 600
+      },
+      "end_level_presentation": {
+        "victory_banner": "Bien Joué !",
+        "finisher_anim": "grid_rainbow_sweep",
+        "particle_theme": "neon"
+      }
     },
     {
       "level_id": 2,
@@ -29,16 +124,106 @@
       "target_value": 3,
       "move_limit": null,
       "initial_grid": [
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0]
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
       ],
-      "allowed_shapes": ["1x1", "1x2_h", "1x2_v", "1x3_h", "1x3_v", "2x2"]
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "2x2"
+      ],
+      "world": "Initiation",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": null,
+        "three_stars_score": 1250
+      },
+      "end_level_presentation": {
+        "victory_banner": "Éclatant !",
+        "finisher_anim": "gem_explosion",
+        "particle_theme": "gold"
+      }
     },
     {
       "level_id": 3,
@@ -47,16 +232,106 @@
       "target_value": 660,
       "move_limit": null,
       "initial_grid": [
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0]
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
       ],
-      "allowed_shapes": ["1x1", "1x2_h", "1x2_v", "1x3_h", "1x3_v", "2x2"]
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "2x2"
+      ],
+      "world": "Initiation",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": null,
+        "three_stars_score": 950
+      },
+      "end_level_presentation": {
+        "victory_banner": "Superbe !",
+        "finisher_anim": "missile_shower",
+        "particle_theme": "neon"
+      }
     },
     {
       "level_id": 4,
@@ -65,16 +340,106 @@
       "target_value": 4,
       "move_limit": 22,
       "initial_grid": [
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 1, 0, 0, 0, 1],
-        [0, 0, 1, 0, 0, 0, 1, 0],
-        [0, 1, 0, 0, 0, 1, 0, 0]
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0
+        ]
       ],
-      "allowed_shapes": ["1x1", "1x2_h", "1x2_v", "1x3_h", "1x3_v", "2x2"]
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "2x2"
+      ],
+      "world": "Initiation",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 6,
+        "three_stars_score": 1500
+      },
+      "end_level_presentation": {
+        "victory_banner": "Brillant !",
+        "finisher_anim": "grid_rainbow_sweep",
+        "particle_theme": "gold"
+      }
     },
     {
       "level_id": 5,
@@ -83,16 +448,106 @@
       "target_value": 900,
       "move_limit": 23,
       "initial_grid": [
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 1, 0, 0, 0, 1],
-        [0, 0, 1, 0, 0, 0, 1, 0],
-        [0, 1, 0, 0, 0, 1, 0, 0]
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0
+        ]
       ],
-      "allowed_shapes": ["1x1", "1x2_h", "1x2_v", "1x3_h", "1x3_v", "2x2"]
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "2x2"
+      ],
+      "world": "Initiation",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 6,
+        "three_stars_score": 1300
+      },
+      "end_level_presentation": {
+        "victory_banner": "Parfait !",
+        "finisher_anim": "gem_explosion",
+        "particle_theme": "neon"
+      }
     },
     {
       "level_id": 6,
@@ -101,16 +556,110 @@
       "target_value": 5,
       "move_limit": 24,
       "initial_grid": [
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 1, 0, 0, 0, 1],
-        [0, 0, 1, 0, 0, 0, 1, 0],
-        [0, 1, 0, 0, 0, 1, 0, 0]
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0
+        ]
       ],
-      "allowed_shapes": ["1x1", "1x2_h", "1x2_v", "1x3_h", "1x3_v", "1x4_h", "1x4_v", "2x2", "L_normal", "L_inv"]
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "1x4_h",
+        "1x4_v",
+        "2x2",
+        "L_normal",
+        "L_inv"
+      ],
+      "world": "Initiation",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 7,
+        "three_stars_score": 1800
+      },
+      "end_level_presentation": {
+        "victory_banner": "Net et Précis !",
+        "finisher_anim": "missile_shower",
+        "particle_theme": "gold"
+      }
     },
     {
       "level_id": 7,
@@ -119,16 +668,110 @@
       "target_value": 1140,
       "move_limit": 25,
       "initial_grid": [
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 1, 0, 0, 0, 1],
-        [0, 0, 1, 0, 0, 0, 1, 0],
-        [0, 1, 0, 0, 0, 1, 0, 0]
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0
+        ]
       ],
-      "allowed_shapes": ["1x1", "1x2_h", "1x2_v", "1x3_h", "1x3_v", "1x4_h", "1x4_v", "2x2", "L_normal", "L_inv"]
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "1x4_h",
+        "1x4_v",
+        "2x2",
+        "L_normal",
+        "L_inv"
+      ],
+      "world": "Initiation",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 7,
+        "three_stars_score": 1650
+      },
+      "end_level_presentation": {
+        "victory_banner": "Bel Enchaînement !",
+        "finisher_anim": "grid_rainbow_sweep",
+        "particle_theme": "neon"
+      }
     },
     {
       "level_id": 8,
@@ -137,16 +780,110 @@
       "target_value": 6,
       "move_limit": 26,
       "initial_grid": [
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 1, 0, 0, 0, 1],
-        [0, 0, 1, 0, 0, 0, 1, 0],
-        [0, 1, 0, 0, 0, 1, 0, 0]
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0
+        ]
       ],
-      "allowed_shapes": ["1x1", "1x2_h", "1x2_v", "1x3_h", "1x3_v", "1x4_h", "1x4_v", "2x2", "L_normal", "L_inv"]
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "1x4_h",
+        "1x4_v",
+        "2x2",
+        "L_normal",
+        "L_inv"
+      ],
+      "world": "Initiation",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 7,
+        "three_stars_score": 2100
+      },
+      "end_level_presentation": {
+        "victory_banner": "Astucieux !",
+        "finisher_anim": "gem_explosion",
+        "particle_theme": "gold"
+      }
     },
     {
       "level_id": 9,
@@ -155,16 +892,110 @@
       "target_value": 1380,
       "move_limit": 27,
       "initial_grid": [
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 1, 0, 0, 0, 1],
-        [0, 0, 1, 0, 0, 0, 1, 0],
-        [0, 1, 0, 0, 0, 1, 0, 0]
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0
+        ]
       ],
-      "allowed_shapes": ["1x1", "1x2_h", "1x2_v", "1x3_h", "1x3_v", "1x4_h", "1x4_v", "2x2", "L_normal", "L_inv"]
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "1x4_h",
+        "1x4_v",
+        "2x2",
+        "L_normal",
+        "L_inv"
+      ],
+      "world": "Initiation",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 8,
+        "three_stars_score": 2000
+      },
+      "end_level_presentation": {
+        "victory_banner": "Bravo !",
+        "finisher_anim": "missile_shower",
+        "particle_theme": "neon"
+      }
     },
     {
       "level_id": 10,
@@ -173,16 +1004,110 @@
       "target_value": 7,
       "move_limit": 28,
       "initial_grid": [
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 1, 0, 0, 0, 1],
-        [0, 0, 1, 0, 0, 0, 1, 0],
-        [0, 1, 0, 0, 0, 1, 0, 0]
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0
+        ]
       ],
-      "allowed_shapes": ["1x1", "1x2_h", "1x2_v", "1x3_h", "1x3_v", "1x4_h", "1x4_v", "2x2", "L_normal", "L_inv"]
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "1x4_h",
+        "1x4_v",
+        "2x2",
+        "L_normal",
+        "L_inv"
+      ],
+      "world": "Initiation",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 8,
+        "three_stars_score": 2350
+      },
+      "end_level_presentation": {
+        "victory_banner": "Maîtrise Naissante !",
+        "finisher_anim": "grid_rainbow_sweep",
+        "particle_theme": "gold"
+      }
     },
     {
       "level_id": 11,
@@ -191,16 +1116,110 @@
       "target_value": 4,
       "move_limit": 22,
       "initial_grid": [
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 2, 0, 0, 2, 0, 0, 0],
-        [0, 0, 2, 0, 0, 2, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0]
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
       ],
-      "allowed_shapes": ["1x1", "1x2_h", "1x2_v", "1x3_h", "1x3_v", "1x4_h", "1x4_v", "2x2", "L_normal", "L_inv"]
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "1x4_h",
+        "1x4_v",
+        "2x2",
+        "L_normal",
+        "L_inv"
+      ],
+      "world": "Pierres",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 6,
+        "three_stars_score": 2600
+      },
+      "end_level_presentation": {
+        "victory_banner": "Chasseur de Gemmes !",
+        "finisher_anim": "gem_explosion",
+        "particle_theme": "crystal"
+      }
     },
     {
       "level_id": 12,
@@ -209,16 +1228,110 @@
       "target_value": 5,
       "move_limit": 22,
       "initial_grid": [
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 2, 0, 0, 2, 0, 0, 0],
-        [0, 0, 2, 0, 0, 2, 0, 0],
-        [0, 0, 0, 2, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0]
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
       ],
-      "allowed_shapes": ["1x1", "1x2_h", "1x2_v", "1x3_h", "1x3_v", "1x4_h", "1x4_v", "2x2", "L_normal", "L_inv"]
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "1x4_h",
+        "1x4_v",
+        "2x2",
+        "L_normal",
+        "L_inv"
+      ],
+      "world": "Pierres",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 6,
+        "three_stars_score": 2850
+      },
+      "end_level_presentation": {
+        "victory_banner": "Mineur d'Élite !",
+        "finisher_anim": "missile_shower",
+        "particle_theme": "neon"
+      }
     },
     {
       "level_id": 13,
@@ -227,16 +1340,110 @@
       "target_value": 6,
       "move_limit": 21,
       "initial_grid": [
-        [-1, 0, 0, 0, 0, 0, 0, 0],
-        [0, 2, 0, 0, 2, 0, 0, 0],
-        [0, 0, 2, 0, 0, 2, 0, 0],
-        [0, 0, 0, 2, 0, 0, 2, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0]
+        [
+          -1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
       ],
-      "allowed_shapes": ["1x1", "1x2_h", "1x2_v", "1x3_h", "1x3_v", "1x4_h", "1x4_v", "2x2", "L_normal", "L_inv"]
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "1x4_h",
+        "1x4_v",
+        "2x2",
+        "L_normal",
+        "L_inv"
+      ],
+      "world": "Pierres",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 6,
+        "three_stars_score": 3000
+      },
+      "end_level_presentation": {
+        "victory_banner": "Trésor Révélé !",
+        "finisher_anim": "grid_rainbow_sweep",
+        "particle_theme": "crystal"
+      }
     },
     {
       "level_id": 14,
@@ -245,16 +1452,110 @@
       "target_value": 7,
       "move_limit": 21,
       "initial_grid": [
-        [-1, 0, 0, 0, 0, 0, 0, 0],
-        [0, 2, 0, 0, 2, 0, 0, 0],
-        [0, 0, 2, 0, 0, 2, 0, 0],
-        [0, 0, 0, 2, 0, 0, 2, 0],
-        [0, 2, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0]
+        [
+          -1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
       ],
-      "allowed_shapes": ["1x1", "1x2_h", "1x2_v", "1x3_h", "1x3_v", "1x4_h", "1x4_v", "2x2", "L_normal", "L_inv"]
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "1x4_h",
+        "1x4_v",
+        "2x2",
+        "L_normal",
+        "L_inv"
+      ],
+      "world": "Pierres",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 6,
+        "three_stars_score": 3250
+      },
+      "end_level_presentation": {
+        "victory_banner": "Éblouissant !",
+        "finisher_anim": "gem_explosion",
+        "particle_theme": "neon"
+      }
     },
     {
       "level_id": 15,
@@ -263,16 +1564,110 @@
       "target_value": 8,
       "move_limit": 20,
       "initial_grid": [
-        [-1, 0, 0, 0, 0, 0, 0, 0],
-        [0, 2, 0, 0, 2, 0, 0, 0],
-        [0, 0, 2, 0, 0, 2, 0, 0],
-        [0, 0, 0, 2, 0, 0, 2, 0],
-        [0, 2, 0, 0, 2, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0]
+        [
+          -1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
       ],
-      "allowed_shapes": ["1x1", "1x2_h", "1x2_v", "1x3_h", "1x3_v", "1x4_h", "1x4_v", "2x2", "L_normal", "L_inv"]
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "1x4_h",
+        "1x4_v",
+        "2x2",
+        "L_normal",
+        "L_inv"
+      ],
+      "world": "Pierres",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 6,
+        "three_stars_score": 3400
+      },
+      "end_level_presentation": {
+        "victory_banner": "Diamant Pur !",
+        "finisher_anim": "missile_shower",
+        "particle_theme": "crystal"
+      }
     },
     {
       "level_id": 16,
@@ -281,16 +1676,110 @@
       "target_value": 9,
       "move_limit": 20,
       "initial_grid": [
-        [-1, 0, 0, 0, 0, 0, 0, -1],
-        [0, 2, 0, 0, 2, 0, 0, 0],
-        [0, 0, 2, 0, 0, 2, 0, 0],
-        [0, 0, 0, 2, 0, 0, 2, 0],
-        [0, 2, 0, 0, 2, 0, 0, 0],
-        [0, 0, 2, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0]
+        [
+          -1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          -1
+        ],
+        [
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
       ],
-      "allowed_shapes": ["1x1", "1x2_h", "1x2_v", "1x3_h", "1x3_v", "1x4_h", "1x4_v", "2x2", "L_normal", "L_inv"]
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "1x4_h",
+        "1x4_v",
+        "2x2",
+        "L_normal",
+        "L_inv"
+      ],
+      "world": "Pierres",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 6,
+        "three_stars_score": 3650
+      },
+      "end_level_presentation": {
+        "victory_banner": "Fouille Parfaite !",
+        "finisher_anim": "grid_rainbow_sweep",
+        "particle_theme": "neon"
+      }
     },
     {
       "level_id": 17,
@@ -299,16 +1788,110 @@
       "target_value": 10,
       "move_limit": 19,
       "initial_grid": [
-        [-1, 0, 0, 0, 0, 0, 0, -1],
-        [0, 2, 0, 0, 2, 0, 0, 0],
-        [0, 0, 2, 0, 0, 2, 0, 0],
-        [0, 0, 0, 2, 0, 0, 2, 0],
-        [0, 2, 0, 0, 2, 0, 0, 0],
-        [0, 0, 2, 0, 0, 2, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0]
+        [
+          -1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          -1
+        ],
+        [
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
       ],
-      "allowed_shapes": ["1x1", "1x2_h", "1x2_v", "1x3_h", "1x3_v", "1x4_h", "1x4_v", "2x2", "L_normal", "L_inv"]
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "1x4_h",
+        "1x4_v",
+        "2x2",
+        "L_normal",
+        "L_inv"
+      ],
+      "world": "Pierres",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 5,
+        "three_stars_score": 3800
+      },
+      "end_level_presentation": {
+        "victory_banner": "Joyau Brillant !",
+        "finisher_anim": "gem_explosion",
+        "particle_theme": "crystal"
+      }
     },
     {
       "level_id": 18,
@@ -317,16 +1900,110 @@
       "target_value": 11,
       "move_limit": 19,
       "initial_grid": [
-        [-1, 0, 0, 0, 0, 0, 0, -1],
-        [0, 2, 0, 0, 2, 0, 0, 0],
-        [0, 0, 2, 0, 0, 2, 0, 0],
-        [0, 0, 0, 2, 0, 0, 2, 0],
-        [0, 2, 0, 0, 2, 0, 0, 0],
-        [0, 0, 2, 0, 0, 2, 0, 0],
-        [0, 0, 0, 2, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0]
+        [
+          -1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          -1
+        ],
+        [
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
       ],
-      "allowed_shapes": ["1x1", "1x2_h", "1x2_v", "1x3_h", "1x3_v", "1x4_h", "1x4_v", "2x2", "L_normal", "L_inv"]
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "1x4_h",
+        "1x4_v",
+        "2x2",
+        "L_normal",
+        "L_inv"
+      ],
+      "world": "Pierres",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 5,
+        "three_stars_score": 4050
+      },
+      "end_level_presentation": {
+        "victory_banner": "Collectionneur !",
+        "finisher_anim": "missile_shower",
+        "particle_theme": "neon"
+      }
     },
     {
       "level_id": 19,
@@ -335,16 +2012,110 @@
       "target_value": 12,
       "move_limit": 18,
       "initial_grid": [
-        [-1, 0, 0, 0, 0, 0, 0, -1],
-        [0, 2, 0, 0, 2, 0, 0, 0],
-        [0, 0, 2, 0, 0, 2, 0, 0],
-        [0, 0, 0, 2, 0, 0, 2, 0],
-        [0, 2, 0, 0, 2, 0, 0, 0],
-        [0, 0, 2, 0, 0, 2, 0, 0],
-        [0, 0, 0, 2, 0, 0, 2, 0],
-        [-1, 0, 0, 0, 0, 0, 0, 0]
+        [
+          -1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          -1
+        ],
+        [
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0
+        ],
+        [
+          -1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
       ],
-      "allowed_shapes": ["1x1", "1x2_h", "1x2_v", "1x3_h", "1x3_v", "1x4_h", "1x4_v", "2x2", "L_normal", "L_inv"]
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "1x4_h",
+        "1x4_v",
+        "2x2",
+        "L_normal",
+        "L_inv"
+      ],
+      "world": "Pierres",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 5,
+        "three_stars_score": 4250
+      },
+      "end_level_presentation": {
+        "victory_banner": "Richesse Absolue !",
+        "finisher_anim": "grid_rainbow_sweep",
+        "particle_theme": "crystal"
+      }
     },
     {
       "level_id": 20,
@@ -353,16 +2124,110 @@
       "target_value": 13,
       "move_limit": 18,
       "initial_grid": [
-        [-1, 0, 0, 0, 0, 0, 0, -1],
-        [0, 2, 0, 0, 2, 0, 0, 0],
-        [0, 0, 2, 0, 0, 2, 0, 0],
-        [0, 0, 0, 2, 0, 0, 2, 0],
-        [0, 2, 0, 0, 2, 0, 0, 0],
-        [0, 0, 2, 0, 0, 2, 0, 0],
-        [0, 0, 0, 2, 0, 0, 2, 0],
-        [-1, 0, 0, 0, 0, 0, 0, -1]
+        [
+          -1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          -1
+        ],
+        [
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0
+        ],
+        [
+          -1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          -1
+        ]
       ],
-      "allowed_shapes": ["1x1", "1x2_h", "1x2_v", "1x3_h", "1x3_v", "1x4_h", "1x4_v", "2x2", "L_normal", "L_inv"]
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "1x4_h",
+        "1x4_v",
+        "2x2",
+        "L_normal",
+        "L_inv"
+      ],
+      "world": "Pierres",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 5,
+        "three_stars_score": 4450
+      },
+      "end_level_presentation": {
+        "victory_banner": "Géologue Expert !",
+        "finisher_anim": "gem_explosion",
+        "particle_theme": "neon"
+      }
     },
     {
       "level_id": 21,
@@ -371,16 +2236,111 @@
       "target_value": 7,
       "move_limit": 24,
       "initial_grid": [
-        [1, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [1, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [1, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [1, 0, 0, 0, 0, 0, 0, 0],
-        [0, 1, 0, 1, 0, 1, 0, 1]
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ]
       ],
-      "allowed_shapes": ["1x3_h", "1x3_v", "1x4_h", "1x4_v", "1x5_h", "1x5_v", "2x2", "3x3", "L_giant", "U_shape", "plus_5"]
+      "allowed_shapes": [
+        "1x3_h",
+        "1x3_v",
+        "1x4_h",
+        "1x4_v",
+        "1x5_h",
+        "1x5_v",
+        "2x2",
+        "3x3",
+        "L_giant",
+        "U_shape",
+        "plus_5"
+      ],
+      "world": "Poids Lourd",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 7,
+        "three_stars_score": 2350
+      },
+      "end_level_presentation": {
+        "victory_banner": "Force Brute !",
+        "finisher_anim": "missile_shower",
+        "particle_theme": "fireworks"
+      }
     },
     {
       "level_id": 22,
@@ -389,16 +2349,111 @@
       "target_value": 2700,
       "move_limit": 23,
       "initial_grid": [
-        [1, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [1, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [1, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [1, 0, 0, 0, 0, 0, 0, 0],
-        [0, 1, 0, 1, 0, 1, 0, 1]
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ]
       ],
-      "allowed_shapes": ["1x3_h", "1x3_v", "1x4_h", "1x4_v", "1x5_h", "1x5_v", "2x2", "3x3", "L_giant", "U_shape", "plus_5"]
+      "allowed_shapes": [
+        "1x3_h",
+        "1x3_v",
+        "1x4_h",
+        "1x4_v",
+        "1x5_h",
+        "1x5_v",
+        "2x2",
+        "3x3",
+        "L_giant",
+        "U_shape",
+        "plus_5"
+      ],
+      "world": "Poids Lourd",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 6,
+        "three_stars_score": 3900
+      },
+      "end_level_presentation": {
+        "victory_banner": "Briseur de Roches !",
+        "finisher_anim": "grid_rainbow_sweep",
+        "particle_theme": "gold"
+      }
     },
     {
       "level_id": 23,
@@ -407,16 +2462,111 @@
       "target_value": 9,
       "move_limit": 22,
       "initial_grid": [
-        [1, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [1, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [1, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [1, 0, 0, 0, 0, 0, 0, 0],
-        [0, 1, 0, 1, 0, 1, 0, 1]
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ]
       ],
-      "allowed_shapes": ["1x3_h", "1x3_v", "1x4_h", "1x4_v", "1x5_h", "1x5_v", "2x2", "3x3", "L_giant", "U_shape", "plus_5"]
+      "allowed_shapes": [
+        "1x3_h",
+        "1x3_v",
+        "1x4_h",
+        "1x4_v",
+        "1x5_h",
+        "1x5_v",
+        "2x2",
+        "3x3",
+        "L_giant",
+        "U_shape",
+        "plus_5"
+      ],
+      "world": "Poids Lourd",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 6,
+        "three_stars_score": 2900
+      },
+      "end_level_presentation": {
+        "victory_banner": "Stratège !",
+        "finisher_anim": "gem_explosion",
+        "particle_theme": "fireworks"
+      }
     },
     {
       "level_id": 24,
@@ -425,16 +2575,111 @@
       "target_value": 3400,
       "move_limit": 21,
       "initial_grid": [
-        [1, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [1, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [1, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [1, 0, 0, 0, 0, 0, 0, 0],
-        [0, 1, 0, 1, 0, 1, 0, 1]
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ]
       ],
-      "allowed_shapes": ["1x3_h", "1x3_v", "1x4_h", "1x4_v", "1x5_h", "1x5_v", "2x2", "3x3", "L_giant", "U_shape", "plus_5"]
+      "allowed_shapes": [
+        "1x3_h",
+        "1x3_v",
+        "1x4_h",
+        "1x4_v",
+        "1x5_h",
+        "1x5_v",
+        "2x2",
+        "3x3",
+        "L_giant",
+        "U_shape",
+        "plus_5"
+      ],
+      "world": "Poids Lourd",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 6,
+        "three_stars_score": 4950
+      },
+      "end_level_presentation": {
+        "victory_banner": "Inébranlable !",
+        "finisher_anim": "missile_shower",
+        "particle_theme": "gold"
+      }
     },
     {
       "level_id": 25,
@@ -443,16 +2688,111 @@
       "target_value": 11,
       "move_limit": 20,
       "initial_grid": [
-        [1, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [1, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [1, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [1, 0, 0, 0, 0, 0, 0, 0],
-        [0, 1, 0, 1, 0, 1, 0, 1]
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ]
       ],
-      "allowed_shapes": ["1x3_h", "1x3_v", "1x4_h", "1x4_v", "1x5_h", "1x5_v", "2x2", "3x3", "L_giant", "U_shape", "plus_5"]
+      "allowed_shapes": [
+        "1x3_h",
+        "1x3_v",
+        "1x4_h",
+        "1x4_v",
+        "1x5_h",
+        "1x5_v",
+        "2x2",
+        "3x3",
+        "L_giant",
+        "U_shape",
+        "plus_5"
+      ],
+      "world": "Poids Lourd",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 6,
+        "three_stars_score": 3500
+      },
+      "end_level_presentation": {
+        "victory_banner": "Colosse du Puzzle !",
+        "finisher_anim": "grid_rainbow_sweep",
+        "particle_theme": "fireworks"
+      }
     },
     {
       "level_id": 26,
@@ -461,16 +2801,108 @@
       "target_value": 8,
       "move_limit": 22,
       "initial_grid": [
-        [-1, 0, 0, 0, 0, 0, 0, -1],
-        [0, 0, 1, 1, 1, 1, 0, 0],
-        [0, 1, 0, 0, 0, 0, 1, 0],
-        [0, 1, 0, -1, -1, 0, 1, 0],
-        [0, 1, 0, -1, -1, 0, 1, 0],
-        [0, 1, 0, 0, 0, 0, 1, 0],
-        [0, 0, 1, 1, 1, 1, 0, 0],
-        [-1, 0, 0, 0, 0, 0, 0, -1]
+        [
+          -1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          -1
+        ],
+        [
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          -1,
+          -1,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          -1,
+          -1,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          -1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          -1
+        ]
       ],
-      "allowed_shapes": ["1x2_h", "1x2_v", "1x3_h", "1x3_v", "2x2", "L_normal", "L_inv", "T_shape"]
+      "allowed_shapes": [
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "2x2",
+        "L_normal",
+        "L_inv",
+        "T_shape"
+      ],
+      "world": "Poids Lourd",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 6,
+        "three_stars_score": 2650
+      },
+      "end_level_presentation": {
+        "victory_banner": "Démolisseur !",
+        "finisher_anim": "gem_explosion",
+        "particle_theme": "gold"
+      }
     },
     {
       "level_id": 27,
@@ -479,16 +2911,109 @@
       "target_value": 3200,
       "move_limit": 21,
       "initial_grid": [
-        [0, 0, -1, 0, 0, -1, 0, 0],
-        [0, 1, 0, 0, 0, 0, 1, 0],
-        [-1, 0, 0, 1, 1, 0, 0, -1],
-        [0, 0, 1, 0, 0, 1, 0, 0],
-        [0, 0, 1, 0, 0, 1, 0, 0],
-        [-1, 0, 0, 1, 1, 0, 0, -1],
-        [0, 1, 0, 0, 0, 0, 1, 0],
-        [0, 0, -1, 0, 0, -1, 0, 0]
+        [
+          0,
+          0,
+          -1,
+          0,
+          0,
+          -1,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          -1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          -1
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          -1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          -1
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          -1,
+          0,
+          0,
+          -1,
+          0,
+          0
+        ]
       ],
-      "allowed_shapes": ["1x1", "1x2_h", "1x2_v", "1x3_h", "1x3_v", "2x2", "T_shape", "Z_shape", "S_shape"]
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "2x2",
+        "T_shape",
+        "Z_shape",
+        "S_shape"
+      ],
+      "world": "Poids Lourd",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 6,
+        "three_stars_score": 4650
+      },
+      "end_level_presentation": {
+        "victory_banner": "Roc Vaincu !",
+        "finisher_anim": "missile_shower",
+        "particle_theme": "fireworks"
+      }
     },
     {
       "level_id": 28,
@@ -497,16 +3022,109 @@
       "target_value": 10,
       "move_limit": 24,
       "initial_grid": [
-        [-1, -1, 0, 0, 0, 0, -1, -1],
-        [-1, 0, 0, 1, 1, 0, 0, -1],
-        [0, 0, 1, 0, 0, 1, 0, 0],
-        [0, 1, 0, 0, 0, 0, 1, 0],
-        [0, 1, 0, 0, 0, 0, 1, 0],
-        [0, 0, 1, 0, 0, 1, 0, 0],
-        [-1, 0, 0, 1, 1, 0, 0, -1],
-        [-1, -1, 0, 0, 0, 0, -1, -1]
+        [
+          -1,
+          -1,
+          0,
+          0,
+          0,
+          0,
+          -1,
+          -1
+        ],
+        [
+          -1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          -1
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          -1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          -1
+        ],
+        [
+          -1,
+          -1,
+          0,
+          0,
+          0,
+          0,
+          -1,
+          -1
+        ]
       ],
-      "allowed_shapes": ["1x1", "1x2_h", "1x2_v", "1x3_h", "1x3_v", "1x4_h", "1x4_v", "2x2", "L_normal"]
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "1x4_h",
+        "1x4_v",
+        "2x2",
+        "L_normal"
+      ],
+      "world": "Poids Lourd",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 7,
+        "three_stars_score": 3200
+      },
+      "end_level_presentation": {
+        "victory_banner": "Impact Titanesque !",
+        "finisher_anim": "grid_rainbow_sweep",
+        "particle_theme": "gold"
+      }
     },
     {
       "level_id": 29,
@@ -515,16 +3133,108 @@
       "target_value": 3800,
       "move_limit": 22,
       "initial_grid": [
-        [0, 0, 0, -1, -1, 0, 0, 0],
-        [0, 1, 0, 0, 0, 0, 1, 0],
-        [0, 0, 1, 0, 0, 1, 0, 0],
-        [-1, 0, 0, 0, 0, 0, 0, -1],
-        [-1, 0, 0, 0, 0, 0, 0, -1],
-        [0, 0, 1, 0, 0, 1, 0, 0],
-        [0, 1, 0, 0, 0, 0, 1, 0],
-        [0, 0, 0, -1, -1, 0, 0, 0]
+        [
+          0,
+          0,
+          0,
+          -1,
+          -1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          -1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          -1
+        ],
+        [
+          -1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          -1
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          -1,
+          -1,
+          0,
+          0,
+          0
+        ]
       ],
-      "allowed_shapes": ["1x2_h", "1x2_v", "1x3_h", "1x3_v", "2x2", "T_shape", "L_normal", "L_inv"]
+      "allowed_shapes": [
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "2x2",
+        "T_shape",
+        "L_normal",
+        "L_inv"
+      ],
+      "world": "Poids Lourd",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 6,
+        "three_stars_score": 5500
+      },
+      "end_level_presentation": {
+        "victory_banner": "Géant du Bloc !",
+        "finisher_anim": "gem_explosion",
+        "particle_theme": "fireworks"
+      }
     },
     {
       "level_id": 30,
@@ -533,16 +3243,109 @@
       "target_value": 12,
       "move_limit": 25,
       "initial_grid": [
-        [-1, 0, -1, 0, 0, -1, 0, -1],
-        [0, 1, 0, 1, 1, 0, 1, 0],
-        [-1, 0, 0, 0, 0, 0, 0, -1],
-        [0, 1, 0, -1, -1, 0, 1, 0],
-        [0, 1, 0, -1, -1, 0, 1, 0],
-        [-1, 0, 0, 0, 0, 0, 0, -1],
-        [0, 1, 0, 1, 1, 0, 1, 0],
-        [-1, 0, -1, 0, 0, -1, 0, -1]
+        [
+          -1,
+          0,
+          -1,
+          0,
+          0,
+          -1,
+          0,
+          -1
+        ],
+        [
+          0,
+          1,
+          0,
+          1,
+          1,
+          0,
+          1,
+          0
+        ],
+        [
+          -1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          -1
+        ],
+        [
+          0,
+          1,
+          0,
+          -1,
+          -1,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          -1,
+          -1,
+          0,
+          1,
+          0
+        ],
+        [
+          -1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          -1
+        ],
+        [
+          0,
+          1,
+          0,
+          1,
+          1,
+          0,
+          1,
+          0
+        ],
+        [
+          -1,
+          0,
+          -1,
+          0,
+          0,
+          -1,
+          0,
+          -1
+        ]
       ],
-      "allowed_shapes": ["1x1", "1x2_h", "1x2_v", "1x3_h", "1x3_v", "2x2", "T_shape", "L_normal", "L_inv"]
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "2x2",
+        "T_shape",
+        "L_normal",
+        "L_inv"
+      ],
+      "world": "Poids Lourd",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 7,
+        "three_stars_score": 3750
+      },
+      "end_level_presentation": {
+        "victory_banner": "Écrasant !",
+        "finisher_anim": "missile_shower",
+        "particle_theme": "gold"
+      }
     },
     {
       "level_id": 31,
@@ -551,16 +3354,108 @@
       "target_value": 10,
       "move_limit": 20,
       "initial_grid": [
-        [0, 0, 0, 2, 2, 0, 0, 0],
-        [0, 0, 2, 0, 0, 2, 0, 0],
-        [0, 2, 0, 0, 0, 0, 2, 0],
-        [2, 0, 0, 0, 0, 0, 0, 2],
-        [2, 0, 0, 0, 0, 0, 0, 2],
-        [0, 2, 0, 0, 0, 0, 2, 0],
-        [0, 0, 2, 0, 0, 2, 0, 0],
-        [0, 0, 0, 2, 2, 0, 0, 0]
+        [
+          0,
+          0,
+          0,
+          2,
+          2,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        [
+          0,
+          2,
+          0,
+          0,
+          0,
+          0,
+          2,
+          0
+        ],
+        [
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2
+        ],
+        [
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2
+        ],
+        [
+          0,
+          2,
+          0,
+          0,
+          0,
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          2,
+          0,
+          0,
+          0
+        ]
       ],
-      "allowed_shapes": ["1x1", "1x2_h", "1x2_v", "1x3_h", "1x3_v", "1x4_h", "1x4_v", "2x2"]
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "1x4_h",
+        "1x4_v",
+        "2x2"
+      ],
+      "world": "Combos",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 6,
+        "three_stars_score": 3900
+      },
+      "end_level_presentation": {
+        "victory_banner": "Maître du Combo !",
+        "finisher_anim": "grid_rainbow_sweep",
+        "particle_theme": "fireworks"
+      }
     },
     {
       "level_id": 32,
@@ -569,16 +3464,108 @@
       "target_value": 12,
       "move_limit": 19,
       "initial_grid": [
-        [2, 0, 0, 0, 0, 0, 0, 2],
-        [0, 2, 0, 1, 1, 0, 2, 0],
-        [0, 0, 2, 0, 0, 2, 0, 0],
-        [0, 1, 0, 2, 2, 0, 1, 0],
-        [0, 1, 0, 2, 2, 0, 1, 0],
-        [0, 0, 2, 0, 0, 2, 0, 0],
-        [0, 2, 0, 1, 1, 0, 2, 0],
-        [2, 0, 0, 0, 0, 0, 0, 2]
+        [
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2
+        ],
+        [
+          0,
+          2,
+          0,
+          1,
+          1,
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          2,
+          2,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          2,
+          2,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        [
+          0,
+          2,
+          0,
+          1,
+          1,
+          0,
+          2,
+          0
+        ],
+        [
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2
+        ]
       ],
-      "allowed_shapes": ["1x1", "1x2_h", "1x2_v", "1x3_h", "1x3_v", "2x2", "L_normal", "L_inv"]
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "2x2",
+        "L_normal",
+        "L_inv"
+      ],
+      "world": "Combos",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 5,
+        "three_stars_score": 4300
+      },
+      "end_level_presentation": {
+        "victory_banner": "Cascade Magique !",
+        "finisher_anim": "gem_explosion",
+        "particle_theme": "crystal"
+      }
     },
     {
       "level_id": 33,
@@ -587,16 +3574,109 @@
       "target_value": 14,
       "move_limit": 19,
       "initial_grid": [
-        [-1, 2, 0, 0, 0, 0, 2, -1],
-        [2, 0, 2, 0, 0, 2, 0, 2],
-        [0, 2, 0, 2, 2, 0, 2, 0],
-        [0, 0, 2, 0, 0, 2, 0, 0],
-        [0, 0, 2, 0, 0, 2, 0, 0],
-        [0, 2, 0, 2, 2, 0, 2, 0],
-        [2, 0, 2, 0, 0, 2, 0, 2],
-        [-1, 2, 0, 0, 0, 0, 2, -1]
+        [
+          -1,
+          2,
+          0,
+          0,
+          0,
+          0,
+          2,
+          -1
+        ],
+        [
+          2,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          2
+        ],
+        [
+          0,
+          2,
+          0,
+          2,
+          2,
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        [
+          0,
+          2,
+          0,
+          2,
+          2,
+          0,
+          2,
+          0
+        ],
+        [
+          2,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          2
+        ],
+        [
+          -1,
+          2,
+          0,
+          0,
+          0,
+          0,
+          2,
+          -1
+        ]
       ],
-      "allowed_shapes": ["1x1", "1x2_h", "1x2_v", "1x3_h", "1x3_v", "1x4_h", "1x4_v", "2x2", "T_shape"]
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "1x4_h",
+        "1x4_v",
+        "2x2",
+        "T_shape"
+      ],
+      "world": "Combos",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 5,
+        "three_stars_score": 4800
+      },
+      "end_level_presentation": {
+        "victory_banner": "Mega Blast !",
+        "finisher_anim": "missile_shower",
+        "particle_theme": "fireworks"
+      }
     },
     {
       "level_id": 34,
@@ -605,16 +3685,108 @@
       "target_value": 16,
       "move_limit": 18,
       "initial_grid": [
-        [2, 2, 0, 0, 0, 0, 2, 2],
-        [2, 0, 2, 0, 0, 2, 0, 2],
-        [0, 2, 0, 2, 2, 0, 2, 0],
-        [0, 0, 2, -1, -1, 2, 0, 0],
-        [0, 0, 2, -1, -1, 2, 0, 0],
-        [0, 2, 0, 2, 2, 0, 2, 0],
-        [2, 0, 2, 0, 0, 2, 0, 2],
-        [2, 2, 0, 0, 0, 0, 2, 2]
+        [
+          2,
+          2,
+          0,
+          0,
+          0,
+          0,
+          2,
+          2
+        ],
+        [
+          2,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          2
+        ],
+        [
+          0,
+          2,
+          0,
+          2,
+          2,
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          -1,
+          -1,
+          2,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          -1,
+          -1,
+          2,
+          0,
+          0
+        ],
+        [
+          0,
+          2,
+          0,
+          2,
+          2,
+          0,
+          2,
+          0
+        ],
+        [
+          2,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          2
+        ],
+        [
+          2,
+          2,
+          0,
+          0,
+          0,
+          0,
+          2,
+          2
+        ]
       ],
-      "allowed_shapes": ["1x1", "1x2_h", "1x2_v", "1x3_h", "1x3_v", "2x2", "L_normal", "T_shape"]
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "2x2",
+        "L_normal",
+        "T_shape"
+      ],
+      "world": "Combos",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 5,
+        "three_stars_score": 5200
+      },
+      "end_level_presentation": {
+        "victory_banner": "Virtuose !",
+        "finisher_anim": "grid_rainbow_sweep",
+        "particle_theme": "crystal"
+      }
     },
     {
       "level_id": 35,
@@ -623,16 +3795,108 @@
       "target_value": 18,
       "move_limit": 18,
       "initial_grid": [
-        [2, 0, 2, 0, 0, 2, 0, 2],
-        [0, 2, 0, 2, 2, 0, 2, 0],
-        [2, 0, 2, 0, 0, 2, 0, 2],
-        [0, 2, 0, -1, -1, 0, 2, 0],
-        [0, 2, 0, -1, -1, 0, 2, 0],
-        [2, 0, 2, 0, 0, 2, 0, 2],
-        [0, 2, 0, 2, 2, 0, 2, 0],
-        [2, 0, 2, 0, 0, 2, 0, 2]
+        [
+          2,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          2
+        ],
+        [
+          0,
+          2,
+          0,
+          2,
+          2,
+          0,
+          2,
+          0
+        ],
+        [
+          2,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          2
+        ],
+        [
+          0,
+          2,
+          0,
+          -1,
+          -1,
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          2,
+          0,
+          -1,
+          -1,
+          0,
+          2,
+          0
+        ],
+        [
+          2,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          2
+        ],
+        [
+          0,
+          2,
+          0,
+          2,
+          2,
+          0,
+          2,
+          0
+        ],
+        [
+          2,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          2
+        ]
       ],
-      "allowed_shapes": ["1x1", "1x2_h", "1x2_v", "1x3_h", "1x3_v", "1x4_h", "1x4_v", "2x2"]
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "1x4_h",
+        "1x4_v",
+        "2x2"
+      ],
+      "world": "Combos",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 5,
+        "three_stars_score": 5650
+      },
+      "end_level_presentation": {
+        "victory_banner": "Harmonie Parfaite !",
+        "finisher_anim": "gem_explosion",
+        "particle_theme": "fireworks"
+      }
     },
     {
       "level_id": 36,
@@ -641,16 +3905,106 @@
       "target_value": 8,
       "move_limit": 20,
       "initial_grid": [
-        [0, 0, 1, 0, 0, 1, 0, 0],
-        [0, 1, 0, 0, 0, 0, 1, 0],
-        [1, 0, 0, 0, 0, 0, 0, 1],
-        [0, 0, 0, 1, 1, 0, 0, 0],
-        [0, 0, 0, 1, 1, 0, 0, 0],
-        [1, 0, 0, 0, 0, 0, 0, 1],
-        [0, 1, 0, 0, 0, 0, 1, 0],
-        [0, 0, 1, 0, 0, 1, 0, 0]
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ]
       ],
-      "allowed_shapes": ["T_shape", "Z_shape", "S_shape", "L_normal", "L_inv", "plus_5"]
+      "allowed_shapes": [
+        "T_shape",
+        "Z_shape",
+        "S_shape",
+        "L_normal",
+        "L_inv",
+        "plus_5"
+      ],
+      "world": "Combos",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 6,
+        "three_stars_score": 2650
+      },
+      "end_level_presentation": {
+        "victory_banner": "Combo Explosif !",
+        "finisher_anim": "missile_shower",
+        "particle_theme": "crystal"
+      }
     },
     {
       "level_id": 37,
@@ -659,16 +4013,106 @@
       "target_value": 4200,
       "move_limit": 21,
       "initial_grid": [
-        [1, 1, 0, 0, 0, 0, 1, 1],
-        [1, 0, 0, 0, 0, 0, 0, 1],
-        [0, 0, 1, 0, 0, 1, 0, 0],
-        [0, 0, 0, 1, 1, 0, 0, 0],
-        [0, 0, 0, 1, 1, 0, 0, 0],
-        [0, 0, 1, 0, 0, 1, 0, 0],
-        [1, 0, 0, 0, 0, 0, 0, 1],
-        [1, 1, 0, 0, 0, 0, 1, 1]
+        [
+          1,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          1
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          1,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          1
+        ]
       ],
-      "allowed_shapes": ["2x2", "3x3", "T_shape", "L_giant", "U_shape", "plus_5"]
+      "allowed_shapes": [
+        "2x2",
+        "3x3",
+        "T_shape",
+        "L_giant",
+        "U_shape",
+        "plus_5"
+      ],
+      "world": "Combos",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 6,
+        "three_stars_score": 6100
+      },
+      "end_level_presentation": {
+        "victory_banner": "Rythme Parfait !",
+        "finisher_anim": "grid_rainbow_sweep",
+        "particle_theme": "fireworks"
+      }
     },
     {
       "level_id": 38,
@@ -677,16 +4121,108 @@
       "target_value": 10,
       "move_limit": 22,
       "initial_grid": [
-        [0, 1, 0, 1, 0, 1, 0, 1],
-        [1, 0, 1, 0, 1, 0, 1, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [1, 0, 1, 0, 1, 0, 1, 0],
-        [0, 1, 0, 1, 0, 1, 0, 1]
+        [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        [
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ]
       ],
-      "allowed_shapes": ["1x3_h", "1x3_v", "1x4_h", "1x4_v", "T_shape", "Z_shape", "S_shape", "2x2"]
+      "allowed_shapes": [
+        "1x3_h",
+        "1x3_v",
+        "1x4_h",
+        "1x4_v",
+        "T_shape",
+        "Z_shape",
+        "S_shape",
+        "2x2"
+      ],
+      "world": "Combos",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 6,
+        "three_stars_score": 3200
+      },
+      "end_level_presentation": {
+        "victory_banner": "Chaîne Divine !",
+        "finisher_anim": "gem_explosion",
+        "particle_theme": "crystal"
+      }
     },
     {
       "level_id": 39,
@@ -695,16 +4231,107 @@
       "target_value": 4800,
       "move_limit": 20,
       "initial_grid": [
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 1, 1, 0, 0, 1, 1, 0],
-        [0, 1, 0, 0, 0, 0, 1, 0],
-        [0, 0, 0, 1, 1, 0, 0, 0],
-        [0, 0, 0, 1, 1, 0, 0, 0],
-        [0, 1, 0, 0, 0, 0, 1, 0],
-        [0, 1, 1, 0, 0, 1, 1, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0]
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
       ],
-      "allowed_shapes": ["1x4_h", "1x4_v", "2x2", "3x3", "L_giant", "plus_5", "U_shape"]
+      "allowed_shapes": [
+        "1x4_h",
+        "1x4_v",
+        "2x2",
+        "3x3",
+        "L_giant",
+        "plus_5",
+        "U_shape"
+      ],
+      "world": "Combos",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 6,
+        "three_stars_score": 6950
+      },
+      "end_level_presentation": {
+        "victory_banner": "Tempête de Lignes !",
+        "finisher_anim": "missile_shower",
+        "particle_theme": "fireworks"
+      }
     },
     {
       "level_id": 40,
@@ -713,16 +4340,109 @@
       "target_value": 12,
       "move_limit": 24,
       "initial_grid": [
-        [1, 0, 0, 1, 1, 0, 0, 1],
-        [0, 1, 0, 0, 0, 0, 1, 0],
-        [0, 0, 1, 0, 0, 1, 0, 0],
-        [1, 0, 0, 1, 1, 0, 0, 1],
-        [1, 0, 0, 1, 1, 0, 0, 1],
-        [0, 0, 1, 0, 0, 1, 0, 0],
-        [0, 1, 0, 0, 0, 0, 1, 0],
-        [1, 0, 0, 1, 1, 0, 0, 1]
+        [
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1
+        ],
+        [
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1
+        ]
       ],
-      "allowed_shapes": ["1x2_h", "1x2_v", "1x3_h", "1x3_v", "2x2", "T_shape", "L_normal", "Z_shape", "S_shape"]
+      "allowed_shapes": [
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "2x2",
+        "T_shape",
+        "L_normal",
+        "Z_shape",
+        "S_shape"
+      ],
+      "world": "Combos",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 7,
+        "three_stars_score": 3750
+      },
+      "end_level_presentation": {
+        "victory_banner": "Fulgurant !",
+        "finisher_anim": "grid_rainbow_sweep",
+        "particle_theme": "crystal"
+      }
     },
     {
       "level_id": 41,
@@ -731,16 +4451,108 @@
       "target_value": 12,
       "move_limit": 18,
       "initial_grid": [
-        [-1, 0, 2, 0, 0, 2, 0, -1],
-        [0, 2, 0, 1, 1, 0, 2, 0],
-        [2, 0, 0, 0, 0, 0, 0, 2],
-        [0, 1, 0, -1, -1, 0, 1, 0],
-        [0, 1, 0, -1, -1, 0, 1, 0],
-        [2, 0, 0, 0, 0, 0, 0, 2],
-        [0, 2, 0, 1, 1, 0, 2, 0],
-        [-1, 0, 2, 0, 0, 2, 0, -1]
+        [
+          -1,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          -1
+        ],
+        [
+          0,
+          2,
+          0,
+          1,
+          1,
+          0,
+          2,
+          0
+        ],
+        [
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2
+        ],
+        [
+          0,
+          1,
+          0,
+          -1,
+          -1,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          -1,
+          -1,
+          0,
+          1,
+          0
+        ],
+        [
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2
+        ],
+        [
+          0,
+          2,
+          0,
+          1,
+          1,
+          0,
+          2,
+          0
+        ],
+        [
+          -1,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          -1
+        ]
       ],
-      "allowed_shapes": ["1x1", "1x2_h", "1x2_v", "1x3_h", "1x3_v", "2x2", "L_normal", "T_shape"]
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "2x2",
+        "L_normal",
+        "T_shape"
+      ],
+      "world": "Master",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 5,
+        "three_stars_score": 4250
+      },
+      "end_level_presentation": {
+        "victory_banner": "Maître du Puzzle !",
+        "finisher_anim": "gem_explosion",
+        "particle_theme": "gold"
+      }
     },
     {
       "level_id": 42,
@@ -749,16 +4561,108 @@
       "target_value": 5200,
       "move_limit": 20,
       "initial_grid": [
-        [0, -1, 0, 0, 0, 0, -1, 0],
-        [-1, 2, 0, 1, 1, 0, 2, -1],
-        [0, 0, 2, 0, 0, 2, 0, 0],
-        [0, 1, 0, 2, 2, 0, 1, 0],
-        [0, 1, 0, 2, 2, 0, 1, 0],
-        [0, 0, 2, 0, 0, 2, 0, 0],
-        [-1, 2, 0, 1, 1, 0, 2, -1],
-        [0, -1, 0, 0, 0, 0, -1, 0]
+        [
+          0,
+          -1,
+          0,
+          0,
+          0,
+          0,
+          -1,
+          0
+        ],
+        [
+          -1,
+          2,
+          0,
+          1,
+          1,
+          0,
+          2,
+          -1
+        ],
+        [
+          0,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          2,
+          2,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          2,
+          2,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        [
+          -1,
+          2,
+          0,
+          1,
+          1,
+          0,
+          2,
+          -1
+        ],
+        [
+          0,
+          -1,
+          0,
+          0,
+          0,
+          0,
+          -1,
+          0
+        ]
       ],
-      "allowed_shapes": ["1x2_h", "1x2_v", "1x3_h", "1x3_v", "1x4_h", "1x4_v", "2x2", "L_normal"]
+      "allowed_shapes": [
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "1x4_h",
+        "1x4_v",
+        "2x2",
+        "L_normal"
+      ],
+      "world": "Master",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 6,
+        "three_stars_score": 7550
+      },
+      "end_level_presentation": {
+        "victory_banner": "Divin !",
+        "finisher_anim": "missile_shower",
+        "particle_theme": "fireworks"
+      }
     },
     {
       "level_id": 43,
@@ -767,16 +4671,108 @@
       "target_value": 14,
       "move_limit": 17,
       "initial_grid": [
-        [-1, 2, -1, 0, 0, -1, 2, -1],
-        [2, 0, 0, 2, 2, 0, 0, 2],
-        [-1, 0, 2, 0, 0, 2, 0, -1],
-        [0, 2, 0, 0, 0, 0, 2, 0],
-        [0, 2, 0, 0, 0, 0, 2, 0],
-        [-1, 0, 2, 0, 0, 2, 0, -1],
-        [2, 0, 0, 2, 2, 0, 0, 2],
-        [-1, 2, -1, 0, 0, -1, 2, -1]
+        [
+          -1,
+          2,
+          -1,
+          0,
+          0,
+          -1,
+          2,
+          -1
+        ],
+        [
+          2,
+          0,
+          0,
+          2,
+          2,
+          0,
+          0,
+          2
+        ],
+        [
+          -1,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          -1
+        ],
+        [
+          0,
+          2,
+          0,
+          0,
+          0,
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          2,
+          0,
+          0,
+          0,
+          0,
+          2,
+          0
+        ],
+        [
+          -1,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          -1
+        ],
+        [
+          2,
+          0,
+          0,
+          2,
+          2,
+          0,
+          0,
+          2
+        ],
+        [
+          -1,
+          2,
+          -1,
+          0,
+          0,
+          -1,
+          2,
+          -1
+        ]
       ],
-      "allowed_shapes": ["1x1", "1x2_h", "1x2_v", "1x3_h", "1x3_v", "2x2", "T_shape", "L_normal"]
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "2x2",
+        "T_shape",
+        "L_normal"
+      ],
+      "world": "Master",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 5,
+        "three_stars_score": 4650
+      },
+      "end_level_presentation": {
+        "victory_banner": "Légendaire !",
+        "finisher_anim": "grid_rainbow_sweep",
+        "particle_theme": "neon"
+      }
     },
     {
       "level_id": 44,
@@ -785,16 +4781,108 @@
       "target_value": 13,
       "move_limit": 22,
       "initial_grid": [
-        [-1, 0, 0, 1, 1, 0, 0, -1],
-        [0, 0, 1, 0, 0, 1, 0, 0],
-        [0, 1, 0, -1, -1, 0, 1, 0],
-        [1, 0, -1, 0, 0, -1, 0, 1],
-        [1, 0, -1, 0, 0, -1, 0, 1],
-        [0, 1, 0, -1, -1, 0, 1, 0],
-        [0, 0, 1, 0, 0, 1, 0, 0],
-        [-1, 0, 0, 1, 1, 0, 0, -1]
+        [
+          -1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          -1
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          -1,
+          -1,
+          0,
+          1,
+          0
+        ],
+        [
+          1,
+          0,
+          -1,
+          0,
+          0,
+          -1,
+          0,
+          1
+        ],
+        [
+          1,
+          0,
+          -1,
+          0,
+          0,
+          -1,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0,
+          -1,
+          -1,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          -1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          -1
+        ]
       ],
-      "allowed_shapes": ["1x2_h", "1x2_v", "1x3_h", "1x3_v", "2x2", "T_shape", "L_normal", "L_inv"]
+      "allowed_shapes": [
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "2x2",
+        "T_shape",
+        "L_normal",
+        "L_inv"
+      ],
+      "world": "Master",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 6,
+        "three_stars_score": 4050
+      },
+      "end_level_presentation": {
+        "victory_banner": "Grand Maître !",
+        "finisher_anim": "gem_explosion",
+        "particle_theme": "crystal"
+      }
     },
     {
       "level_id": 45,
@@ -803,16 +4891,108 @@
       "target_value": 6000,
       "move_limit": 20,
       "initial_grid": [
-        [-1, 2, 0, 1, 1, 0, 2, -1],
-        [2, 0, 1, 0, 0, 1, 0, 2],
-        [0, 1, 0, 2, 2, 0, 1, 0],
-        [1, 0, 2, -1, -1, 2, 0, 1],
-        [1, 0, 2, -1, -1, 2, 0, 1],
-        [0, 1, 0, 2, 2, 0, 1, 0],
-        [2, 0, 1, 0, 0, 1, 0, 2],
-        [-1, 2, 0, 1, 1, 0, 2, -1]
+        [
+          -1,
+          2,
+          0,
+          1,
+          1,
+          0,
+          2,
+          -1
+        ],
+        [
+          2,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          2
+        ],
+        [
+          0,
+          1,
+          0,
+          2,
+          2,
+          0,
+          1,
+          0
+        ],
+        [
+          1,
+          0,
+          2,
+          -1,
+          -1,
+          2,
+          0,
+          1
+        ],
+        [
+          1,
+          0,
+          2,
+          -1,
+          -1,
+          2,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0,
+          2,
+          2,
+          0,
+          1,
+          0
+        ],
+        [
+          2,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          2
+        ],
+        [
+          -1,
+          2,
+          0,
+          1,
+          1,
+          0,
+          2,
+          -1
+        ]
       ],
-      "allowed_shapes": ["1x1", "1x2_h", "1x2_v", "1x3_h", "1x3_v", "2x2", "T_shape", "plus_5"]
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "2x2",
+        "T_shape",
+        "plus_5"
+      ],
+      "world": "Master",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 6,
+        "three_stars_score": 8700
+      },
+      "end_level_presentation": {
+        "victory_banner": "Champion Suprême !",
+        "finisher_anim": "missile_shower",
+        "particle_theme": "gold"
+      }
     },
     {
       "level_id": 46,
@@ -821,16 +5001,108 @@
       "target_value": 16,
       "move_limit": 18,
       "initial_grid": [
-        [2, 0, 2, 0, 0, 2, 0, 2],
-        [0, 2, 0, 2, 2, 0, 2, 0],
-        [2, 0, -1, 0, 0, -1, 0, 2],
-        [0, 2, 0, 2, 2, 0, 2, 0],
-        [0, 2, 0, 2, 2, 0, 2, 0],
-        [2, 0, -1, 0, 0, -1, 0, 2],
-        [0, 2, 0, 2, 2, 0, 2, 0],
-        [2, 0, 2, 0, 0, 2, 0, 2]
+        [
+          2,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          2
+        ],
+        [
+          0,
+          2,
+          0,
+          2,
+          2,
+          0,
+          2,
+          0
+        ],
+        [
+          2,
+          0,
+          -1,
+          0,
+          0,
+          -1,
+          0,
+          2
+        ],
+        [
+          0,
+          2,
+          0,
+          2,
+          2,
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          2,
+          0,
+          2,
+          2,
+          0,
+          2,
+          0
+        ],
+        [
+          2,
+          0,
+          -1,
+          0,
+          0,
+          -1,
+          0,
+          2
+        ],
+        [
+          0,
+          2,
+          0,
+          2,
+          2,
+          0,
+          2,
+          0
+        ],
+        [
+          2,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          2
+        ]
       ],
-      "allowed_shapes": ["1x1", "1x2_h", "1x2_v", "1x3_h", "1x3_v", "2x2", "L_normal", "T_shape"]
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "2x2",
+        "L_normal",
+        "T_shape"
+      ],
+      "world": "Master",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 5,
+        "three_stars_score": 5200
+      },
+      "end_level_presentation": {
+        "victory_banner": "Génie Tactique !",
+        "finisher_anim": "grid_rainbow_sweep",
+        "particle_theme": "fireworks"
+      }
     },
     {
       "level_id": 47,
@@ -839,16 +5111,109 @@
       "target_value": 14,
       "move_limit": 22,
       "initial_grid": [
-        [-1, -1, 0, 0, 0, 0, -1, -1],
-        [-1, 0, 1, 1, 1, 1, 0, -1],
-        [0, 1, 0, 0, 0, 0, 1, 0],
-        [0, 1, 0, -1, -1, 0, 1, 0],
-        [0, 1, 0, -1, -1, 0, 1, 0],
-        [0, 1, 0, 0, 0, 0, 1, 0],
-        [-1, 0, 1, 1, 1, 1, 0, -1],
-        [-1, -1, 0, 0, 0, 0, -1, -1]
+        [
+          -1,
+          -1,
+          0,
+          0,
+          0,
+          0,
+          -1,
+          -1
+        ],
+        [
+          -1,
+          0,
+          1,
+          1,
+          1,
+          1,
+          0,
+          -1
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          -1,
+          -1,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          -1,
+          -1,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          -1,
+          0,
+          1,
+          1,
+          1,
+          1,
+          0,
+          -1
+        ],
+        [
+          -1,
+          -1,
+          0,
+          0,
+          0,
+          0,
+          -1,
+          -1
+        ]
       ],
-      "allowed_shapes": ["1x2_h", "1x2_v", "1x3_h", "1x3_v", "1x4_h", "1x4_v", "2x2", "T_shape", "L_normal"]
+      "allowed_shapes": [
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "1x4_h",
+        "1x4_v",
+        "2x2",
+        "T_shape",
+        "L_normal"
+      ],
+      "world": "Master",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 6,
+        "three_stars_score": 4300
+      },
+      "end_level_presentation": {
+        "victory_banner": "Perfection Absolue !",
+        "finisher_anim": "gem_explosion",
+        "particle_theme": "neon"
+      }
     },
     {
       "level_id": 48,
@@ -857,16 +5222,109 @@
       "target_value": 6800,
       "move_limit": 20,
       "initial_grid": [
-        [1, 0, 2, 0, 0, 2, 0, 1],
-        [0, 1, 0, 2, 2, 0, 1, 0],
-        [2, 0, 1, 0, 0, 1, 0, 2],
-        [0, 2, 0, -1, -1, 0, 2, 0],
-        [0, 2, 0, -1, -1, 0, 2, 0],
-        [2, 0, 1, 0, 0, 1, 0, 2],
-        [0, 1, 0, 2, 2, 0, 1, 0],
-        [1, 0, 2, 0, 0, 2, 0, 1]
+        [
+          1,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0,
+          2,
+          2,
+          0,
+          1,
+          0
+        ],
+        [
+          2,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          2
+        ],
+        [
+          0,
+          2,
+          0,
+          -1,
+          -1,
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          2,
+          0,
+          -1,
+          -1,
+          0,
+          2,
+          0
+        ],
+        [
+          2,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          2
+        ],
+        [
+          0,
+          1,
+          0,
+          2,
+          2,
+          0,
+          1,
+          0
+        ],
+        [
+          1,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          1
+        ]
       ],
-      "allowed_shapes": ["1x2_h", "1x2_v", "1x3_h", "1x3_v", "2x2", "T_shape", "Z_shape", "S_shape", "plus_5"]
+      "allowed_shapes": [
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "2x2",
+        "T_shape",
+        "Z_shape",
+        "S_shape",
+        "plus_5"
+      ],
+      "world": "Master",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 6,
+        "three_stars_score": 9850
+      },
+      "end_level_presentation": {
+        "victory_banner": "Souverain du Bloc !",
+        "finisher_anim": "missile_shower",
+        "particle_theme": "crystal"
+      }
     },
     {
       "level_id": 49,
@@ -875,16 +5333,108 @@
       "target_value": 18,
       "move_limit": 17,
       "initial_grid": [
-        [2, 2, 0, -1, -1, 0, 2, 2],
-        [2, 0, 2, 0, 0, 2, 0, 2],
-        [0, 2, 0, 2, 2, 0, 2, 0],
-        [-1, 0, 2, 0, 0, 2, 0, -1],
-        [-1, 0, 2, 0, 0, 2, 0, -1],
-        [0, 2, 0, 2, 2, 0, 2, 0],
-        [2, 0, 2, 0, 0, 2, 0, 2],
-        [2, 2, 0, -1, -1, 0, 2, 2]
+        [
+          2,
+          2,
+          0,
+          -1,
+          -1,
+          0,
+          2,
+          2
+        ],
+        [
+          2,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          2
+        ],
+        [
+          0,
+          2,
+          0,
+          2,
+          2,
+          0,
+          2,
+          0
+        ],
+        [
+          -1,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          -1
+        ],
+        [
+          -1,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          -1
+        ],
+        [
+          0,
+          2,
+          0,
+          2,
+          2,
+          0,
+          2,
+          0
+        ],
+        [
+          2,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          2
+        ],
+        [
+          2,
+          2,
+          0,
+          -1,
+          -1,
+          0,
+          2,
+          2
+        ]
       ],
-      "allowed_shapes": ["1x1", "1x2_h", "1x2_v", "1x3_h", "1x3_v", "2x2", "L_normal", "T_shape"]
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "2x2",
+        "L_normal",
+        "T_shape"
+      ],
+      "world": "Master",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 5,
+        "three_stars_score": 5600
+      },
+      "end_level_presentation": {
+        "victory_banner": "Transcendance !",
+        "finisher_anim": "grid_rainbow_sweep",
+        "particle_theme": "gold"
+      }
     },
     {
       "level_id": 50,
@@ -893,16 +5443,119 @@
       "target_value": 8000,
       "move_limit": 22,
       "initial_grid": [
-        [-1, 2, 0, 2, 2, 0, 2, -1],
-        [2, -1, 2, 0, 0, 2, -1, 2],
-        [0, 2, -1, 1, 1, -1, 2, 0],
-        [2, 0, 1, -1, -1, 1, 0, 2],
-        [2, 0, 1, -1, -1, 1, 0, 2],
-        [0, 2, -1, 1, 1, -1, 2, 0],
-        [2, -1, 2, 0, 0, 2, -1, 2],
-        [-1, 2, 0, 2, 2, 0, 2, -1]
+        [
+          -1,
+          2,
+          0,
+          2,
+          2,
+          0,
+          2,
+          -1
+        ],
+        [
+          2,
+          -1,
+          2,
+          0,
+          0,
+          2,
+          -1,
+          2
+        ],
+        [
+          0,
+          2,
+          -1,
+          1,
+          1,
+          -1,
+          2,
+          0
+        ],
+        [
+          2,
+          0,
+          1,
+          -1,
+          -1,
+          1,
+          0,
+          2
+        ],
+        [
+          2,
+          0,
+          1,
+          -1,
+          -1,
+          1,
+          0,
+          2
+        ],
+        [
+          0,
+          2,
+          -1,
+          1,
+          1,
+          -1,
+          2,
+          0
+        ],
+        [
+          2,
+          -1,
+          2,
+          0,
+          0,
+          2,
+          -1,
+          2
+        ],
+        [
+          -1,
+          2,
+          0,
+          2,
+          2,
+          0,
+          2,
+          -1
+        ]
       ],
-      "allowed_shapes": ["1x1", "1x2_h", "1x2_v", "1x3_h", "1x3_v", "1x4_h", "1x4_v", "2x2", "3x3", "L_giant", "plus_5", "T_shape"]
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "1x4_h",
+        "1x4_v",
+        "2x2",
+        "3x3",
+        "L_giant",
+        "plus_5",
+        "T_shape"
+      ],
+      "world": "Master",
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 6,
+        "three_stars_score": 11600
+      },
+      "end_level_presentation": {
+        "victory_banner": "Sanctuaire Conquis !",
+        "finisher_anim": "gem_explosion",
+        "particle_theme": "fireworks"
+      }
     }
+  ],
+  "worlds": [
+    "Initiation",
+    "Pierres",
+    "Poids Lourd",
+    "Combos",
+    "Master"
   ]
 }
