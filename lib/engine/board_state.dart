@@ -120,6 +120,28 @@ class BoardState {
     }
   }
 
+  /// Physique / Gravité descendante (Step Down) :
+  /// Fait chuter les blocs suspendus vers le bas (colonne par colonne)
+  /// pour combler les vides laissés par les lignes détruites.
+  /// Renvoie true si au moins un bloc est descendu.
+  bool applyGravity() {
+    bool moved = false;
+    for (int c = 0; c < size; c++) {
+      int writeRow = size - 1;
+      for (int r = size - 1; r >= 0; r--) {
+        if (grid[r][c] != 0) {
+          if (r != writeRow) {
+            grid[writeRow][c] = grid[r][c];
+            grid[r][c] = 0;
+            moved = true;
+          }
+          writeRow--;
+        }
+      }
+    }
+    return moved;
+  }
+
   /// Efface une seule cellule et renvoie sa valeur précédente (ou 0 si vide)
   int clearSingleCell(int r, int c) {
     if (r < 0 || r >= size || c < 0 || c >= size) return 0;

@@ -385,56 +385,10 @@ class GameProvider extends ChangeNotifier {
       _score += placementPoints;
     }
 
-    // 2. Vérification des lignes et colonnes pleines
+    // 2. Traitement des lignes complètes avec Gravité et Cascades automatiques
     final clearResult = _board.checkCompletedLines();
     if (clearResult.hasClear) {
-      _comboStreak++;
-      final clearPoints = ScoreCalculator.calculateClearPoints(
-        clearResult.totalLines,
-        _comboStreak,
-      );
-      _lastPointsAwarded = clearPoints;
-
-      if (_gameMode == GameMode.adventure) {
-        _levelScore += clearPoints + (clearResult.jewelsCleared * 50) + (clearResult.rocksCleared * 30);
-        _levelLinesCleared += clearResult.totalLines;
-        _levelJewelsCollected += clearResult.jewelsCleared;
-      } else {
-        _score += clearPoints;
-      }
-
-      // Sons et haptiques
-      AudioService.playLineClear(_comboStreak);
-      HapticService.onLineClear(lineCount: clearResult.totalLines);
-      if (_comboStreak >= 3) {
-        AudioService.playComboBlast();
-        HapticService.onComboBlast();
-      } else if (_comboStreak >= 2) {
-        HapticService.onComboBlast();
-      }
-
-      // Déclenchement de l'animation d'explosion & Événement Juice
-      _clearingRows = List.from(clearResult.rows);
-      _clearingCols = List.from(clearResult.cols);
-      _lastClearEvent = ClearEvent(
-        rows: List.from(clearResult.rows),
-        cols: List.from(clearResult.cols),
-        totalLines: clearResult.totalLines,
-        comboStreak: _comboStreak,
-        points: clearPoints,
-        jewelsCleared: clearResult.jewelsCleared,
-        rocksCleared: clearResult.rocksCleared,
-      );
-      notifyListeners();
-
-      // Nettoyage effectif après le flash d'animation (220ms pour laisser fleurir les particules)
-      Future.delayed(const Duration(milliseconds: 220), () {
-        _board.clearLines(_clearingRows, _clearingCols);
-        GameStorage.addLinesCleared(_clearingRows.length + _clearingCols.length);
-        _clearingRows = [];
-        _clearingCols = [];
-        _checkPostMoveState();
-      });
+      _processLineClear(clearResult);
     } else {
       _comboStreak = 0;
       _checkPostMoveState();
@@ -451,6 +405,89 @@ class GameProvider extends ChangeNotifier {
 
     notifyListeners();
     return true;
+  }
+
+  /// Traitement modulaire d'une destruction de lignes/colonnes :
+  /// 1. Explosion & Particules
+  /// 2. Effacement des lignes
+  /// 3. Gravité / Chute des blocs suspendus (Step Down)
+  /// 4. Détection récursive des Combos en cascade
+  void _processLineClear(LineClearResult clearResult) {
+    _comboStreak++;
+    final clearPoints = ScoreCalculator.calculateClearPoints(
+      clearResult.totalLines,
+      _comboStreak,
+    );
+    _lastPointsAwarded = clearPoints;
+
+    if (_gameMode == GameMode.adventure) {
+      _levelScore += clearPoints +
+          (clearResult.jewelsCleared * 50) +
+          (clearResult.rocksCleared * 30);
+      _levelLinesCleared += clearResult.totalLines;
+      _levelJewelsCollected += clearResult.jewelsCleared;
+    } else {
+      _score += clearPoints;
+    }
+
+    // Effets sonores et haptiques dynamiques
+    AudioService.playLineClear(_comboStreak);
+    HapticService.onLineClear(lineCount: clearResult.totalLines);
+    if (_comboStreak >= 2) {
+      AudioService.playComboBlast();
+      HapticService.onComboBlast();
+    }
+
+    // Déclenchement de l'animation d'explosion & Événement Juice
+    _clearingRows = List.from(clearResult.rows);
+    _clearingCols = List.from(clearResult.cols);
+    _lastClearEvent = ClearEvent(
+      rows: List.from(clearResult.rows),
+      cols: List.from(clearResult.cols),
+      totalLines: clearResult.totalLines,
+      comboStreak: _comboStreak,
+      points: clearPoints,
+      jewelsCleared: clearResult.jewelsCleared,
+      rocksCleared: clearResult.rocksCleared,
+    );
+    notifyListeners();
+
+    // 1. Délai pour admirer l'explosion et les éclats de particules (220ms)
+    Future.delayed(const Duration(milliseconds: 220), () {
+      GameStorage.addLinesCleared(_clearingRows.length + _clearingCols.length);
+      _board.clearLines(_clearingRows, _clearingCols);
+      _clearingRows = [];
+      _clearingCols = [];
+
+      // 2. Physique de chute / Gravité descendante (Step Down)
+      final hasFallen = _board.applyGravity();
+      notifyListeners();
+
+      // 3. Après stabilisation de la chute, re-scan pour cascade combo
+      Future.delayed(Duration(milliseconds: hasFallen ? 160 : 60), () {
+        final cascadeResult = _board.checkCompletedLines();
+        if (cascadeResult.hasClear) {
+          // Combo en cascade : nouvelle vague de destruction !
+          _processLineClear(cascadeResult);
+        } else {
+          // Grille stabilisée : validation des objectifs et fin de tour
+          _checkPostMoveState();
+          saveCurrentState();
+          notifyListeners();
+        }
+      });
+    });
+  }
+
+  /// Nettoie les statuts de fin de niveau pour éviter les glitchs lors de la navigation
+  void clearLevelStatus() {
+    _isLevelWon = false;
+    _isLevelFailed = false;
+    _defeatReason = '';
+    _clearingRows = [];
+    _clearingCols = [];
+    _lastClearEvent = null;
+    notifyListeners();
   }
 
   void _checkPostMoveState() {

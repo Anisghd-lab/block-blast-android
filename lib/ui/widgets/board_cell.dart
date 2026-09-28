@@ -8,6 +8,8 @@ class BoardCell extends StatelessWidget {
   final bool isGhost;
   final bool isGhostValid;
   final bool isClearing;
+  /// Lueur subtile : case dans une ligne/colonne à 1 case d'être complète
+  final bool isNearComplete;
   final GameTheme theme;
   final double size;
 
@@ -17,6 +19,7 @@ class BoardCell extends StatelessWidget {
     this.isGhost = false,
     this.isGhostValid = true,
     this.isClearing = false,
+    this.isNearComplete = false,
     required this.theme,
     required this.size,
   }) : super(key: key);
@@ -201,7 +204,7 @@ class BoardCell extends StatelessWidget {
     // 5. Case occupée par un bloc normal ou coloré
     if (colorIndex > 0) {
       if (isCandyTheme) {
-        return SizedBox(
+        final candyWidget = SizedBox(
           width: size,
           height: size,
           child: CandyWidget(
@@ -210,6 +213,25 @@ class BoardCell extends StatelessWidget {
             showGlow: true,
           ),
         );
+        if (isNearComplete) {
+          // Lueur dorée pulsante : la ligne est presque complète !
+          return Container(
+            width: size,
+            height: size,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(theme.cellBorderRadius),
+              boxShadow: const [
+                BoxShadow(
+                  color: Color(0xAAFFD700),
+                  blurRadius: 8,
+                  spreadRadius: 2,
+                ),
+              ],
+            ),
+            child: candyWidget,
+          );
+        }
+        return candyWidget;
       }
 
       final baseColor = theme.blockColors[(colorIndex - 1) % theme.blockColors.length];
@@ -262,6 +284,26 @@ class BoardCell extends StatelessWidget {
                 ),
               ),
             ),
+            // Lueur dorée si la ligne/colonne est presque complète
+            if (isNearComplete)
+              Positioned.fill(
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(theme.cellBorderRadius),
+                    border: Border.all(
+                      color: const Color(0xFFFFD700).withOpacity(0.7),
+                      width: 1.5,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFFFFD700).withOpacity(0.4),
+                        blurRadius: 6,
+                        spreadRadius: 1,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
           ],
         ),
       );

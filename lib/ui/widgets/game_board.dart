@@ -245,16 +245,45 @@ class _GameBoardState extends State<GameBoard> {
     return Center(
       child: JuiceOverlay(
         key: _juiceKey,
-        child: Stack(
-          clipBehavior: Clip.none,
-          alignment: Alignment.center,
-          children: [
-            Container(
-              key: _boardKey,
-              width: boardSize,
-              height: boardSize,
-              padding: const EdgeInsets.all(padding),
-              decoration: isCandyTheme
+        child: SizedBox(
+          width: boardSize,
+          // Extension verticale invisible (+110px) pour que le doigt puisse descendre
+          // sous le plateau lors de la pose sur les 3 dernières lignes sans déclencher onLeave
+          height: boardSize + 110.0,
+          child: DragTarget<Map<String, dynamic>>(
+            hitTestBehavior: HitTestBehavior.translucent,
+            onWillAcceptWithDetails: (details) => true,
+            onMove: (details) {
+              final shape = details.data['shape'] as BlockShape;
+              final target = _calculateTargetCell(details.offset, boardSize, cellSize, spacing, padding, shape);
+              if (target != null) {
+                gameProvider.setDragPreview(shape, target.$1, target.$2);
+              } else {
+                gameProvider.setDragPreview(null, null, null);
+              }
+            },
+            onLeave: (_) {
+              gameProvider.setDragPreview(null, null, null);
+            },
+            onAcceptWithDetails: (details) {
+              final shape = details.data['shape'] as BlockShape;
+              final target = _calculateTargetCell(details.offset, boardSize, cellSize, spacing, padding, shape);
+              if (target != null) {
+                final pieceIndex = details.data['pieceIndex'] as int;
+                gameProvider.tryPlacePiece(pieceIndex, target.$1, target.$2);
+              }
+            },
+            builder: (context, candidateData, rejectedData) {
+              return Stack(
+                clipBehavior: Clip.none,
+                alignment: Alignment.topCenter,
+                children: [
+                  Container(
+                    key: _boardKey,
+                    width: boardSize,
+                    height: boardSize,
+                    padding: const EdgeInsets.all(padding),
+                    decoration: isCandyTheme
                   ? BoxDecoration(
                       gradient: const LinearGradient(
                         begin: Alignment.topCenter,
@@ -297,84 +326,95 @@ class _GameBoardState extends State<GameBoard> {
                         ),
                       ],
                     ),
-              child: DragTarget<Map<String, dynamic>>(
-                onWillAcceptWithDetails: (details) => true,
-                onMove: (details) {
-                  final shape = details.data['shape'] as BlockShape;
-                  final target = _calculateTargetCell(details.offset, boardSize, cellSize, spacing, padding, shape);
-                  if (target != null) {
-                    gameProvider.setDragPreview(shape, target.$1, target.$2);
-                  } else {
-                    gameProvider.setDragPreview(null, null, null);
+              child: Builder(
+                builder: (context) {
+                  // Calcul des lignes/colonnes "presque pleines" (7/8 remplies) — lueur d'aperçu
+                  final Set<int> nearFullRows = {};
+                  final Set<int> nearFullCols = {};
+                  final grid = gameProvider.board.grid;
+                  for (int r = 0; r < BoardState.size; r++) {
+                    int filled = 0;
+                    for (int c = 0; c < BoardState.size; c++) {
+                      if (grid[r][c] != 0) filled++;
+                    }
+                    if (filled >= BoardState.size - 1) nearFullRows.add(r);
                   }
-                },
-                onLeave: (_) {
-                  gameProvider.setDragPreview(null, null, null);
-                },
-                onAcceptWithDetails: (details) {
-                  final shape = details.data['shape'] as BlockShape;
-                  final target = _calculateTargetCell(details.offset, boardSize, cellSize, spacing, padding, shape);
-                  if (target != null) {
-                    final pieceIndex = details.data['pieceIndex'] as int;
-                    gameProvider.tryPlacePiece(pieceIndex, target.$1, target.$2);
+                  for (int c = 0; c < BoardState.size; c++) {
+                    int filled = 0;
+                    for (int r = 0; r < BoardState.size; r++) {
+                      if (grid[r][c] != 0) filled++;
+                    }
+                    if (filled >= BoardState.size - 1) nearFullCols.add(c);
                   }
-                },
-                builder: (context, candidateData, rejectedData) {
-                  return GridView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: BoardState.size * BoardState.size,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: BoardState.size,
-                      crossAxisSpacing: spacing,
-                      mainAxisSpacing: spacing,
-                    ),
-                    itemBuilder: (context, index) {
-                      final r = index ~/ BoardState.size;
-                      final c = index % BoardState.size;
 
-                      final rawColor = gameProvider.board.grid[r][c];
-                      final isClearing = gameProvider.clearingRows.contains(r) ||
-                          gameProvider.clearingCols.contains(c);
+                  // Grille construite manuellement (Column/Row) pour que les hitboxes
+                  // correspondent EXACTEMENT au calcul pixel de _calculateTargetCell.
+                  // GridView peut étirer les cellules et décaler le mapping tactile,
+                  // rendant les 3 dernières lignes inaccessibles au drag-and-drop.
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: List.generate(BoardState.size, (r) {
+                      return Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: List.generate(BoardState.size, (c) {
+                          final rawColor = gameProvider.board.grid[r][c];
+                          final isClearing = gameProvider.clearingRows.contains(r) ||
+                              gameProvider.clearingCols.contains(c);
+                          // Lueur subtile sur les blocs d'une ligne/colonne presque complète
+                          final isNearComplete =
+                              (nearFullRows.contains(r) || nearFullCols.contains(c)) &&
+                              rawColor != 0;
 
-                      // Vérifier si cette case fait partie de l'aperçu de placement en cours
-                      bool isGhost = false;
-                      bool isGhostValid = true;
-                      if (gameProvider.previewShape != null &&
-                          gameProvider.previewRow != null &&
-                          gameProvider.previewCol != null) {
-                        final pShape = gameProvider.previewShape!;
-                        final pRow = gameProvider.previewRow!;
-                        final pCol = gameProvider.previewCol!;
-
-                        final dr = r - pRow;
-                        final dc = c - pCol;
-                        if (dr >= 0 && dr < pShape.rows && dc >= 0 && dc < pShape.cols) {
-                          if (pShape.matrix[dr][dc] > 0) {
-                            isGhost = true;
-                            isGhostValid = gameProvider.isPreviewValid;
+                          // Ghost (aperçu de placement en cours)
+                          bool isGhost = false;
+                          bool isGhostValid = true;
+                          if (gameProvider.previewShape != null &&
+                              gameProvider.previewRow != null &&
+                              gameProvider.previewCol != null) {
+                            final pShape = gameProvider.previewShape!;
+                            final pRow = gameProvider.previewRow!;
+                            final pCol = gameProvider.previewCol!;
+                            final dr = r - pRow;
+                            final dc = c - pCol;
+                            if (dr >= 0 && dr < pShape.rows && dc >= 0 && dc < pShape.cols) {
+                              if (pShape.matrix[dr][dc] > 0) {
+                                isGhost = true;
+                                isGhostValid = gameProvider.isPreviewValid;
+                              }
+                            }
                           }
-                        }
-                      }
 
-                      return GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: () {
-                          if (gameProvider.activeBooster == ActiveBooster.hammer) {
-                            _applyHammerAt(r, c, cellSize, spacing, padding, gameProvider);
-                          } else if (gameProvider.activeBooster == ActiveBooster.bomb) {
-                            _applyBombAt(r, c, cellSize, spacing, padding, gameProvider);
-                          }
-                        },
-                        child: BoardCell(
-                          colorIndex: rawColor,
-                          isGhost: isGhost,
-                          isGhostValid: isGhostValid,
-                          isClearing: isClearing,
-                          theme: theme,
-                          size: cellSize,
-                        ),
+                          final double rightPadding = c < BoardState.size - 1 ? spacing : 0;
+                          final double bottomPadding = r < BoardState.size - 1 ? spacing : 0;
+
+                          return GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onTap: () {
+                              if (gameProvider.activeBooster == ActiveBooster.hammer) {
+                                _applyHammerAt(r, c, cellSize, spacing, padding, gameProvider);
+                              } else if (gameProvider.activeBooster == ActiveBooster.bomb) {
+                                _applyBombAt(r, c, cellSize, spacing, padding, gameProvider);
+                              }
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                right: rightPadding,
+                                bottom: bottomPadding,
+                              ),
+                              child: BoardCell(
+                                colorIndex: rawColor,
+                                isGhost: isGhost,
+                                isGhostValid: isGhostValid,
+                                isClearing: isClearing,
+                                isNearComplete: isNearComplete,
+                                theme: theme,
+                                size: cellSize,
+                              ),
+                            ),
+                          );
+                        }),
                       );
-                    },
+                    }),
                   );
                 },
               ),
@@ -390,8 +430,11 @@ class _GameBoardState extends State<GameBoard> {
                 ),
               ),
           ],
-        ),
-      ),
+        );
+      },
+    ),
+  ),
+),
     );
   }
 

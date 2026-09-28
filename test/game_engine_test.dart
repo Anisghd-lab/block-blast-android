@@ -46,6 +46,41 @@ void main() {
       expect(cleared.length, 9);
       expect(board.occupiedCellsCount, 0);
     });
+
+    test('checkCompletedLines detects full rows and full columns accurately', () {
+      final board = BoardState();
+      // Remplir la ligne 7 entièrement
+      for (int c = 0; c < 8; c++) {
+        board.grid[7][c] = 1;
+      }
+      // Remplir la colonne 2 entièrement
+      for (int r = 0; r < 8; r++) {
+        board.grid[r][2] = 3;
+      }
+
+      final result = board.checkCompletedLines();
+      expect(result.rows, contains(7));
+      expect(result.cols, contains(2));
+      expect(result.totalLines, 2);
+    });
+
+    test('applyGravity makes suspended blocks drop into empty spaces', () {
+      final board = BoardState();
+      // Bloc en ligne 5, ligne 6 et 7 vides
+      board.grid[5][3] = 4;
+      // Bloc en ligne 2
+      board.grid[2][3] = 6;
+
+      final moved = board.applyGravity();
+      expect(moved, isTrue);
+      // Le bloc le plus bas (ligne 5) doit atterrir en ligne 7
+      expect(board.grid[7][3], 4);
+      // Le bloc en ligne 2 doit atterrir en ligne 6
+      expect(board.grid[6][3], 6);
+      // Les lignes 2 et 5 doivent être vides
+      expect(board.grid[5][3], 0);
+      expect(board.grid[2][3], 0);
+    });
   });
 
   group('BlockShape Transformation Tests', () {

@@ -178,9 +178,11 @@ class LevelVictoryDialog extends StatelessWidget {
             ),
             const SizedBox(height: 10),
 
-            // Boutons Rejouer et Niveaux
-            Row(
-              children: [
+            // Boutons Rejouer et Niveaux (Expanded garantit qu'ils ne se chevauchent pas)
+            IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
                 Expanded(
                   child: OutlinedButton(
                     style: OutlinedButton.styleFrom(
@@ -206,7 +208,14 @@ class LevelVictoryDialog extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 11),
                     ),
                     onPressed: () {
-                      Navigator.of(context).pop();
+                      // Fermer le dialog d'abord, puis remonter proprement à la racine
+                      // pour éviter le glitch de superposition de la grille
+                      Navigator.of(context).pop(); // ferme le dialog
+                      // popUntil pour revenir à la racine (game screen)
+                      // puis push de la carte niveaux
+                      Navigator.of(context, rootNavigator: false).popUntil(
+                        (route) => route.isFirst,
+                      );
                       Navigator.of(context).push(
                         MaterialPageRoute(builder: (_) => const LevelSelectScreen()),
                       );
@@ -216,6 +225,7 @@ class LevelVictoryDialog extends StatelessWidget {
                 ),
               ],
             ),
+          ),
           ],
         ),
       ),
