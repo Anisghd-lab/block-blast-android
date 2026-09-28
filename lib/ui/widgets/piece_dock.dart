@@ -1,3 +1,4 @@
+import 'game_board.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/theme/app_colors.dart';
@@ -61,8 +62,8 @@ class PieceDock extends StatelessWidget {
             return const Expanded(
               child: Center(
                 child: SizedBox(
-                  width: 76.0,
-                  height: 76.0,
+                  width: 84.0,
+                  height: 84.0,
                 ),
               ),
             );
@@ -70,13 +71,26 @@ class PieceDock extends StatelessWidget {
 
           final isPlaceable = board.canFitAnywhere(piece);
           final maxDim = piece.rows > piece.cols ? piece.rows : piece.cols;
-          final uniformCellSize = maxDim >= 5 ? 12.5 : 14.0;
+
+          // Tailles adaptatives généreuses pour que les blocs soient bien visibles et faciles à saisir
+          final double uniformCellSize;
+          if (maxDim <= 1) {
+            uniformCellSize = 38.0; // Bloc 1x1 bien grand (38px) et facile à attraper
+          } else if (maxDim <= 2) {
+            uniformCellSize = 28.0; // Bloc 2x2 = 56px
+          } else if (maxDim <= 3) {
+            uniformCellSize = 22.0; // Bloc 3x3 = 66px
+          } else if (maxDim <= 4) {
+            uniformCellSize = 17.5; // Bloc 4x4 = 70px
+          } else {
+            uniformCellSize = 14.5; // Barre de 5 = 72px
+          }
 
           return Expanded(
             child: Center(
               child: SizedBox(
-                width: 76.0,
-                height: 76.0,
+                width: 84.0,
+                height: 84.0,
                 child: Center(
                   child: GestureDetector(
                     behavior: HitTestBehavior.opaque,
@@ -86,7 +100,7 @@ class PieceDock extends StatelessWidget {
                       shape: piece,
                       theme: theme,
                       dockCellSize: uniformCellSize,
-                      boardCellSize: 38.0,
+                      boardCellSize: GameBoard.currentCellSize > 0 ? GameBoard.currentCellSize : 34.0,
                       isPlaceable: isPlaceable,
                     ),
                   ),

@@ -1,3 +1,4 @@
+import '../../engine/block_shape.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/theme/app_colors.dart';
@@ -104,43 +105,69 @@ class GameScreen extends StatelessWidget {
               )
             : BoxDecoration(color: theme.backgroundColor),
         child: SafeArea(
-          child: Column(
-            children: [
-              // 1. HUD & Score (Isolé dans un RepaintBoundary pour le rasterizer)
-              RepaintBoundary(
-                child: ScoreHeader(
-                  onPausePressed: () => _showPauseDialog(context),
-                  onSettingsPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => const SettingsScreen()),
-                    );
-                  },
-                ),
-              ),
-
-              // 2. Grille de jeu 8x8 centrale
-              const Expanded(
-                child: Center(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-                    child: GameBoard(),
+          child: DragTarget<Map<String, dynamic>>(
+            hitTestBehavior: HitTestBehavior.translucent,
+            onWillAcceptWithDetails: (details) => true,
+            onMove: (details) {
+              final shape = details.data['shape'] as BlockShape;
+              final target = GameBoard.calculateTargetCell(details.offset, shape);
+              if (target != null) {
+                gameProvider.setDragPreview(shape, target.$1, target.$2);
+              } else {
+                gameProvider.setDragPreview(null, null, null);
+              }
+            },
+            onLeave: (_) {
+              gameProvider.setDragPreview(null, null, null);
+            },
+            onAcceptWithDetails: (details) {
+              final shape = details.data['shape'] as BlockShape;
+              final target = GameBoard.calculateTargetCell(details.offset, shape);
+              if (target != null) {
+                final pieceIndex = details.data['pieceIndex'] as int;
+                gameProvider.tryPlacePiece(pieceIndex, target.$1, target.$2);
+              }
+            },
+            builder: (context, candidateData, rejectedData) {
+              return Column(
+                children: [
+                  // 1. HUD & Score (Isolé dans un RepaintBoundary pour le rasterizer)
+                  RepaintBoundary(
+                    child: ScoreHeader(
+                      onPausePressed: () => _showPauseDialog(context),
+                      onSettingsPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const SettingsScreen()),
+                        );
+                      },
+                    ),
                   ),
-                ),
-              ),
 
-              // 3. Barre de Boosters tactiques (Sugar Delight System)
-              const RepaintBoundary(child: BoosterDock()),
+                  // 2. Grille de jeu 8x8 centrale
+                  const Expanded(
+                    child: Center(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+                        child: GameBoard(),
+                      ),
+                    ),
+                  ),
 
-              // 4. Tiroir de pièces du bas fixé à l'écran
-              const SafeArea(
-                top: false,
-                child: Padding(
-                  padding: EdgeInsets.only(bottom: 8.0),
-                  child: RepaintBoundary(child: PieceDock()),
-                ),
-              ),
-            ],
+                  // 3. Barre de Boosters tactiques (Sugar Delight System)
+                  const RepaintBoundary(child: BoosterDock()),
+
+                  // 4. Tiroir de pièces du bas fixé à l'écran
+                  const SafeArea(
+                    top: false,
+                    child: Padding(
+                      padding: EdgeInsets.only(bottom: 8.0),
+                      child: RepaintBoundary(child: PieceDock()),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ),

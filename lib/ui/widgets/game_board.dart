@@ -10,19 +10,52 @@ import 'board_cell.dart';
 import 'juice_effects.dart';
 
 class GameBoard extends StatefulWidget {
+  static final GlobalKey boardKey = GlobalKey();
+  static double currentCellSize = 34.0;
+  static const double spacing = 4.0;
+  static const double padding = 10.0;
+  static const double fingerVerticalOffset = -75.0;
+
   const GameBoard({Key? key}) : super(key: key);
+
+  /// Calcule avec précision la cellule cible (row, col) pour une pièce donnée
+  /// selon la position globale du doigt sur l'écran
+  static (int, int)? calculateTargetCell(
+    Offset globalTouchPosition,
+    BlockShape shape,
+  ) {
+    final renderBox = boardKey.currentContext?.findRenderObject() as RenderBox?;
+    if (renderBox == null || !renderBox.hasSize) return null;
+
+    final localTouch = renderBox.globalToLocal(globalTouchPosition);
+    final visualCenter = Offset(localTouch.dx, localTouch.dy + fingerVerticalOffset);
+
+    // Dimensions exactes de la pièce avec espacement
+    final pieceWidth = shape.cols * currentCellSize + (shape.cols - 1) * spacing;
+    final pieceHeight = shape.rows * currentCellSize + (shape.rows - 1) * spacing;
+
+    // Coin supérieur gauche de la pièce
+    final pieceLeft = visualCenter.dx - pieceWidth / 2;
+    final pieceTop = visualCenter.dy - pieceHeight / 2;
+
+    final totalStep = currentCellSize + spacing;
+    final col = ((pieceLeft - padding) / totalStep).round();
+    final row = ((pieceTop - padding) / totalStep).round();
+
+    if (row < 0 || row + shape.rows > BoardState.size ||
+        col < 0 || col + shape.cols > BoardState.size) {
+      return null;
+    }
+    return (row, col);
+  }
 
   @override
   State<GameBoard> createState() => _GameBoardState();
 }
 
 class _GameBoardState extends State<GameBoard> {
-  final GlobalKey _boardKey = GlobalKey();
   final GlobalKey<JuiceOverlayState> _juiceKey = GlobalKey<JuiceOverlayState>();
   int _lastHandledClearTimestamp = 0;
-
-  // Décalage tactile vertical standard pour mobile (la pièce flotte au-dessus du doigt)
-  static const double fingerVerticalOffset = -75.0;
 
   void _handleClearEffects(
     ClearEvent event,
@@ -226,12 +259,14 @@ class _GameBoardState extends State<GameBoard> {
 
     final screenSize = MediaQuery.of(context).size;
     final availableWidth = screenSize.width - 32.0;
-    final availableHeight = screenSize.height * 0.48;
+    final availableHeight = screenSize.height * 0.44;
     final boardSize = (availableWidth < availableHeight ? availableWidth : availableHeight)
-        .clamp(240.0, 420.0);
-    const double padding = 10.0;
-    const double spacing = 4.0;
+        .clamp(240.0, 380.0);
+    const double padding = GameBoard.padding;
+    const double spacing = GameBoard.spacing;
     final cellSize = (boardSize - (padding * 2) - (spacing * 7)) / BoardState.size;
+
+    GameBoard.currentCellSize = cellSize;
 
     // Déclencher les effets dès qu'un nouvel événement de destruction survient
     final clearEvent = gameProvider.lastClearEvent;
@@ -242,48 +277,38 @@ class _GameBoardState extends State<GameBoard> {
       });
     }
 
+    // Calcul des lignes/colonnes "presque pleines" (7/8 remplies) — lueur d'aperçu
+    final Set<int> nearFullRows = {};
+    final Set<int> nearFullCols = {};
+    final grid = gameProvider.board.grid;
+    for (int r = 0; r < BoardState.size; r++) {
+      int filled = 0;
+      for (int c = 0; c < BoardState.size; c++) {
+        if (grid[r][c] != 0) filled++;
+      }
+      if (filled >= BoardState.size - 1) nearFullRows.add(r);
+    }
+    for (int c = 0; c < BoardState.size; c++) {
+      int filled = 0;
+      for (int r = 0; r < BoardState.size; r++) {
+        if (grid[r][c] != 0) filled++;
+      }
+      if (filled >= BoardState.size - 1) nearFullCols.add(c);
+    }
+
     return Center(
       child: JuiceOverlay(
         key: _juiceKey,
-        child: SizedBox(
-          width: boardSize,
-          // Extension verticale invisible (+110px) pour que le doigt puisse descendre
-          // sous le plateau lors de la pose sur les 3 dernières lignes sans déclencher onLeave
-          height: boardSize + 110.0,
-          child: DragTarget<Map<String, dynamic>>(
-            hitTestBehavior: HitTestBehavior.translucent,
-            onWillAcceptWithDetails: (details) => true,
-            onMove: (details) {
-              final shape = details.data['shape'] as BlockShape;
-              final target = _calculateTargetCell(details.offset, boardSize, cellSize, spacing, padding, shape);
-              if (target != null) {
-                gameProvider.setDragPreview(shape, target.$1, target.$2);
-              } else {
-                gameProvider.setDragPreview(null, null, null);
-              }
-            },
-            onLeave: (_) {
-              gameProvider.setDragPreview(null, null, null);
-            },
-            onAcceptWithDetails: (details) {
-              final shape = details.data['shape'] as BlockShape;
-              final target = _calculateTargetCell(details.offset, boardSize, cellSize, spacing, padding, shape);
-              if (target != null) {
-                final pieceIndex = details.data['pieceIndex'] as int;
-                gameProvider.tryPlacePiece(pieceIndex, target.$1, target.$2);
-              }
-            },
-            builder: (context, candidateData, rejectedData) {
-              return Stack(
-                clipBehavior: Clip.none,
-                alignment: Alignment.topCenter,
-                children: [
-                  Container(
-                    key: _boardKey,
-                    width: boardSize,
-                    height: boardSize,
-                    padding: const EdgeInsets.all(padding),
-                    decoration: isCandyTheme
+        child: Stack(
+          clipBehavior: Clip.none,
+          alignment: Alignment.center,
+          children: [
+            Container(
+              key: GameBoard.boardKey,
+              width: boardSize,
+              height: boardSize,
+              padding: const EdgeInsets.all(padding),
+              decoration: isCandyTheme
                   ? BoxDecoration(
                       gradient: const LinearGradient(
                         begin: Alignment.topCenter,
@@ -326,97 +351,69 @@ class _GameBoardState extends State<GameBoard> {
                         ),
                       ],
                     ),
-              child: Builder(
-                builder: (context) {
-                  // Calcul des lignes/colonnes "presque pleines" (7/8 remplies) — lueur d'aperçu
-                  final Set<int> nearFullRows = {};
-                  final Set<int> nearFullCols = {};
-                  final grid = gameProvider.board.grid;
-                  for (int r = 0; r < BoardState.size; r++) {
-                    int filled = 0;
-                    for (int c = 0; c < BoardState.size; c++) {
-                      if (grid[r][c] != 0) filled++;
-                    }
-                    if (filled >= BoardState.size - 1) nearFullRows.add(r);
-                  }
-                  for (int c = 0; c < BoardState.size; c++) {
-                    int filled = 0;
-                    for (int r = 0; r < BoardState.size; r++) {
-                      if (grid[r][c] != 0) filled++;
-                    }
-                    if (filled >= BoardState.size - 1) nearFullCols.add(c);
-                  }
-
-                  // Grille construite manuellement (Column/Row) pour que les hitboxes
-                  // correspondent EXACTEMENT au calcul pixel de _calculateTargetCell.
-                  // GridView peut étirer les cellules et décaler le mapping tactile,
-                  // rendant les 3 dernières lignes inaccessibles au drag-and-drop.
-                  return Column(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: List.generate(BoardState.size, (r) {
+                  return Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: List.generate(BoardState.size, (r) {
-                      return Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: List.generate(BoardState.size, (c) {
-                          final rawColor = gameProvider.board.grid[r][c];
-                          final isClearing = gameProvider.clearingRows.contains(r) ||
-                              gameProvider.clearingCols.contains(c);
-                          // Lueur subtile sur les blocs d'une ligne/colonne presque complète
-                          final isNearComplete =
-                              (nearFullRows.contains(r) || nearFullCols.contains(c)) &&
-                              rawColor != 0;
+                    children: List.generate(BoardState.size, (c) {
+                      final rawColor = gameProvider.board.grid[r][c];
+                      final isClearing = gameProvider.clearingRows.contains(r) ||
+                          gameProvider.clearingCols.contains(c);
+                      final isNearComplete =
+                          (nearFullRows.contains(r) || nearFullCols.contains(c)) &&
+                          rawColor != 0;
 
-                          // Ghost (aperçu de placement en cours)
-                          bool isGhost = false;
-                          bool isGhostValid = true;
-                          if (gameProvider.previewShape != null &&
-                              gameProvider.previewRow != null &&
-                              gameProvider.previewCol != null) {
-                            final pShape = gameProvider.previewShape!;
-                            final pRow = gameProvider.previewRow!;
-                            final pCol = gameProvider.previewCol!;
-                            final dr = r - pRow;
-                            final dc = c - pCol;
-                            if (dr >= 0 && dr < pShape.rows && dc >= 0 && dc < pShape.cols) {
-                              if (pShape.matrix[dr][dc] > 0) {
-                                isGhost = true;
-                                isGhostValid = gameProvider.isPreviewValid;
-                              }
-                            }
+                      // Ghost (aperçu de placement en cours)
+                      bool isGhost = false;
+                      bool isGhostValid = true;
+                      if (gameProvider.previewShape != null &&
+                          gameProvider.previewRow != null &&
+                          gameProvider.previewCol != null) {
+                        final pShape = gameProvider.previewShape!;
+                        final pRow = gameProvider.previewRow!;
+                        final pCol = gameProvider.previewCol!;
+                        final dr = r - pRow;
+                        final dc = c - pCol;
+                        if (dr >= 0 && dr < pShape.rows && dc >= 0 && dc < pShape.cols) {
+                          if (pShape.matrix[dr][dc] > 0) {
+                            isGhost = true;
+                            isGhostValid = gameProvider.isPreviewValid;
                           }
+                        }
+                      }
 
-                          final double rightPadding = c < BoardState.size - 1 ? spacing : 0;
-                          final double bottomPadding = r < BoardState.size - 1 ? spacing : 0;
+                      final double rightPadding = c < BoardState.size - 1 ? spacing : 0;
+                      final double bottomPadding = r < BoardState.size - 1 ? spacing : 0;
 
-                          return GestureDetector(
-                            behavior: HitTestBehavior.opaque,
-                            onTap: () {
-                              if (gameProvider.activeBooster == ActiveBooster.hammer) {
-                                _applyHammerAt(r, c, cellSize, spacing, padding, gameProvider);
-                              } else if (gameProvider.activeBooster == ActiveBooster.bomb) {
-                                _applyBombAt(r, c, cellSize, spacing, padding, gameProvider);
-                              }
-                            },
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                right: rightPadding,
-                                bottom: bottomPadding,
-                              ),
-                              child: BoardCell(
-                                colorIndex: rawColor,
-                                isGhost: isGhost,
-                                isGhostValid: isGhostValid,
-                                isClearing: isClearing,
-                                isNearComplete: isNearComplete,
-                                theme: theme,
-                                size: cellSize,
-                              ),
-                            ),
-                          );
-                        }),
+                      return GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () {
+                          if (gameProvider.activeBooster == ActiveBooster.hammer) {
+                            _applyHammerAt(r, c, cellSize, spacing, padding, gameProvider);
+                          } else if (gameProvider.activeBooster == ActiveBooster.bomb) {
+                            _applyBombAt(r, c, cellSize, spacing, padding, gameProvider);
+                          }
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                            right: rightPadding,
+                            bottom: bottomPadding,
+                          ),
+                          child: BoardCell(
+                            colorIndex: rawColor,
+                            isGhost: isGhost,
+                            isGhostValid: isGhostValid,
+                            isClearing: isClearing,
+                            isNearComplete: isNearComplete,
+                            theme: theme,
+                            size: cellSize,
+                          ),
+                        ),
                       );
                     }),
                   );
-                },
+                }),
               ),
             ),
             // Bannière de ciblage lorsque le marteau ou la bombe est actif
@@ -430,44 +427,8 @@ class _GameBoardState extends State<GameBoard> {
                 ),
               ),
           ],
-        );
-      },
-    ),
-  ),
-),
+        ),
+      ),
     );
-  }
-
-  (int, int)? _calculateTargetCell(
-    Offset globalTouchPosition,
-    double boardSize,
-    double cellSize,
-    double spacing,
-    double padding,
-    BlockShape shape,
-  ) {
-    final renderBox = _boardKey.currentContext?.findRenderObject() as RenderBox?;
-    if (renderBox == null) return null;
-
-    final localTouch = renderBox.globalToLocal(globalTouchPosition);
-    final visualCenter = Offset(localTouch.dx, localTouch.dy + fingerVerticalOffset);
-
-    // Dimensions exactes de la pièce avec espacement
-    final pieceWidth = shape.cols * cellSize + (shape.cols - 1) * spacing;
-    final pieceHeight = shape.rows * cellSize + (shape.rows - 1) * spacing;
-
-    // Coin supérieur gauche de la pièce
-    final pieceLeft = visualCenter.dx - pieceWidth / 2;
-    final pieceTop = visualCenter.dy - pieceHeight / 2;
-
-    final totalStep = cellSize + spacing;
-    final col = ((pieceLeft - padding) / totalStep).round();
-    final row = ((pieceTop - padding) / totalStep).round();
-
-    if (row < 0 || row + shape.rows > BoardState.size ||
-        col < 0 || col + shape.cols > BoardState.size) {
-      return null;
-    }
-    return (row, col);
   }
 }

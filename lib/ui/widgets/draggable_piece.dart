@@ -18,18 +18,19 @@ class DraggablePiece extends StatelessWidget {
     required this.pieceIndex,
     required this.shape,
     required this.theme,
-    this.dockCellSize = 22.0,
-    this.boardCellSize = 38.0,
+    this.dockCellSize = 24.0,
+    this.boardCellSize = 36.0,
     this.isPlaceable = true,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     // Largeur et hauteur de la forme au format plateau
-    final feedbackWidth = shape.cols * boardCellSize + (shape.cols - 1) * 3.0;
-    final feedbackHeight = shape.rows * boardCellSize + (shape.rows - 1) * 3.0;
+    final feedbackWidth = shape.cols * boardCellSize + (shape.cols - 1) * 4.0;
+    final feedbackHeight = shape.rows * boardCellSize + (shape.rows - 1) * 4.0;
 
     return Draggable<Map<String, dynamic>>(
+      dragAnchorStrategy: pointerDragAnchorStrategy,
       data: {
         'pieceIndex': pieceIndex,
         'shape': shape,
@@ -44,32 +45,42 @@ class DraggablePiece extends StatelessWidget {
         child: Transform.translate(
           // Décalage vertical de -75px pour que le doigt ne cache jamais la pièce ni la grille !
           offset: Offset(-feedbackWidth / 2, -feedbackHeight / 2 - 75.0),
-          child: Transform.scale(
-            scale: 1.10,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color(0x66000000),
-                    blurRadius: 20,
-                    offset: Offset(0, 16),
-                  ),
-                ],
-              ),
-              child: _buildShapeMatrix(cellSize: boardCellSize, spacing: 3.0, opacity: 0.98),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: const [
+                BoxShadow(
+                  color: Color(0x66000000),
+                  blurRadius: 20,
+                  offset: Offset(0, 16),
+                ),
+              ],
             ),
+            child: _buildShapeMatrix(cellSize: boardCellSize, spacing: 4.0, opacity: 0.98),
           ),
         ),
       ),
       childWhenDragging: Opacity(
         opacity: 0.15,
-        child: _buildShapeMatrix(cellSize: dockCellSize, spacing: 2.0, opacity: 0.15),
+        child: Container(
+          width: 84.0,
+          height: 84.0,
+          alignment: Alignment.center,
+          child: _buildShapeMatrix(cellSize: dockCellSize, spacing: 2.0, opacity: 0.15),
+        ),
       ),
+      // Container plein format 84x84 pour que le toucher / drag se déclenche instantanément
+      // même sur les petits blocs 1x1 sans rater la cible
       child: AnimatedOpacity(
         duration: const Duration(milliseconds: 200),
         opacity: isPlaceable ? 1.0 : 0.4,
-        child: _buildShapeMatrix(cellSize: dockCellSize, spacing: 2.0, opacity: 1.0),
+        child: Container(
+          width: 84.0,
+          height: 84.0,
+          color: Colors.transparent,
+          alignment: Alignment.center,
+          child: _buildShapeMatrix(cellSize: dockCellSize, spacing: 2.0, opacity: 1.0),
+        ),
       ),
     );
   }
