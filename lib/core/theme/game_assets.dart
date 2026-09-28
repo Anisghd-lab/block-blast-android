@@ -18,11 +18,12 @@ class GameAssets {
   ];
 
   // Liste des 4 assets de boosters signatures
+  // Index 0: Marteau, Index 1: Bombe, Index 2: Gant Magique, Index 3: +5 Coups Extra
   static const List<String> boosters = [
-    'assets/boosters/booster_01.png',
-    'assets/boosters/booster_02.png',
-    'assets/boosters/booster_03.png',
-    'assets/boosters/booster_04.png',
+    'assets/boosters/booster_01.png', // Marteau
+    'assets/boosters/booster_02.png', // Bombe
+    'assets/boosters/booster_04.png', // Gant Magique
+    'assets/boosters/booster_03.png', // +5 Coups Extra
   ];
 
   /// Retourne un fond aléatoire
