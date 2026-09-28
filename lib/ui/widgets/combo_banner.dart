@@ -22,7 +22,6 @@ class _ComboBannerState extends State<ComboBanner> with SingleTickerProviderStat
     if (widget.comboStreak >= 2) {
       _anim.forward();
     }
-    _lastStreak = widget.comboStreak;
   }
 
   @override
@@ -35,7 +34,6 @@ class _ComboBannerState extends State<ComboBanner> with SingleTickerProviderStat
       } else {
         _anim.reverse();
       }
-      _lastStreak = widget.comboStreak;
     }
   }
 

@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../engine/level_model.dart';
 import '../../providers/game_provider.dart';
-import '../../providers/settings_provider.dart';
 import '../screens/level_select_screen.dart';
 import 'candy_visuals.dart';
 import 'combo_banner.dart';
