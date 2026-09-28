@@ -137,4 +137,81 @@ class GameStorage {
     starsMap.forEach((k, v) => exportMap[k.toString()] = v);
     await _prefs?.setString(_keyLevelStars, jsonEncode(exportMap));
   }
+
+  // --- ÉCONOMIE DU JEU : PIÈCES & VIES (SUGAR DELIGHT SYSTEM) ---
+  static const String _keyCoins = 'candy_coins_balance';
+  static const String _keyLives = 'candy_lives_count';
+  static const String _keyLastLifeTime = 'candy_last_life_timestamp';
+  static const int maxLives = 5;
+  static const int lifeRegenSeconds = 900; // 15 minutes par vie
+
+  static int getCoins() {
+    return _prefs?.getInt(_keyCoins) ?? 150;
+  }
+
+  static Future<void> addCoins(int amount) async {
+    final current = getCoins();
+    await _prefs?.setInt(_keyCoins, current + amount);
+  }
+
+  static Future<bool> spendCoins(int amount) async {
+    final current = getCoins();
+    if (current >= amount) {
+      await _prefs?.setInt(_keyCoins, current - amount);
+      return true;
+    }
+    return false;
+  }
+
+  static int getLives() {
+    _checkLifeRegeneration();
+    return _prefs?.getInt(_keyLives) ?? maxLives;
+  }
+
+  static int getSecondsUntilNextLife() {
+    final currentLives = _prefs?.getInt(_keyLives) ?? maxLives;
+    if (currentLives >= maxLives) return 0;
+    final lastTime = _prefs?.getInt(_keyLastLifeTime) ?? DateTime.now().millisecondsSinceEpoch;
+    final elapsedSec = ((DateTime.now().millisecondsSinceEpoch - lastTime) / 1000).floor();
+    final remaining = lifeRegenSeconds - (elapsedSec % lifeRegenSeconds);
+    return remaining.clamp(0, lifeRegenSeconds);
+  }
+
+  static void _checkLifeRegeneration() {
+    int current = _prefs?.getInt(_keyLives) ?? maxLives;
+    if (current >= maxLives) return;
+
+    final lastTime = _prefs?.getInt(_keyLastLifeTime) ?? DateTime.now().millisecondsSinceEpoch;
+    final elapsedSec = ((DateTime.now().millisecondsSinceEpoch - lastTime) / 1000).floor();
+    final livesGained = elapsedSec ~/ lifeRegenSeconds;
+
+    if (livesGained > 0) {
+      final updated = (current + livesGained).clamp(0, maxLives);
+      _prefs?.setInt(_keyLives, updated);
+      if (updated >= maxLives) {
+        _prefs?.remove(_keyLastLifeTime);
+      } else {
+        final newLastTime = lastTime + (livesGained * lifeRegenSeconds * 1000);
+        _prefs?.setInt(_keyLastLifeTime, newLastTime);
+      }
+    }
+  }
+
+  static Future<void> refillLives() async {
+    await _prefs?.setInt(_keyLives, maxLives);
+    await _prefs?.remove(_keyLastLifeTime);
+  }
+
+  static Future<bool> consumeLife() async {
+    _checkLifeRegeneration();
+    int current = _prefs?.getInt(_keyLives) ?? maxLives;
+    if (current > 0) {
+      if (current == maxLives) {
+        await _prefs?.setInt(_keyLastLifeTime, DateTime.now().millisecondsSinceEpoch);
+      }
+      await _prefs?.setInt(_keyLives, current - 1);
+      return true;
+    }
+    return false;
+  }
 }
