@@ -36,18 +36,33 @@ class DraggablePiece extends StatelessWidget {
       onDragStarted: () {
         HapticService.onPiecePick();
       },
-      // Le composant visuel qui flotte sous/au-dessus du doigt
+      // Le composant visuel qui flotte sous/au-dessus du doigt avec élévation et ombrage 3D
       feedback: Material(
         color: Colors.transparent,
         child: Transform.translate(
           // Décalage vertical de -75px pour que le doigt ne cache jamais la pièce ni la grille !
           offset: Offset(-feedbackWidth / 2, -feedbackHeight / 2 - 75.0),
-          child: _buildShapeMatrix(cellSize: boardCellSize, spacing: 3.0, opacity: 0.95),
+          child: Transform.scale(
+            scale: 1.10,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color(0x66000000),
+                    blurRadius: 20,
+                    offset: Offset(0, 16),
+                  ),
+                ],
+              ),
+              child: _buildShapeMatrix(cellSize: boardCellSize, spacing: 3.0, opacity: 0.98),
+            ),
+          ),
         ),
       ),
       childWhenDragging: Opacity(
-        opacity: 0.2,
-        child: _buildShapeMatrix(cellSize: dockCellSize, spacing: 2.0, opacity: 0.2),
+        opacity: 0.15,
+        child: _buildShapeMatrix(cellSize: dockCellSize, spacing: 2.0, opacity: 0.15),
       ),
       child: AnimatedOpacity(
         duration: const Duration(milliseconds: 200),

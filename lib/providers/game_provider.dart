@@ -14,6 +14,28 @@ enum GameMode {
   adventure,
 }
 
+/// Événement de destruction de lignes/colonnes pour déclencher les effets Juice & Particules
+class ClearEvent {
+  final List<int> rows;
+  final List<int> cols;
+  final int totalLines;
+  final int comboStreak;
+  final int points;
+  final int jewelsCleared;
+  final int rocksCleared;
+  final int timestamp;
+
+  ClearEvent({
+    required this.rows,
+    required this.cols,
+    required this.totalLines,
+    required this.comboStreak,
+    required this.points,
+    required this.jewelsCleared,
+    required this.rocksCleared,
+  }) : timestamp = DateTime.now().microsecondsSinceEpoch;
+}
+
 class GameProvider extends ChangeNotifier {
   final ShapeGenerator _generator = ShapeGenerator();
   final LevelManager _levelManager = LevelManager();
@@ -45,6 +67,7 @@ class GameProvider extends ChangeNotifier {
   // Animation des explosions de lignes en cours
   List<int> _clearingRows = [];
   List<int> _clearingCols = [];
+  ClearEvent? _lastClearEvent;
 
   // Aperçu de placement en direct pendant le glissement (Drag & Drop)
   BlockShape? _previewShape;
@@ -64,6 +87,7 @@ class GameProvider extends ChangeNotifier {
   bool get isPaused => _isPaused;
   List<int> get clearingRows => _clearingRows;
   List<int> get clearingCols => _clearingCols;
+  ClearEvent? get lastClearEvent => _lastClearEvent;
 
   // Getters Aventure
   GameLevel? get currentLevel => _currentLevel;
@@ -359,13 +383,22 @@ class GameProvider extends ChangeNotifier {
         HapticService.onComboBlast();
       }
 
-      // Déclenchement de l'animation d'explosion
+      // Déclenchement de l'animation d'explosion & Événement Juice
       _clearingRows = List.from(clearResult.rows);
       _clearingCols = List.from(clearResult.cols);
+      _lastClearEvent = ClearEvent(
+        rows: List.from(clearResult.rows),
+        cols: List.from(clearResult.cols),
+        totalLines: clearResult.totalLines,
+        comboStreak: _comboStreak,
+        points: clearPoints,
+        jewelsCleared: clearResult.jewelsCleared,
+        rocksCleared: clearResult.rocksCleared,
+      );
       notifyListeners();
 
-      // Nettoyage effectif après le flash d'animation
-      Future.delayed(const Duration(milliseconds: 180), () {
+      // Nettoyage effectif après le flash d'animation (220ms pour laisser fleurir les particules)
+      Future.delayed(const Duration(milliseconds: 220), () {
         _board.clearLines(_clearingRows, _clearingCols);
         GameStorage.addLinesCleared(_clearingRows.length + _clearingCols.length);
         _clearingRows = [];
