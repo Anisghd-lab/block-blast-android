@@ -19,9 +19,6 @@ dependencies:
   # Local Storage for Highscores & Settings (Offline First)
   shared_preferences: ^2.3.2
   
-  # Haptic & Feedback
-  flutter_vibrate: ^1.3.0
-  
   # UI Icons & Effects
   confetti: ^0.7.0
 
