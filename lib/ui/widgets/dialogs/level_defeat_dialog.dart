@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../core/storage/game_storage.dart';
 import '../../../engine/level_model.dart';
 import '../../../providers/game_provider.dart';
 import '../../screens/level_select_screen.dart';
@@ -99,6 +100,58 @@ class LevelDefeatDialog extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
+
+            // Option Sauvetage : Continuer avec +5 coups si limite de coups atteinte
+            if (gameProvider.defeatReason.contains('coups')) ...[
+              SizedBox(
+                width: double.infinity,
+                height: 48,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF48BB78),
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                    elevation: 6,
+                  ),
+                  onPressed: () async {
+                    if (gameProvider.extraMovesCount > 0) {
+                      await gameProvider.useExtraMoves(5);
+                      if (context.mounted) Navigator.of(context).pop();
+                    } else if (GameStorage.getCoins() >= 60) {
+                      final ok = await gameProvider.buyBooster('extra_moves', 60);
+                      if (ok) {
+                        await gameProvider.useExtraMoves(5);
+                        if (context.mounted) Navigator.of(context).pop();
+                      }
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Pas assez de pièces (60 🪙 requis)'),
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
+                    }
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'CONTINUER (+5 COUPS) ➕🖐️',
+                        style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13),
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        gameProvider.extraMovesCount > 0
+                            ? '(${gameProvider.extraMovesCount})'
+                            : '(60 🪙)',
+                        style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 12),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+            ],
 
             // Bouton Réessayer
             SizedBox(

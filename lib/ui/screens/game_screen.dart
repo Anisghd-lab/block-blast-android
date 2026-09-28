@@ -8,6 +8,7 @@ import '../widgets/dialogs/game_over_dialog.dart';
 import '../widgets/dialogs/level_defeat_dialog.dart';
 import '../widgets/dialogs/level_victory_dialog.dart';
 import '../widgets/dialogs/pause_dialog.dart';
+import '../widgets/booster_dock.dart';
 import '../widgets/game_board.dart';
 import '../widgets/piece_dock.dart';
 import '../widgets/score_header.dart';
@@ -120,17 +121,20 @@ class GameScreen extends StatelessWidget {
               const Expanded(
                 child: Center(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
                     child: GameBoard(),
                   ),
                 ),
               ),
 
-              // 3. Tiroir de pièces du bas fixé à l'écran
+              // 3. Barre de Boosters tactiques (Sugar Delight System)
+              const BoosterDock(),
+
+              // 4. Tiroir de pièces du bas fixé à l'écran
               const SafeArea(
                 top: false,
                 child: Padding(
-                  padding: EdgeInsets.only(bottom: 12.0),
+                  padding: EdgeInsets.only(bottom: 8.0),
                   child: PieceDock(),
                 ),
               ),

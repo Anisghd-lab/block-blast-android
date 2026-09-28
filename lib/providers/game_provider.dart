@@ -14,6 +14,13 @@ enum GameMode {
   adventure,
 }
 
+/// Boosters tactiques sélectionnables (Style Sugar Delight)
+enum ActiveBooster {
+  none,
+  hammer,
+  bomb,
+}
+
 /// Événement de destruction de lignes/colonnes pour déclencher les effets Juice & Particules
 class ClearEvent {
   final List<int> rows;
@@ -64,6 +71,13 @@ class GameProvider extends ChangeNotifier {
   String _defeatReason = '';
   int _starsEarned = 0;
 
+  // Boosters & Outils Tactiques (Sugar Delight System)
+  ActiveBooster _activeBooster = ActiveBooster.none;
+  int _hammerCount = 3;
+  int _bombCount = 3;
+  int _gloveCount = 3;
+  int _extraMovesCount = 3;
+
   // Animation des explosions de lignes en cours
   List<int> _clearingRows = [];
   List<int> _clearingCols = [];
@@ -89,6 +103,13 @@ class GameProvider extends ChangeNotifier {
   List<int> get clearingCols => _clearingCols;
   ClearEvent? get lastClearEvent => _lastClearEvent;
 
+  // Getters Boosters
+  ActiveBooster get activeBooster => _activeBooster;
+  int get hammerCount => _hammerCount;
+  int get bombCount => _bombCount;
+  int get gloveCount => _gloveCount;
+  int get extraMovesCount => _extraMovesCount;
+
   // Getters Aventure
   GameLevel? get currentLevel => _currentLevel;
   int get currentLevelId => _currentLevelId;
@@ -108,6 +129,10 @@ class GameProvider extends ChangeNotifier {
   GameProvider() {
     _board = BoardState();
     _highScore = GameStorage.getHighScore();
+    _hammerCount = GameStorage.getHammerCount();
+    _bombCount = GameStorage.getBombCount();
+    _gloveCount = GameStorage.getGloveCount();
+    _extraMovesCount = GameStorage.getExtraMovesCount();
     _initLevelsAndStart();
   }
 
@@ -226,6 +251,7 @@ class GameProvider extends ChangeNotifier {
     _defeatReason = '';
     _starsEarned = 0;
     _isPaused = false;
+    _activeBooster = ActiveBooster.none;
 
     _spawnNewTrio();
     saveCurrentState();
@@ -251,6 +277,7 @@ class GameProvider extends ChangeNotifier {
     _comboStreak = 0;
     _isGameOver = false;
     _isPaused = false;
+    _activeBooster = ActiveBooster.none;
     _board.reset();
     _spawnNewTrio();
     saveCurrentState();
@@ -506,5 +533,135 @@ class GameProvider extends ChangeNotifier {
 
     final trio = _generator.generateTrio(_board, allowedShapes: allowed);
     _availablePieces = [trio[0], trio[1], trio[2]];
+  }
+
+  // --- ACTIONS DES BOOSTERS TACTIQUES (SUGAR DELIGHT SYSTEM) ---
+
+  /// Active ou désactive un booster ciblé (Marteau ou Bombe)
+  void selectBooster(ActiveBooster booster) {
+    if (_activeBooster == booster) {
+      _activeBooster = ActiveBooster.none;
+    } else {
+      _activeBooster = booster;
+    }
+    notifyListeners();
+  }
+
+  /// Annule le ciblage du booster en cours
+  void cancelActiveBooster() {
+    if (_activeBooster != ActiveBooster.none) {
+      _activeBooster = ActiveBooster.none;
+      notifyListeners();
+    }
+  }
+
+  /// Actualise le stock de boosters depuis le stockage persistant
+  void refreshBoosterCounts() {
+    _hammerCount = GameStorage.getHammerCount();
+    _bombCount = GameStorage.getBombCount();
+    _gloveCount = GameStorage.getGloveCount();
+    _extraMovesCount = GameStorage.getExtraMovesCount();
+    notifyListeners();
+  }
+
+  /// Applique le Marteau Sucré sur la cellule (r, c)
+  Future<bool> applyHammer(int r, int c) async {
+    if (_hammerCount <= 0) return false;
+    final oldVal = _board.clearSingleCell(r, c);
+
+    await GameStorage.useBooster('hammer');
+    _hammerCount = GameStorage.getHammerCount();
+    _activeBooster = ActiveBooster.none;
+
+    AudioService.playPiecePlace();
+    HapticService.onComboBlast();
+
+    if (oldVal == 2) {
+      _levelJewelsCollected++;
+    }
+    if (_gameMode == GameMode.adventure) {
+      _levelScore += 50;
+    } else {
+      _score += 50;
+    }
+
+    _checkPostMoveState();
+    saveCurrentState();
+    notifyListeners();
+    return true;
+  }
+
+  /// Applique la Bombe Soda sur une zone 3x3 centrée en (centerR, centerC)
+  Future<bool> applyBomb(int centerR, int centerC) async {
+    if (_bombCount <= 0) return false;
+    final cleared = _board.clear3x3Area(centerR, centerC);
+
+    await GameStorage.useBooster('bomb');
+    _bombCount = GameStorage.getBombCount();
+    _activeBooster = ActiveBooster.none;
+
+    AudioService.playLineClear(3);
+    HapticService.onLineClear(lineCount: 3);
+
+    int jewels = 0;
+    for (final item in cleared) {
+      if (item.$3 == 2) jewels++;
+    }
+    _levelJewelsCollected += jewels;
+    final pts = (cleared.length * 35) + (jewels * 50);
+    if (_gameMode == GameMode.adventure) {
+      _levelScore += pts;
+    } else {
+      _score += pts;
+    }
+
+    _checkPostMoveState();
+    saveCurrentState();
+    notifyListeners();
+    return true;
+  }
+
+  /// Utilise le Gant Magique pour régénérer immédiatement le tiroir de 3 pièces
+  Future<bool> useGloveReroll() async {
+    if (_gloveCount <= 0) return false;
+    await GameStorage.useBooster('glove');
+    _gloveCount = GameStorage.getGloveCount();
+    _spawnNewTrio();
+
+    AudioService.playPiecePlace();
+    HapticService.onPiecePick();
+
+    _checkPostMoveState();
+    saveCurrentState();
+    notifyListeners();
+    return true;
+  }
+
+  /// Utilise le Booster +5 Coups pour continuer le niveau
+  Future<bool> useExtraMoves([int extra = 5]) async {
+    if (_extraMovesCount <= 0) return false;
+    await GameStorage.useBooster('extra_moves');
+    _extraMovesCount = GameStorage.getExtraMovesCount();
+    _movesRemaining = (_movesRemaining ?? 0) + extra;
+    _isLevelFailed = false;
+    _defeatReason = '';
+
+    AudioService.playPiecePlace();
+    HapticService.onPieceDrop();
+
+    saveCurrentState();
+    notifyListeners();
+    return true;
+  }
+
+  /// Achète 1 unité d'un booster avec les pièces du joueur
+  Future<bool> buyBooster(String boosterType, int costInCoins) async {
+    final success = await GameStorage.spendCoins(costInCoins);
+    if (success) {
+      await GameStorage.addBooster(boosterType, 1);
+      refreshBoosterCounts();
+      return true;
+    }
+    return false;
   }
 }

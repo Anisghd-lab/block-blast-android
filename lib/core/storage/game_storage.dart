@@ -214,4 +214,45 @@ class GameStorage {
     }
     return false;
   }
+
+  // --- BOOSTERS & OUTILS TACTIQUES (SUGAR DELIGHT BOOSTERS) ---
+  static const String _keyHammer = 'booster_hammer_count';
+  static const String _keyBomb = 'booster_bomb_count';
+  static const String _keyGlove = 'booster_glove_count';
+  static const String _keyExtraMoves = 'booster_extra_moves_count';
+
+  static int getHammerCount() => _prefs?.getInt(_keyHammer) ?? 3;
+  static int getBombCount() => _prefs?.getInt(_keyBomb) ?? 3;
+  static int getGloveCount() => _prefs?.getInt(_keyGlove) ?? 3;
+  static int getExtraMovesCount() => _prefs?.getInt(_keyExtraMoves) ?? 3;
+
+  static Future<void> addBooster(String boosterType, [int count = 1]) async {
+    final key = _getBoosterKey(boosterType);
+    final current = _prefs?.getInt(key) ?? 3;
+    await _prefs?.setInt(key, current + count);
+  }
+
+  static Future<bool> useBooster(String boosterType) async {
+    final key = _getBoosterKey(boosterType);
+    final current = _prefs?.getInt(key) ?? 3;
+    if (current > 0) {
+      await _prefs?.setInt(key, current - 1);
+      return true;
+    }
+    return false;
+  }
+
+  static String _getBoosterKey(String boosterType) {
+    switch (boosterType) {
+      case 'hammer':
+        return _keyHammer;
+      case 'bomb':
+        return _keyBomb;
+      case 'glove':
+        return _keyGlove;
+      case 'extra_moves':
+      default:
+        return _keyExtraMoves;
+    }
+  }
 }

@@ -120,6 +120,31 @@ class BoardState {
     }
   }
 
+  /// Efface une seule cellule et renvoie sa valeur précédente (ou 0 si vide)
+  int clearSingleCell(int r, int c) {
+    if (r < 0 || r >= size || c < 0 || c >= size) return 0;
+    final val = grid[r][c];
+    grid[r][c] = 0;
+    return val;
+  }
+
+  /// Efface une zone 3x3 centrée en (centerR, centerC) et renvoie les cellules modifiées avec leur ancienne valeur
+  List<(int, int, int)> clear3x3Area(int centerR, int centerC) {
+    final List<(int, int, int)> cleared = [];
+    for (int r = centerR - 1; r <= centerR + 1; r++) {
+      if (r < 0 || r >= size) continue;
+      for (int c = centerC - 1; c <= centerC + 1; c++) {
+        if (c < 0 || c >= size) continue;
+        final val = grid[r][c];
+        if (val != 0) {
+          grid[r][c] = 0;
+          cleared.add((r, c, val));
+        }
+      }
+    }
+    return cleared;
+  }
+
   /// Vérifie si une pièce donnée peut être placée n'importe où sur la grille
   bool canFitAnywhere(BlockShape shape) {
     for (int r = 0; r <= size - shape.rows; r++) {

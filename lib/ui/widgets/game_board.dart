@@ -102,6 +102,121 @@ class _GameBoardState extends State<GameBoard> {
     );
   }
 
+  void _applyHammerAt(
+    int r,
+    int c,
+    double cellSize,
+    double spacing,
+    double padding,
+    GameProvider provider,
+  ) {
+    final juice = _juiceKey.currentState;
+    final x = padding + c * (cellSize + spacing) + cellSize / 2;
+    final y = padding + r * (cellSize + spacing) + cellSize / 2;
+
+    juice?.emitBurst(
+      position: Offset(x, y),
+      colors: CandyColors.candyPalette,
+      particleCount: 22,
+      emitShockwave: true,
+    );
+    juice?.triggerScreenShake(magnitude: 4.5);
+    juice?.spawnFloatingText(
+      position: Offset(x, y - 20),
+      text: '🔨 SMASH !',
+      color: CandyColors.lemonStar,
+    );
+
+    provider.applyHammer(r, c);
+  }
+
+  void _applyBombAt(
+    int centerR,
+    int centerC,
+    double cellSize,
+    double spacing,
+    double padding,
+    GameProvider provider,
+  ) {
+    final juice = _juiceKey.currentState;
+    final x = padding + centerC * (cellSize + spacing) + cellSize / 2;
+    final y = padding + centerR * (cellSize + spacing) + cellSize / 2;
+
+    for (int dr = -1; dr <= 1; dr++) {
+      for (int dc = -1; dc <= 1; dc++) {
+        final pr = centerR + dr;
+        final pc = centerC + dc;
+        if (pr >= 0 && pr < BoardState.size && pc >= 0 && pc < BoardState.size) {
+          final cx = padding + pc * (cellSize + spacing) + cellSize / 2;
+          final cy = padding + pr * (cellSize + spacing) + cellSize / 2;
+          juice?.emitBurst(
+            position: Offset(cx, cy),
+            colors: CandyColors.candyPalette,
+            particleCount: 14,
+            emitShockwave: dr == 0 && dc == 0,
+          );
+        }
+      }
+    }
+
+    juice?.triggerScreenShake(magnitude: 8.0);
+    juice?.spawnFloatingText(
+      position: Offset(x, y - 30),
+      text: '💣 BOOM !',
+      color: CandyColors.tangerineOrange,
+    );
+
+    provider.applyBomb(centerR, centerC);
+  }
+
+  Widget _buildBoosterTargetBanner(GameProvider provider) {
+    final isHammer = provider.activeBooster == ActiveBooster.hammer;
+    final text = isHammer
+        ? "🔨 Touchez un bonbon à écraser !"
+        : "💣 Touchez la zone 3x3 à exploser !";
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFFF8E7),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: CandyColors.boardBorder, width: 2),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x40000000),
+            blurRadius: 10,
+            offset: Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            text,
+            style: const TextStyle(
+              color: Color(0xFF5D3600),
+              fontWeight: FontWeight.w900,
+              fontSize: 12.5,
+            ),
+          ),
+          const SizedBox(width: 8),
+          GestureDetector(
+            onTap: () => provider.cancelActiveBooster(),
+            child: Container(
+              padding: const EdgeInsets.all(3),
+              decoration: BoxDecoration(
+                color: Colors.red.shade100,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.close, size: 14, color: Colors.red),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final gameProvider = context.watch<GameProvider>();
@@ -130,126 +245,152 @@ class _GameBoardState extends State<GameBoard> {
     return Center(
       child: JuiceOverlay(
         key: _juiceKey,
-        child: Container(
-        key: _boardKey,
-        width: boardSize,
-        height: boardSize,
-        padding: const EdgeInsets.all(padding),
-        decoration: isCandyTheme
-            ? BoxDecoration(
-                gradient: const LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Color(0xFF345B92),
-                    Color(0xFF233E65),
-                  ],
-                ),
-                borderRadius: BorderRadius.circular(20.0),
-                border: Border.all(
-                  color: CandyColors.boardBorder,
-                  width: 3.0,
-                ),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color(0x660F2648),
-                    blurRadius: 18,
-                    offset: Offset(0, 8),
-                  ),
-                  BoxShadow(
-                    color: Color(0x33FFFFFF),
-                    blurRadius: 4,
-                    offset: Offset(0, -1),
-                  ),
-                ],
-              )
-            : BoxDecoration(
-                color: theme.surfaceColor,
-                borderRadius: BorderRadius.circular(16.0),
-                border: Border.all(
-                  color: Colors.white.withOpacity(0.08),
-                  width: 1.5,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.4),
-                    blurRadius: 16,
-                    offset: const Offset(0, 8),
-                  ),
-                ],
-              ),
-        child: DragTarget<Map<String, dynamic>>(
-          onWillAcceptWithDetails: (details) => true,
-          onMove: (details) {
-            final shape = details.data['shape'] as BlockShape;
-            final target = _calculateTargetCell(details.offset, boardSize, cellSize, spacing, padding, shape);
-            if (target != null) {
-              gameProvider.setDragPreview(shape, target.$1, target.$2);
-            } else {
-              gameProvider.setDragPreview(null, null, null);
-            }
-          },
-          onLeave: (_) {
-            gameProvider.setDragPreview(null, null, null);
-          },
-          onAcceptWithDetails: (details) {
-            final shape = details.data['shape'] as BlockShape;
-            final target = _calculateTargetCell(details.offset, boardSize, cellSize, spacing, padding, shape);
-            if (target != null) {
-              final pieceIndex = details.data['pieceIndex'] as int;
-              gameProvider.tryPlacePiece(pieceIndex, target.$1, target.$2);
-            }
-          },
-          builder: (context, candidateData, rejectedData) {
-            return GridView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: BoardState.size * BoardState.size,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: BoardState.size,
-                crossAxisSpacing: spacing,
-                mainAxisSpacing: spacing,
-              ),
-              itemBuilder: (context, index) {
-                final r = index ~/ BoardState.size;
-                final c = index % BoardState.size;
-
-                final rawColor = gameProvider.board.grid[r][c];
-                final isClearing = gameProvider.clearingRows.contains(r) ||
-                    gameProvider.clearingCols.contains(c);
-
-                // Vérifier si cette case fait partie de l'aperçu de placement en cours
-                bool isGhost = false;
-                bool isGhostValid = true;
-                if (gameProvider.previewShape != null &&
-                    gameProvider.previewRow != null &&
-                    gameProvider.previewCol != null) {
-                  final pShape = gameProvider.previewShape!;
-                  final pRow = gameProvider.previewRow!;
-                  final pCol = gameProvider.previewCol!;
-
-                  final dr = r - pRow;
-                  final dc = c - pCol;
-                  if (dr >= 0 && dr < pShape.rows && dc >= 0 && dc < pShape.cols) {
-                    if (pShape.matrix[dr][dc] > 0) {
-                      isGhost = true;
-                      isGhostValid = gameProvider.isPreviewValid;
-                    }
+        child: Stack(
+          clipBehavior: Clip.none,
+          alignment: Alignment.center,
+          children: [
+            Container(
+              key: _boardKey,
+              width: boardSize,
+              height: boardSize,
+              padding: const EdgeInsets.all(padding),
+              decoration: isCandyTheme
+                  ? BoxDecoration(
+                      gradient: const LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Color(0xFF345B92),
+                          Color(0xFF233E65),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(20.0),
+                      border: Border.all(
+                        color: CandyColors.boardBorder,
+                        width: 3.0,
+                      ),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Color(0x660F2648),
+                          blurRadius: 18,
+                          offset: Offset(0, 8),
+                        ),
+                        BoxShadow(
+                          color: Color(0x33FFFFFF),
+                          blurRadius: 4,
+                          offset: Offset(0, -1),
+                        ),
+                      ],
+                    )
+                  : BoxDecoration(
+                      color: theme.surfaceColor,
+                      borderRadius: BorderRadius.circular(16.0),
+                      border: Border.all(
+                        color: Colors.white.withOpacity(0.08),
+                        width: 1.5,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.4),
+                          blurRadius: 16,
+                          offset: const Offset(0, 8),
+                        ),
+                      ],
+                    ),
+              child: DragTarget<Map<String, dynamic>>(
+                onWillAcceptWithDetails: (details) => true,
+                onMove: (details) {
+                  final shape = details.data['shape'] as BlockShape;
+                  final target = _calculateTargetCell(details.offset, boardSize, cellSize, spacing, padding, shape);
+                  if (target != null) {
+                    gameProvider.setDragPreview(shape, target.$1, target.$2);
+                  } else {
+                    gameProvider.setDragPreview(null, null, null);
                   }
-                }
+                },
+                onLeave: (_) {
+                  gameProvider.setDragPreview(null, null, null);
+                },
+                onAcceptWithDetails: (details) {
+                  final shape = details.data['shape'] as BlockShape;
+                  final target = _calculateTargetCell(details.offset, boardSize, cellSize, spacing, padding, shape);
+                  if (target != null) {
+                    final pieceIndex = details.data['pieceIndex'] as int;
+                    gameProvider.tryPlacePiece(pieceIndex, target.$1, target.$2);
+                  }
+                },
+                builder: (context, candidateData, rejectedData) {
+                  return GridView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: BoardState.size * BoardState.size,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: BoardState.size,
+                      crossAxisSpacing: spacing,
+                      mainAxisSpacing: spacing,
+                    ),
+                    itemBuilder: (context, index) {
+                      final r = index ~/ BoardState.size;
+                      final c = index % BoardState.size;
 
-                return BoardCell(
-                  colorIndex: rawColor,
-                  isGhost: isGhost,
-                  isGhostValid: isGhostValid,
-                  isClearing: isClearing,
-                  theme: theme,
-                  size: cellSize,
-                );
-              },
-            );
-          },
+                      final rawColor = gameProvider.board.grid[r][c];
+                      final isClearing = gameProvider.clearingRows.contains(r) ||
+                          gameProvider.clearingCols.contains(c);
+
+                      // Vérifier si cette case fait partie de l'aperçu de placement en cours
+                      bool isGhost = false;
+                      bool isGhostValid = true;
+                      if (gameProvider.previewShape != null &&
+                          gameProvider.previewRow != null &&
+                          gameProvider.previewCol != null) {
+                        final pShape = gameProvider.previewShape!;
+                        final pRow = gameProvider.previewRow!;
+                        final pCol = gameProvider.previewCol!;
+
+                        final dr = r - pRow;
+                        final dc = c - pCol;
+                        if (dr >= 0 && dr < pShape.rows && dc >= 0 && dc < pShape.cols) {
+                          if (pShape.matrix[dr][dc] > 0) {
+                            isGhost = true;
+                            isGhostValid = gameProvider.isPreviewValid;
+                          }
+                        }
+                      }
+
+                      return GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () {
+                          if (gameProvider.activeBooster == ActiveBooster.hammer) {
+                            _applyHammerAt(r, c, cellSize, spacing, padding, gameProvider);
+                          } else if (gameProvider.activeBooster == ActiveBooster.bomb) {
+                            _applyBombAt(r, c, cellSize, spacing, padding, gameProvider);
+                          }
+                        },
+                        child: BoardCell(
+                          colorIndex: rawColor,
+                          isGhost: isGhost,
+                          isGhostValid: isGhostValid,
+                          isClearing: isClearing,
+                          theme: theme,
+                          size: cellSize,
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+            // Bannière de ciblage lorsque le marteau ou la bombe est actif
+            if (gameProvider.activeBooster != ActiveBooster.none)
+              Positioned(
+                top: -46,
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: _buildBoosterTargetBanner(gameProvider),
+                ),
+              ),
+          ],
         ),
-      ),
       ),
     );
   }
