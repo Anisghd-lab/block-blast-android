@@ -187,7 +187,7 @@ class BoardCell extends StatelessWidget {
               fontSize: size * 0.45,
               shadows: const [
                 Shadow(
-                  color: Colors.black80,
+                  color: Colors.black87,
                   offset: Offset(0, 2),
                   blurRadius: 4,
                 ),

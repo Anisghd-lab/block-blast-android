@@ -15,7 +15,7 @@ void main() {
     test('Can place a valid single dot piece', () {
       final board = BoardState();
       final dot = BlockShape(
-        name: 'dot',
+        id: 'dot',
         matrix: [[1]],
         colorIndex: 1,
       );
@@ -51,7 +51,7 @@ void main() {
   group('BlockShape Transformation Tests', () {
     test('Rotating piece 90 degrees transposes dimensions correctly', () {
       final horizontalBar = BlockShape(
-        name: 'bar_3',
+        id: 'bar_3',
         matrix: [
           [1, 1, 1],
         ],
@@ -70,18 +70,17 @@ void main() {
 
     test('Mirroring piece inverts columns', () {
       final lShape = BlockShape(
-        name: 'L',
+        id: 'L',
         matrix: [
           [1, 0],
           [1, 1],
         ],
         colorIndex: 2,
       );
-      final mirrored = lShape.mirror();
-      expect(mirrored.matrix[0][0], 0);
-      expect(mirrored.matrix[0][1], 1);
-      expect(mirrored.matrix[1][0], 1);
-      expect(mirrored.matrix[1][1], 1);
+      expect(lShape.mirror().matrix[0][0], 0);
+      expect(lShape.mirror().matrix[0][1], 1);
+      expect(lShape.mirror().matrix[1][0], 1);
+      expect(lShape.mirror().matrix[1][1], 1);
     });
   });
 

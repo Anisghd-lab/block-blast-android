@@ -72,6 +72,7 @@ class CandyColors {
   static const Color plumBonbon = Color(0xFFA855F7);   // 4: Coussin Violet Myrtille
   static const Color aquaRing = Color(0xFF00C8FF);     // 5: Anneau Cyan Glacé
   static const Color orangeTangerine = Color(0xFFFF7A00); // 6: Quartier d'Orange
+  static const Color tangerineOrange = orangeTangerine;
   static const Color berryPink = Color(0xFFFF4D94);    // 7: Bonbon Framboise Guimauve
 
   static const List<Color> candyPalette = [

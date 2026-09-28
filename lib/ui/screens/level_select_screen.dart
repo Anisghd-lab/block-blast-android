@@ -815,13 +815,6 @@ class _SagaMapPainter extends CustomPainter {
       ..strokeJoin = StrokeJoin.round;
     canvas.drawPath(path, roadPaint);
 
-    // Ligne pointillée jaune pavés au centre
-    final dashPaint = Paint()
-      ..color = const Color(0xFFFEF08A)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 3.5
-      ..strokeCap = StrokeCap.round;
-
     // Décors gourmands le long de la route (Gâteaux, maisons pain d'épices, marguerites)
     for (int lvl = 1; lvl <= totalLevels; lvl++) {
       final p = points[lvl - 1];

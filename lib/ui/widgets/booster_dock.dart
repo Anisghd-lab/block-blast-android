@@ -533,7 +533,6 @@ class HammerIconPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final center = Offset(size.width / 2, size.height / 2);
     final w = size.width;
     final h = size.height;
 

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/app_colors.dart';
 
 class ComboBanner extends StatefulWidget {
   final int comboStreak;
@@ -12,7 +11,6 @@ class ComboBanner extends StatefulWidget {
 
 class _ComboBannerState extends State<ComboBanner> with SingleTickerProviderStateMixin {
   late final AnimationController _anim;
-  int _lastStreak = 0;
 
   @override
   void initState() {

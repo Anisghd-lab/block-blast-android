@@ -21,7 +21,6 @@ class ScoreHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final gameProvider = context.watch<GameProvider>();
-    final settingsProvider = context.watch<SettingsProvider>();
     final isAdventure = gameProvider.gameMode == GameMode.adventure;
     final level = gameProvider.currentLevel;
     final isCheering = gameProvider.comboStreak >= 2 || gameProvider.isLevelWon;

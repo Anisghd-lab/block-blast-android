@@ -224,7 +224,7 @@ class LevelVictoryDialog extends StatelessWidget {
 
   Widget _buildStarRow({required String label, required bool isAchieved}) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.between,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           label,
