@@ -4,8 +4,8 @@ import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 import android.os.Bundle
+import android.os.Build
 import android.view.WindowManager
-import androidx.core.view.WindowCompat
 import android.media.AudioTrack
 import android.media.AudioFormat
 import android.media.AudioAttributes
@@ -23,8 +23,10 @@ class MainActivity: FlutterActivity() {
     private val audioExecutor = Executors.newSingleThreadExecutor()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Activation du mode Edge-to-Edge conforme Android 15
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+        // Activation du mode Edge-to-Edge conforme Android
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.setDecorFitsSystemWindows(false)
+        }
         super.onCreate(savedInstanceState)
         
         // Empêcher l'écran de s'éteindre pendant le jeu

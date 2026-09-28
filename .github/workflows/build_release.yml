@@ -41,7 +41,7 @@ jobs:
         run: flutter test
 
   build:
-    name: Compilation Google Play Bundle (AAB) & APKs
+    name: Compilation APKs Release de Test
     needs: quality_check
     runs-on: ubuntu-latest
     env:
@@ -97,40 +97,29 @@ jobs:
       - name: Prepare Release Assets Directory
         run: |
           mkdir -p release_assets
-          mkdir -p build/app/outputs/symbols
 
-      # Construction du format requis par Google Play Console : Android App Bundle (.aab)
-      - name: Build Google Play Bundle (AAB)
+      # Construction des APKs de test
+      - name: Build Test Release APKs
         run: |
-          flutter build appbundle --release --obfuscate --split-debug-info=build/app/outputs/symbols --android-skip-build-dependency-validation
-          cp build/app/outputs/bundle/release/app-release.aab release_assets/SugarDelight-release.aab
-          
-          # Archivage des symboles de désobfuscation à soumettre à Google Play
-          if [ -d "build/app/outputs/symbols" ] && [ "$(ls -A build/app/outputs/symbols 2>/dev/null)" ]; then
-            cd build/app/outputs/symbols && zip -r ../../../../release_assets/symbols.zip . && cd ../../../..
-          else
-            touch release_assets/empty_symbols.txt
-            cd release_assets && zip symbols.zip empty_symbols.txt && rm empty_symbols.txt && cd ..
-          fi
+          # 1. APK Universel (compatible avec tous les appareils)
+          flutter build apk --release --android-skip-build-dependency-validation
+          cp build/app/outputs/flutter-apk/app-release.apk release_assets/SugarDelight-universal.apk
 
-      # Construction optionnelle des APKs autonomes pour les testeurs directs et la release GitHub
-      - name: Build Split-per-ABI APKs
-        run: |
-          flutter build apk --release --split-per-abi --obfuscate --split-debug-info=build/app/outputs/symbols --android-skip-build-dependency-validation
+          # 2. APKs optimisés par ABI (arm64, arm32, x86_64)
+          flutter build apk --release --split-per-abi --android-skip-build-dependency-validation
           cp build/app/outputs/flutter-apk/app-arm64-v8a-release.apk release_assets/SugarDelight-arm64.apk
           cp build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk release_assets/SugarDelight-arm32.apk
           cp build/app/outputs/flutter-apk/app-x86_64-release.apk release_assets/SugarDelight-x86_64.apk
-          echo "=== Fichiers prêts pour distribution ==="
+
+          echo "=== Fichiers APK prêts pour test ==="
           ls -lh release_assets/
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: google-play-bundle-and-apks
+          name: sugar-delight-test-apks
           path: |
-            release_assets/*.aab
             release_assets/*.apk
-            release_assets/symbols.zip
 
       - name: Determine Version
         id: version_step
@@ -147,21 +136,18 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ env.APP_VERSION }}
-          name: "Sugar Delight ${{ env.APP_VERSION }}"
+          name: "Sugar Delight Test Release ${{ env.APP_VERSION }}"
           body: |
-            ### 🍬 Sugar Delight - ${{ env.APP_VERSION }}
+            ### 🍬 Sugar Delight - Release Test ${{ env.APP_VERSION }}
 
-            #### 📦 Fichiers Play Console & Binaires
-            * **`SugarDelight-release.aab`** : Fichier à uploader directement sur la console Google Play.
-            * **`symbols.zip`** : Fichier de symboles natifs/Dart pour les stacktraces désobfusquées.
-            * **APKs découpés par ABI** : Pour tests manuels sans passer par le store (`arm64`, `arm32`, `x86_64`).
+            #### 📱 APKs de Test Directs
+            * **`SugarDelight-universal.apk`** : Compatible avec tous les téléphones et tablettes Android (installation directe recommandée).
+            * **`SugarDelight-arm64.apk`** : Optimisé pour smartphones 64-bit récents (performances maximales).
+            * **`SugarDelight-arm32.apk`** : Pour smartphones 32-bit (ARMv7).
+            * **`SugarDelight-x86_64.apk`** : Pour émulateurs PC / Android Studio.
           draft: false
           prerelease: false
           files: |
-            release_assets/SugarDelight-release.aab
-            release_assets/symbols.zip
-            release_assets/SugarDelight-arm64.apk
-            release_assets/SugarDelight-arm32.apk
-            release_assets/SugarDelight-x86_64.apk
+            release_assets/*.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

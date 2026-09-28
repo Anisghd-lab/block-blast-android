@@ -80,10 +80,8 @@ android {
 
     buildTypes {
         release {
-            // Configuration R8 / Proguard pour un APK/AAB ultra-léger et rapide
-            minifyEnabled true
-            shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            minifyEnabled false
+            shrinkResources false
             signingConfig (keystorePropertiesFile.exists() ? signingConfigs.release : signingConfigs.debug)
         }
         debug {
