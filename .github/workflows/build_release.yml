@@ -1,0 +1,167 @@
+name: Build Play Store AAB & Release Assets
+
+on:
+  push:
+    branches: [ main ]
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  quality_check:
+    name: Contrôle Qualité (Analyse & Tests)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyse statique
+        run: flutter analyze --no-fatal-infos
+
+      - name: Tests unitaires
+        run: flutter test
+
+  build:
+    name: Compilation Google Play Bundle (AAB) & APKs
+    needs: quality_check
+    runs-on: ubuntu-latest
+    env:
+      ANDROID_USER_HOME: /tmp/android-user-home
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Prepare Android user directory
+        run: mkdir -p "$ANDROID_USER_HOME/.android"
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Generate Launcher Icons
+        run: |
+          if grep -q "flutter_launcher_icons" pubspec.yaml; then
+            dart run flutter_launcher_icons || true
+          fi
+
+      - name: Setup Android Keystore for Play Store signing
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            echo "$KEYSTORE_BASE64" | base64 -d > android/app/upload-keystore.jks
+            {
+              echo "storePassword=$KEYSTORE_PASSWORD"
+              echo "keyPassword=$KEY_PASSWORD"
+              echo "keyAlias=$KEY_ALIAS"
+              echo "storeFile=upload-keystore.jks"
+            } > android/key.properties
+          else
+            echo "Avertissement: KEYSTORE_BASE64 non défini dans les secrets, utilisation du keystore par défaut."
+          fi
+
+      - name: Prepare Release Assets Directory
+        run: |
+          mkdir -p release_assets
+          mkdir -p build/app/outputs/symbols
+
+      # Construction du format requis par Google Play Console : Android App Bundle (.aab)
+      - name: Build Google Play Bundle (AAB)
+        run: |
+          flutter build appbundle --release --obfuscate --split-debug-info=build/app/outputs/symbols --android-skip-build-dependency-validation
+          cp build/app/outputs/bundle/release/app-release.aab release_assets/SugarDelight-release.aab
+          
+          # Archivage des symboles de désobfuscation à soumettre à Google Play
+          if [ -d "build/app/outputs/symbols" ] && [ "$(ls -A build/app/outputs/symbols 2>/dev/null)" ]; then
+            cd build/app/outputs/symbols && zip -r ../../../../release_assets/symbols.zip . && cd ../../../..
+          else
+            touch release_assets/empty_symbols.txt
+            cd release_assets && zip symbols.zip empty_symbols.txt && rm empty_symbols.txt && cd ..
+          fi
+
+      # Construction optionnelle des APKs autonomes pour les testeurs directs et la release GitHub
+      - name: Build Split-per-ABI APKs
+        run: |
+          flutter build apk --release --split-per-abi --obfuscate --split-debug-info=build/app/outputs/symbols --android-skip-build-dependency-validation
+          cp build/app/outputs/flutter-apk/app-arm64-v8a-release.apk release_assets/SugarDelight-arm64.apk
+          cp build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk release_assets/SugarDelight-arm32.apk
+          cp build/app/outputs/flutter-apk/app-x86_64-release.apk release_assets/SugarDelight-x86_64.apk
+          echo "=== Fichiers prêts pour distribution ==="
+          ls -lh release_assets/
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: google-play-bundle-and-apks
+          path: |
+            release_assets/*.aab
+            release_assets/*.apk
+            release_assets/symbols.zip
+
+      - name: Determine Version
+        id: version_step
+        run: |
+          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            TAG="${GITHUB_REF#refs/tags/}"
+          else
+            RAW_VER=$(grep '^version:' pubspec.yaml | awk '{print $2}' | cut -d+ -f1)
+            TAG="v$RAW_VER"
+          fi
+          echo "APP_VERSION=$TAG" >> $GITHUB_ENV
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.APP_VERSION }}
+          name: "Sugar Delight ${{ env.APP_VERSION }}"
+          body: |
+            ### 🍬 Sugar Delight - ${{ env.APP_VERSION }}
+
+            #### 📦 Fichiers Play Console & Binaires
+            * **`SugarDelight-release.aab`** : Fichier à uploader directement sur la console Google Play.
+            * **`symbols.zip`** : Fichier de symboles natifs/Dart pour les stacktraces désobfusquées.
+            * **APKs découpés par ABI** : Pour tests manuels sans passer par le store (`arm64`, `arm32`, `x86_64`).
+          draft: false
+          prerelease: false
+          files: |
+            release_assets/SugarDelight-release.aab
+            release_assets/symbols.zip
+            release_assets/SugarDelight-arm64.apk
+            release_assets/SugarDelight-arm32.apk
+            release_assets/SugarDelight-x86_64.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

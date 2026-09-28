@@ -1,19 +1,11 @@
 {
-  "game": "BlockPuzzle8x8",
-  "version": "1.0",
-  "total_levels": 50,
-  "grid_legend": {
-    "0": "empty",
-    "1": "block",
-    "2": "jewel",
-    "-1": "rock"
-  },
   "levels": [
     {
       "level_id": 1,
-      "title": "Apprentissage 1",
-      "goal": "score",
-      "target_value": 420,
+      "title": "Premier Éclat",
+      "world": "Initiation",
+      "goal": "clear_lines",
+      "target_value": 1,
       "move_limit": null,
       "initial_grid": [
         [
@@ -50,8 +42,8 @@
           0,
           0,
           0,
-          0,
-          0,
+          1,
+          1,
           0,
           0,
           0
@@ -60,8 +52,8 @@
           0,
           0,
           0,
-          0,
-          0,
+          1,
+          1,
           0,
           0,
           0
@@ -102,27 +94,133 @@
         "1x2_h",
         "1x2_v",
         "1x3_h",
-        "1x3_v",
         "2x2"
       ],
-      "world": "Initiation",
       "star_thresholds": {
         "one_star": "goal_completed",
         "two_stars_moves_left": null,
-        "three_stars_score": 600
+        "three_stars_score": 400
       },
       "end_level_presentation": {
-        "victory_banner": "Bien Joué !",
+        "victory_banner": "Premier Pas Réussi !",
         "finisher_anim": "grid_rainbow_sweep",
         "particle_theme": "neon"
       }
     },
     {
       "level_id": 2,
-      "title": "Apprentissage 2",
+      "title": "Le Double Pont",
+      "world": "Initiation",
       "goal": "clear_lines",
-      "target_value": 3,
+      "target_value": 2,
       "move_limit": null,
+      "initial_grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          3,
+          3,
+          3,
+          0,
+          3,
+          3,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          4,
+          4,
+          0,
+          4,
+          4,
+          4,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x3_h",
+        "1x2_v",
+        "2x2"
+      ],
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": null,
+        "three_stars_score": 750
+      },
+      "end_level_presentation": {
+        "victory_banner": "Lignes Traversées !",
+        "finisher_anim": "grid_rainbow_sweep",
+        "particle_theme": "neon"
+      }
+    },
+    {
+      "level_id": 3,
+      "title": "La Croix Solaire",
+      "world": "Initiation",
+      "goal": "score",
+      "target_value": 650,
+      "move_limit": 25,
       "initial_grid": [
         [
           0,
@@ -149,17 +247,7 @@
           0,
           0,
           0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
+          3,
           0,
           0,
           0
@@ -168,8 +256,18 @@
           0,
           0,
           0,
+          3,
+          3,
+          3,
+          0,
+          0
+        ],
+        [
           0,
           0,
+          0,
+          0,
+          3,
           0,
           0,
           0
@@ -211,36 +309,47 @@
         "1x2_v",
         "1x3_h",
         "1x3_v",
-        "2x2"
+        "2x2",
+        "T_shape"
       ],
-      "world": "Initiation",
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": null,
-        "three_stars_score": 1250
+        "two_stars_moves_left": 8,
+        "three_stars_score": 1100
       },
       "end_level_presentation": {
-        "victory_banner": "Éclatant !",
+        "victory_banner": "Éclat Solaire !",
         "finisher_anim": "gem_explosion",
         "particle_theme": "gold"
       }
     },
     {
-      "level_id": 3,
-      "title": "Apprentissage 3",
-      "goal": "score",
-      "target_value": 660,
-      "move_limit": null,
+      "level_id": 4,
+      "title": "Les Quatre Piliers",
+      "world": "Initiation",
+      "goal": "clear_lines",
+      "target_value": 4,
+      "move_limit": 24,
       "initial_grid": [
         [
+          1,
+          1,
           0,
           0,
           0,
           0,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
           0,
           0,
           0,
-          0
+          0,
+          1,
+          1
         ],
         [
           0,
@@ -283,61 +392,51 @@
           0
         ],
         [
+          1,
+          1,
           0,
           0,
           0,
           0,
-          0,
-          0,
-          0,
-          0
+          1,
+          1
         ],
         [
+          1,
+          1,
           0,
           0,
           0,
           0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
+          1,
+          1
         ]
       ],
       "allowed_shapes": [
-        "1x1",
         "1x2_h",
         "1x2_v",
         "1x3_h",
         "1x3_v",
-        "2x2"
+        "2x2",
+        "1x1"
       ],
-      "world": "Initiation",
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": null,
-        "three_stars_score": 950
+        "two_stars_moves_left": 7,
+        "three_stars_score": 1350
       },
       "end_level_presentation": {
-        "victory_banner": "Superbe !",
-        "finisher_anim": "missile_shower",
-        "particle_theme": "neon"
+        "victory_banner": "Piliers Démantelés !",
+        "finisher_anim": "grid_rainbow_sweep",
+        "particle_theme": "crystal"
       }
     },
     {
-      "level_id": 4,
-      "title": "Apprentissage 4",
-      "goal": "clear_lines",
-      "target_value": 4,
+      "level_id": 5,
+      "title": "Le Damier Zen",
+      "world": "Initiation",
+      "goal": "score",
+      "target_value": 900,
       "move_limit": 22,
       "initial_grid": [
         [
@@ -353,10 +452,40 @@
         [
           0,
           0,
+          4,
+          0,
+          4,
           0,
           0,
+          0
+        ],
+        [
+          0,
+          4,
+          0,
+          4,
+          0,
+          4,
+          0,
+          0
+        ],
+        [
           0,
           0,
+          4,
+          0,
+          4,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          4,
+          0,
+          4,
+          0,
+          4,
           0,
           0
         ],
@@ -387,36 +516,6 @@
           0,
           0,
           0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          1,
-          0,
-          0,
-          0,
-          1
-        ],
-        [
-          0,
-          0,
-          1,
-          0,
-          0,
-          0,
-          1,
-          0
-        ],
-        [
-          0,
-          1,
-          0,
-          0,
-          0,
-          1,
           0,
           0
         ]
@@ -426,132 +525,24 @@
         "1x2_h",
         "1x2_v",
         "1x3_h",
-        "1x3_v",
-        "2x2"
+        "2x2",
+        "L_normal"
       ],
-      "world": "Initiation",
       "star_thresholds": {
         "one_star": "goal_completed",
         "two_stars_moves_left": 6,
         "three_stars_score": 1500
       },
       "end_level_presentation": {
-        "victory_banner": "Brillant !",
-        "finisher_anim": "grid_rainbow_sweep",
-        "particle_theme": "gold"
-      }
-    },
-    {
-      "level_id": 5,
-      "title": "Apprentissage 5",
-      "goal": "score",
-      "target_value": 900,
-      "move_limit": 23,
-      "initial_grid": [
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          1,
-          0,
-          0,
-          0,
-          1
-        ],
-        [
-          0,
-          0,
-          1,
-          0,
-          0,
-          0,
-          1,
-          0
-        ],
-        [
-          0,
-          1,
-          0,
-          0,
-          0,
-          1,
-          0,
-          0
-        ]
-      ],
-      "allowed_shapes": [
-        "1x1",
-        "1x2_h",
-        "1x2_v",
-        "1x3_h",
-        "1x3_v",
-        "2x2"
-      ],
-      "world": "Initiation",
-      "star_thresholds": {
-        "one_star": "goal_completed",
-        "two_stars_moves_left": 6,
-        "three_stars_score": 1300
-      },
-      "end_level_presentation": {
-        "victory_banner": "Parfait !",
+        "victory_banner": "Harmonie Atteinte !",
         "finisher_anim": "gem_explosion",
         "particle_theme": "neon"
       }
     },
     {
       "level_id": 6,
-      "title": "Premiers Pas 6",
+      "title": "L'Escalier Diagonal",
+      "world": "Initiation",
       "goal": "clear_lines",
       "target_value": 5,
       "move_limit": 24,
@@ -574,6 +565,26 @@
           0,
           0,
           0,
+          5
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          5,
+          5
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5,
+          5,
           0
         ],
         [
@@ -581,18 +592,8 @@
           0,
           0,
           0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
+          5,
+          5,
           0,
           0
         ],
@@ -600,8 +601,8 @@
           0,
           0,
           0,
-          0,
-          0,
+          5,
+          5,
           0,
           0,
           0
@@ -609,73 +610,90 @@
         [
           0,
           0,
-          0,
-          1,
-          0,
-          0,
-          0,
-          1
-        ],
-        [
-          0,
-          0,
-          1,
+          5,
+          5,
           0,
           0,
           0,
-          1,
           0
         ],
         [
           0,
-          1,
+          5,
+          5,
           0,
           0,
           0,
-          1,
           0,
           0
         ]
       ],
       "allowed_shapes": [
-        "1x1",
         "1x2_h",
         "1x2_v",
         "1x3_h",
         "1x3_v",
-        "1x4_h",
-        "1x4_v",
         "2x2",
         "L_normal",
         "L_inv"
       ],
-      "world": "Initiation",
       "star_thresholds": {
         "one_star": "goal_completed",
         "two_stars_moves_left": 7,
         "three_stars_score": 1800
       },
       "end_level_presentation": {
-        "victory_banner": "Net et Précis !",
-        "finisher_anim": "missile_shower",
-        "particle_theme": "gold"
+        "victory_banner": "Sommet Conquis !",
+        "finisher_anim": "grid_rainbow_sweep",
+        "particle_theme": "crystal"
       }
     },
     {
       "level_id": 7,
-      "title": "Premiers Pas 7",
+      "title": "L'Arche Suspendue",
+      "world": "Initiation",
       "goal": "score",
-      "target_value": 1140,
-      "move_limit": 25,
+      "target_value": 1150,
+      "move_limit": 23,
       "initial_grid": [
         [
           0,
           0,
+          6,
+          6,
+          6,
+          6,
+          0,
+          0
+        ],
+        [
+          0,
+          6,
           0,
           0,
           0,
           0,
+          6,
+          0
+        ],
+        [
           0,
+          6,
+          0,
+          0,
+          0,
+          0,
+          6,
+          0
+        ],
+        [
+          0,
+          6,
+          0,
+          0,
+          0,
+          0,
+          6,
           0
         ],
         [
@@ -715,36 +733,6 @@
           0,
           0,
           0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          1,
-          0,
-          0,
-          0,
-          1
-        ],
-        [
-          0,
-          0,
-          1,
-          0,
-          0,
-          0,
-          1,
-          0
-        ],
-        [
-          0,
-          1,
-          0,
-          0,
-          0,
-          1,
           0,
           0
         ]
@@ -755,47 +743,251 @@
         "1x2_v",
         "1x3_h",
         "1x3_v",
-        "1x4_h",
-        "1x4_v",
         "2x2",
-        "L_normal",
-        "L_inv"
+        "T_shape"
       ],
-      "world": "Initiation",
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 7,
-        "three_stars_score": 1650
+        "two_stars_moves_left": 6,
+        "three_stars_score": 1900
       },
       "end_level_presentation": {
-        "victory_banner": "Bel Enchaînement !",
+        "victory_banner": "Arche Franchie !",
+        "finisher_anim": "missile_shower",
+        "particle_theme": "fireworks"
+      }
+    },
+    {
+      "level_id": 8,
+      "title": "Les Deux Tours",
+      "world": "Initiation",
+      "goal": "clear_lines",
+      "target_value": 6,
+      "move_limit": 25,
+      "initial_grid": [
+        [
+          0,
+          0,
+          7,
+          0,
+          0,
+          0,
+          7,
+          0
+        ],
+        [
+          0,
+          0,
+          7,
+          0,
+          0,
+          0,
+          7,
+          0
+        ],
+        [
+          0,
+          0,
+          7,
+          0,
+          0,
+          0,
+          7,
+          0
+        ],
+        [
+          0,
+          0,
+          7,
+          0,
+          0,
+          0,
+          7,
+          0
+        ],
+        [
+          0,
+          0,
+          7,
+          0,
+          0,
+          0,
+          7,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "allowed_shapes": [
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "1x4_h",
+        "2x2"
+      ],
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 8,
+        "three_stars_score": 2100
+      },
+      "end_level_presentation": {
+        "victory_banner": "Tours Effondrées !",
         "finisher_anim": "grid_rainbow_sweep",
         "particle_theme": "neon"
       }
     },
     {
-      "level_id": 8,
-      "title": "Premiers Pas 8",
+      "level_id": 9,
+      "title": "Le Sablier Magique",
+      "world": "Initiation",
+      "goal": "score",
+      "target_value": 1400,
+      "move_limit": 22,
+      "initial_grid": [
+        [
+          0,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          0
+        ],
+        [
+          0,
+          0,
+          3,
+          3,
+          3,
+          3,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          3,
+          3,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          3,
+          3,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          3,
+          3,
+          3,
+          3,
+          0,
+          0
+        ],
+        [
+          0,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "2x2",
+        "T_shape",
+        "L_normal"
+      ],
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 6,
+        "three_stars_score": 2300
+      },
+      "end_level_presentation": {
+        "victory_banner": "Temps Maîtrisé !",
+        "finisher_anim": "gem_explosion",
+        "particle_theme": "gold"
+      }
+    },
+    {
+      "level_id": 10,
+      "title": "L'Étoile d'Initiation",
+      "world": "Initiation",
       "goal": "clear_lines",
-      "target_value": 6,
+      "target_value": 7,
       "move_limit": 26,
       "initial_grid": [
         [
           0,
           0,
           0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
+          1,
+          1,
           0,
           0,
           0
@@ -803,47 +995,47 @@
         [
           0,
           0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
+          1,
+          1,
+          1,
+          1,
           0,
           0
         ],
         [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
           0,
           1,
           0,
           0,
           0,
+          0,
+          1,
+          0
+        ],
+        [
+          1,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
           1
         ],
         [
           0,
-          0,
           1,
+          0,
           0,
           0,
           0,
@@ -852,266 +1044,50 @@
         ],
         [
           0,
-          1,
-          0,
-          0,
           0,
           1,
+          1,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          1,
+          0,
           0,
           0
         ]
       ],
       "allowed_shapes": [
-        "1x1",
         "1x2_h",
         "1x2_v",
         "1x3_h",
         "1x3_v",
-        "1x4_h",
-        "1x4_v",
         "2x2",
+        "T_shape",
         "L_normal",
-        "L_inv"
+        "Z_shape"
       ],
-      "world": "Initiation",
-      "star_thresholds": {
-        "one_star": "goal_completed",
-        "two_stars_moves_left": 7,
-        "three_stars_score": 2100
-      },
-      "end_level_presentation": {
-        "victory_banner": "Astucieux !",
-        "finisher_anim": "gem_explosion",
-        "particle_theme": "gold"
-      }
-    },
-    {
-      "level_id": 9,
-      "title": "Premiers Pas 9",
-      "goal": "score",
-      "target_value": 1380,
-      "move_limit": 27,
-      "initial_grid": [
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          1,
-          0,
-          0,
-          0,
-          1
-        ],
-        [
-          0,
-          0,
-          1,
-          0,
-          0,
-          0,
-          1,
-          0
-        ],
-        [
-          0,
-          1,
-          0,
-          0,
-          0,
-          1,
-          0,
-          0
-        ]
-      ],
-      "allowed_shapes": [
-        "1x1",
-        "1x2_h",
-        "1x2_v",
-        "1x3_h",
-        "1x3_v",
-        "1x4_h",
-        "1x4_v",
-        "2x2",
-        "L_normal",
-        "L_inv"
-      ],
-      "world": "Initiation",
       "star_thresholds": {
         "one_star": "goal_completed",
         "two_stars_moves_left": 8,
-        "three_stars_score": 2000
+        "three_stars_score": 2600
       },
       "end_level_presentation": {
-        "victory_banner": "Bravo !",
+        "victory_banner": "Monde 1 Maîtrisé !",
         "finisher_anim": "missile_shower",
-        "particle_theme": "neon"
-      }
-    },
-    {
-      "level_id": 10,
-      "title": "Premiers Pas 10",
-      "goal": "clear_lines",
-      "target_value": 7,
-      "move_limit": 28,
-      "initial_grid": [
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          1,
-          0,
-          0,
-          0,
-          1
-        ],
-        [
-          0,
-          0,
-          1,
-          0,
-          0,
-          0,
-          1,
-          0
-        ],
-        [
-          0,
-          1,
-          0,
-          0,
-          0,
-          1,
-          0,
-          0
-        ]
-      ],
-      "allowed_shapes": [
-        "1x1",
-        "1x2_h",
-        "1x2_v",
-        "1x3_h",
-        "1x3_v",
-        "1x4_h",
-        "1x4_v",
-        "2x2",
-        "L_normal",
-        "L_inv"
-      ],
-      "world": "Initiation",
-      "star_thresholds": {
-        "one_star": "goal_completed",
-        "two_stars_moves_left": 8,
-        "three_stars_score": 2350
-      },
-      "end_level_presentation": {
-        "victory_banner": "Maîtrise Naissante !",
-        "finisher_anim": "grid_rainbow_sweep",
-        "particle_theme": "gold"
+        "particle_theme": "fireworks"
       }
     },
     {
       "level_id": 11,
-      "title": "Fouille Minière 1",
+      "title": "Filon d'Émeraude",
+      "world": "Pierres",
       "goal": "clear_jewels",
       "target_value": 4,
       "move_limit": 22,
@@ -1128,26 +1104,6 @@
         ],
         [
           0,
-          2,
-          0,
-          0,
-          2,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          2,
-          0,
-          0,
-          2,
-          0,
-          0
-        ],
-        [
-          0,
           0,
           0,
           0,
@@ -1160,7 +1116,27 @@
           0,
           0,
           0,
+          2,
           0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0,
+          2,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
           0,
           0,
           0,
@@ -1203,30 +1179,26 @@
         "1x2_v",
         "1x3_h",
         "1x3_v",
-        "1x4_h",
-        "1x4_v",
-        "2x2",
-        "L_normal",
-        "L_inv"
+        "2x2"
       ],
-      "world": "Pierres",
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 6,
-        "three_stars_score": 2600
+        "two_stars_moves_left": 7,
+        "three_stars_score": 1400
       },
       "end_level_presentation": {
-        "victory_banner": "Chasseur de Gemmes !",
+        "victory_banner": "Gemmes Extraites !",
         "finisher_anim": "gem_explosion",
         "particle_theme": "crystal"
       }
     },
     {
       "level_id": 12,
-      "title": "Fouille Minière 2",
+      "title": "La Croix de Saphir",
+      "world": "Pierres",
       "goal": "clear_jewels",
       "target_value": 5,
-      "move_limit": 22,
+      "move_limit": 21,
       "initial_grid": [
         [
           0,
@@ -1243,7 +1215,17 @@
           2,
           0,
           0,
+          0,
+          0,
           2,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          1,
           0,
           0,
           0
@@ -1251,10 +1233,10 @@
         [
           0,
           0,
+          1,
           2,
-          0,
-          0,
           2,
+          1,
           0,
           0
         ],
@@ -1262,30 +1244,20 @@
           0,
           0,
           0,
+          1,
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
           2,
           0,
           0,
           0,
-          0
-        ],
-        [
           0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
+          2,
           0
         ],
         [
@@ -1315,98 +1287,95 @@
         "1x2_v",
         "1x3_h",
         "1x3_v",
-        "1x4_h",
-        "1x4_v",
         "2x2",
-        "L_normal",
-        "L_inv"
+        "L_normal"
       ],
-      "world": "Pierres",
       "star_thresholds": {
         "one_star": "goal_completed",
         "two_stars_moves_left": 6,
-        "three_stars_score": 2850
+        "three_stars_score": 1600
       },
       "end_level_presentation": {
-        "victory_banner": "Mineur d'Élite !",
-        "finisher_anim": "missile_shower",
+        "victory_banner": "Saphir Scintillant !",
+        "finisher_anim": "gem_explosion",
         "particle_theme": "neon"
       }
     },
     {
       "level_id": 13,
-      "title": "Fouille Minière 3",
+      "title": "La Constellation Cassiopée",
+      "world": "Pierres",
       "goal": "clear_jewels",
       "target_value": 6,
-      "move_limit": 21,
+      "move_limit": 20,
       "initial_grid": [
         [
+          0,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
           -1,
           0,
           0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          2,
-          0,
-          0,
-          2,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          2,
-          0,
-          0,
-          2,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          2,
-          0,
-          0,
-          2,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
+          -1,
           0,
           0
         ],
@@ -1422,79 +1391,35 @@
         ]
       ],
       "allowed_shapes": [
-        "1x1",
         "1x2_h",
         "1x2_v",
         "1x3_h",
         "1x3_v",
-        "1x4_h",
-        "1x4_v",
         "2x2",
-        "L_normal",
-        "L_inv"
+        "T_shape"
       ],
-      "world": "Pierres",
       "star_thresholds": {
         "one_star": "goal_completed",
         "two_stars_moves_left": 6,
-        "three_stars_score": 3000
+        "three_stars_score": 1800
       },
       "end_level_presentation": {
-        "victory_banner": "Trésor Révélé !",
+        "victory_banner": "Étoiles Alignées !",
         "finisher_anim": "grid_rainbow_sweep",
-        "particle_theme": "crystal"
+        "particle_theme": "gold"
       }
     },
     {
       "level_id": 14,
-      "title": "Fouille Minière 4",
+      "title": "Le Coffre aux Trésors",
+      "world": "Pierres",
       "goal": "clear_jewels",
-      "target_value": 7,
-      "move_limit": 21,
+      "target_value": 6,
+      "move_limit": 20,
       "initial_grid": [
         [
-          -1,
           0,
           0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          2,
-          0,
-          0,
-          2,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          2,
-          0,
-          0,
-          2,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          2,
-          0,
-          0,
-          2,
-          0
-        ],
-        [
-          0,
-          2,
           0,
           0,
           0,
@@ -1505,10 +1430,50 @@
         [
           0,
           0,
+          3,
+          3,
+          3,
+          3,
+          0,
+          0
+        ],
+        [
           0,
           0,
+          3,
+          2,
+          2,
+          3,
+          0,
+          0
+        ],
+        [
           0,
           0,
+          3,
+          2,
+          2,
+          3,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          3,
+          2,
+          2,
+          3,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          3,
+          3,
+          3,
+          3,
           0,
           0
         ],
@@ -1539,107 +1504,104 @@
         "1x2_v",
         "1x3_h",
         "1x3_v",
-        "1x4_h",
-        "1x4_v",
         "2x2",
-        "L_normal",
         "L_inv"
       ],
-      "world": "Pierres",
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 6,
-        "three_stars_score": 3250
+        "two_stars_moves_left": 5,
+        "three_stars_score": 2000
       },
       "end_level_presentation": {
-        "victory_banner": "Éblouissant !",
+        "victory_banner": "Coffre Pillé !",
         "finisher_anim": "gem_explosion",
-        "particle_theme": "neon"
+        "particle_theme": "gold"
       }
     },
     {
       "level_id": 15,
-      "title": "Fouille Minière 5",
+      "title": "Cascade de Rubis",
+      "world": "Pierres",
       "goal": "clear_jewels",
-      "target_value": 8,
-      "move_limit": 20,
+      "target_value": 7,
+      "move_limit": 19,
       "initial_grid": [
         [
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
           -1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          2,
-          0,
-          0,
-          2,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          2,
-          0,
-          0,
-          2,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          2,
-          0,
-          0,
-          2,
-          0
-        ],
-        [
-          0,
-          2,
-          0,
-          0,
-          2,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
+          -1,
           0,
           0,
           0
@@ -1651,87 +1613,84 @@
         "1x2_v",
         "1x3_h",
         "1x3_v",
-        "1x4_h",
-        "1x4_v",
         "2x2",
-        "L_normal",
-        "L_inv"
+        "T_shape"
       ],
-      "world": "Pierres",
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 6,
-        "three_stars_score": 3400
+        "two_stars_moves_left": 5,
+        "three_stars_score": 2200
       },
       "end_level_presentation": {
-        "victory_banner": "Diamant Pur !",
-        "finisher_anim": "missile_shower",
+        "victory_banner": "Cascade Brillante !",
+        "finisher_anim": "gem_explosion",
         "particle_theme": "crystal"
       }
     },
     {
       "level_id": 16,
-      "title": "Fouille Minière 6",
+      "title": "Les Géodes Jumelles",
+      "world": "Pierres",
       "goal": "clear_jewels",
-      "target_value": 9,
+      "target_value": 8,
       "move_limit": 20,
       "initial_grid": [
         [
+          0,
+          2,
+          2,
+          0,
+          0,
+          2,
+          2,
+          0
+        ],
+        [
+          2,
+          0,
+          0,
+          2,
+          2,
+          0,
+          0,
+          2
+        ],
+        [
+          2,
+          0,
+          0,
+          2,
+          2,
+          0,
+          0,
+          2
+        ],
+        [
+          0,
+          2,
+          2,
+          0,
+          0,
+          2,
+          2,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
           -1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          -1
-        ],
-        [
-          0,
-          2,
-          0,
-          0,
-          2,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          2,
-          0,
-          0,
-          2,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          2,
-          0,
-          0,
-          2,
-          0
-        ],
-        [
-          0,
-          2,
-          0,
-          0,
-          2,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          2,
-          0,
-          0,
+          -1,
           0,
           0,
           0
@@ -1758,102 +1717,99 @@
         ]
       ],
       "allowed_shapes": [
-        "1x1",
         "1x2_h",
         "1x2_v",
         "1x3_h",
         "1x3_v",
-        "1x4_h",
-        "1x4_v",
         "2x2",
         "L_normal",
-        "L_inv"
+        "T_shape"
       ],
-      "world": "Pierres",
       "star_thresholds": {
         "one_star": "goal_completed",
         "two_stars_moves_left": 6,
-        "three_stars_score": 3650
+        "three_stars_score": 2400
       },
       "end_level_presentation": {
-        "victory_banner": "Fouille Parfaite !",
-        "finisher_anim": "grid_rainbow_sweep",
+        "victory_banner": "Géodes Ouvertes !",
+        "finisher_anim": "gem_explosion",
         "particle_theme": "neon"
       }
     },
     {
       "level_id": 17,
-      "title": "Fouille Minière 7",
+      "title": "Le Collier Scintillant",
+      "world": "Pierres",
       "goal": "clear_jewels",
-      "target_value": 10,
+      "target_value": 8,
       "move_limit": 19,
       "initial_grid": [
         [
+          0,
+          0,
+          2,
+          2,
+          2,
+          2,
+          0,
+          0
+        ],
+        [
+          0,
+          2,
+          0,
+          0,
+          0,
+          0,
+          2,
+          0
+        ],
+        [
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
           -1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          -1
-        ],
-        [
-          0,
-          2,
-          0,
-          0,
-          2,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          2,
-          0,
-          0,
-          2,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          2,
-          0,
-          0,
-          2,
-          0
-        ],
-        [
-          0,
-          2,
-          0,
-          0,
-          2,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          2,
-          0,
-          0,
-          2,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
+          -1,
           0,
           0,
           0
@@ -1875,67 +1831,44 @@
         "1x2_v",
         "1x3_h",
         "1x3_v",
-        "1x4_h",
-        "1x4_v",
         "2x2",
-        "L_normal",
-        "L_inv"
+        "plus_5"
       ],
-      "world": "Pierres",
       "star_thresholds": {
         "one_star": "goal_completed",
         "two_stars_moves_left": 5,
-        "three_stars_score": 3800
+        "three_stars_score": 2600
       },
       "end_level_presentation": {
-        "victory_banner": "Joyau Brillant !",
-        "finisher_anim": "gem_explosion",
-        "particle_theme": "crystal"
+        "victory_banner": "Joyau Parfait !",
+        "finisher_anim": "grid_rainbow_sweep",
+        "particle_theme": "gold"
       }
     },
     {
       "level_id": 18,
-      "title": "Fouille Minière 8",
+      "title": "La Mine Profonde",
+      "world": "Pierres",
       "goal": "clear_jewels",
-      "target_value": 11,
+      "target_value": 9,
       "move_limit": 19,
       "initial_grid": [
         [
+          0,
           -1,
           0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          -1
-        ],
-        [
-          0,
           2,
           0,
-          0,
-          2,
-          0,
+          -1,
           0,
           0
         ],
         [
-          0,
+          2,
           0,
           2,
           0,
-          0,
           2,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          2,
-          0,
           0,
           2,
           0
@@ -1944,8 +1877,28 @@
           0,
           2,
           0,
+          2,
           0,
           2,
+          0,
+          0
+        ],
+        [
+          -1,
+          0,
+          2,
+          0,
+          2,
+          0,
+          -1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
           0,
           0,
           0
@@ -1953,10 +1906,10 @@
         [
           0,
           0,
-          2,
-          0,
-          0,
-          2,
+          4,
+          4,
+          4,
+          4,
           0,
           0
         ],
@@ -1964,7 +1917,7 @@
           0,
           0,
           0,
-          2,
+          0,
           0,
           0,
           0,
@@ -1982,227 +1935,112 @@
         ]
       ],
       "allowed_shapes": [
-        "1x1",
         "1x2_h",
         "1x2_v",
         "1x3_h",
         "1x3_v",
-        "1x4_h",
-        "1x4_v",
         "2x2",
         "L_normal",
         "L_inv"
       ],
-      "world": "Pierres",
       "star_thresholds": {
         "one_star": "goal_completed",
         "two_stars_moves_left": 5,
-        "three_stars_score": 4050
+        "three_stars_score": 2800
       },
       "end_level_presentation": {
-        "victory_banner": "Collectionneur !",
-        "finisher_anim": "missile_shower",
-        "particle_theme": "neon"
-      }
-    },
-    {
-      "level_id": 19,
-      "title": "Fouille Minière 9",
-      "goal": "clear_jewels",
-      "target_value": 12,
-      "move_limit": 18,
-      "initial_grid": [
-        [
-          -1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          -1
-        ],
-        [
-          0,
-          2,
-          0,
-          0,
-          2,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          2,
-          0,
-          0,
-          2,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          2,
-          0,
-          0,
-          2,
-          0
-        ],
-        [
-          0,
-          2,
-          0,
-          0,
-          2,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          2,
-          0,
-          0,
-          2,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          2,
-          0,
-          0,
-          2,
-          0
-        ],
-        [
-          -1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ]
-      ],
-      "allowed_shapes": [
-        "1x1",
-        "1x2_h",
-        "1x2_v",
-        "1x3_h",
-        "1x3_v",
-        "1x4_h",
-        "1x4_v",
-        "2x2",
-        "L_normal",
-        "L_inv"
-      ],
-      "world": "Pierres",
-      "star_thresholds": {
-        "one_star": "goal_completed",
-        "two_stars_moves_left": 5,
-        "three_stars_score": 4250
-      },
-      "end_level_presentation": {
-        "victory_banner": "Richesse Absolue !",
-        "finisher_anim": "grid_rainbow_sweep",
+        "victory_banner": "Filons Épuisés !",
+        "finisher_anim": "gem_explosion",
         "particle_theme": "crystal"
       }
     },
     {
-      "level_id": 20,
-      "title": "Fouille Minière 10",
+      "level_id": 19,
+      "title": "Le Cœur de Cristal",
+      "world": "Pierres",
       "goal": "clear_jewels",
-      "target_value": 13,
+      "target_value": 10,
       "move_limit": 18,
       "initial_grid": [
         [
+          0,
+          2,
+          2,
+          0,
+          0,
+          2,
+          2,
+          0
+        ],
+        [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        [
+          0,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          2,
+          2,
+          2,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          2,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          -1,
           -1,
           0,
           0,
-          0,
-          0,
-          0,
-          0,
-          -1
-        ],
-        [
-          0,
-          2,
-          0,
-          0,
-          2,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          2,
-          0,
-          0,
-          2,
-          0,
           0
         ],
         [
           0,
           0,
           0,
-          2,
           0,
           0,
-          2,
-          0
-        ],
-        [
-          0,
-          2,
-          0,
-          0,
-          2,
           0,
           0,
           0
-        ],
-        [
-          0,
-          0,
-          2,
-          0,
-          0,
-          2,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          2,
-          0,
-          0,
-          2,
-          0
-        ],
-        [
-          -1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          -1
         ]
       ],
       "allowed_shapes": [
@@ -2211,509 +2049,34 @@
         "1x2_v",
         "1x3_h",
         "1x3_v",
-        "1x4_h",
-        "1x4_v",
         "2x2",
-        "L_normal",
-        "L_inv"
+        "T_shape"
       ],
-      "world": "Pierres",
       "star_thresholds": {
         "one_star": "goal_completed",
         "two_stars_moves_left": 5,
-        "three_stars_score": 4450
+        "three_stars_score": 3000
       },
       "end_level_presentation": {
-        "victory_banner": "Géologue Expert !",
-        "finisher_anim": "gem_explosion",
-        "particle_theme": "neon"
-      }
-    },
-    {
-      "level_id": 21,
-      "title": "Poids Lourd 1",
-      "goal": "clear_lines",
-      "target_value": 7,
-      "move_limit": 24,
-      "initial_grid": [
-        [
-          1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          1,
-          0,
-          1,
-          0,
-          1,
-          0,
-          1
-        ]
-      ],
-      "allowed_shapes": [
-        "1x3_h",
-        "1x3_v",
-        "1x4_h",
-        "1x4_v",
-        "1x5_h",
-        "1x5_v",
-        "2x2",
-        "3x3",
-        "L_giant",
-        "U_shape",
-        "plus_5"
-      ],
-      "world": "Poids Lourd",
-      "star_thresholds": {
-        "one_star": "goal_completed",
-        "two_stars_moves_left": 7,
-        "three_stars_score": 2350
-      },
-      "end_level_presentation": {
-        "victory_banner": "Force Brute !",
+        "victory_banner": "Cœur Purifié !",
         "finisher_anim": "missile_shower",
         "particle_theme": "fireworks"
       }
     },
     {
-      "level_id": 22,
-      "title": "Poids Lourd 2",
-      "goal": "score",
-      "target_value": 2700,
-      "move_limit": 23,
-      "initial_grid": [
-        [
-          1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          1,
-          0,
-          1,
-          0,
-          1,
-          0,
-          1
-        ]
-      ],
-      "allowed_shapes": [
-        "1x3_h",
-        "1x3_v",
-        "1x4_h",
-        "1x4_v",
-        "1x5_h",
-        "1x5_v",
-        "2x2",
-        "3x3",
-        "L_giant",
-        "U_shape",
-        "plus_5"
-      ],
-      "world": "Poids Lourd",
-      "star_thresholds": {
-        "one_star": "goal_completed",
-        "two_stars_moves_left": 6,
-        "three_stars_score": 3900
-      },
-      "end_level_presentation": {
-        "victory_banner": "Briseur de Roches !",
-        "finisher_anim": "grid_rainbow_sweep",
-        "particle_theme": "gold"
-      }
-    },
-    {
-      "level_id": 23,
-      "title": "Poids Lourd 3",
-      "goal": "clear_lines",
-      "target_value": 9,
-      "move_limit": 22,
-      "initial_grid": [
-        [
-          1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          1,
-          0,
-          1,
-          0,
-          1,
-          0,
-          1
-        ]
-      ],
-      "allowed_shapes": [
-        "1x3_h",
-        "1x3_v",
-        "1x4_h",
-        "1x4_v",
-        "1x5_h",
-        "1x5_v",
-        "2x2",
-        "3x3",
-        "L_giant",
-        "U_shape",
-        "plus_5"
-      ],
-      "world": "Poids Lourd",
-      "star_thresholds": {
-        "one_star": "goal_completed",
-        "two_stars_moves_left": 6,
-        "three_stars_score": 2900
-      },
-      "end_level_presentation": {
-        "victory_banner": "Stratège !",
-        "finisher_anim": "gem_explosion",
-        "particle_theme": "fireworks"
-      }
-    },
-    {
-      "level_id": 24,
-      "title": "Poids Lourd 4",
-      "goal": "score",
-      "target_value": 3400,
-      "move_limit": 21,
-      "initial_grid": [
-        [
-          1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          1,
-          0,
-          1,
-          0,
-          1,
-          0,
-          1
-        ]
-      ],
-      "allowed_shapes": [
-        "1x3_h",
-        "1x3_v",
-        "1x4_h",
-        "1x4_v",
-        "1x5_h",
-        "1x5_v",
-        "2x2",
-        "3x3",
-        "L_giant",
-        "U_shape",
-        "plus_5"
-      ],
-      "world": "Poids Lourd",
-      "star_thresholds": {
-        "one_star": "goal_completed",
-        "two_stars_moves_left": 6,
-        "three_stars_score": 4950
-      },
-      "end_level_presentation": {
-        "victory_banner": "Inébranlable !",
-        "finisher_anim": "missile_shower",
-        "particle_theme": "gold"
-      }
-    },
-    {
-      "level_id": 25,
-      "title": "Poids Lourd 5",
-      "goal": "clear_lines",
-      "target_value": 11,
+      "level_id": 20,
+      "title": "Le Trésor d'Ophir",
+      "world": "Pierres",
+      "goal": "clear_jewels",
+      "target_value": 12,
       "move_limit": 20,
       "initial_grid": [
         [
-          1,
           0,
           0,
           0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          1,
-          0,
-          0,
-          0,
-          0,
+          2,
+          2,
           0,
           0,
           0
@@ -2721,84 +2084,319 @@
         [
           0,
           0,
+          2,
           0,
           0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          1,
-          0,
-          0,
-          0,
-          0,
-          0,
+          2,
           0,
           0
         ],
         [
           0,
+          2,
+          0,
+          -1,
+          -1,
+          0,
+          2,
+          0
+        ],
+        [
+          2,
+          0,
+          -1,
+          2,
+          2,
+          -1,
+          0,
+          2
+        ],
+        [
+          2,
+          0,
+          -1,
+          2,
+          2,
+          -1,
+          0,
+          2
+        ],
+        [
+          0,
+          2,
+          0,
+          -1,
+          -1,
+          0,
+          2,
+          0
+        ],
+        [
           0,
           0,
+          2,
           0,
           0,
-          0,
+          2,
           0,
           0
         ],
         [
-          1,
           0,
           0,
           0,
-          0,
+          2,
+          2,
           0,
           0,
           0
-        ],
-        [
-          0,
-          1,
-          0,
-          1,
-          0,
-          1,
-          0,
-          1
         ]
       ],
       "allowed_shapes": [
+        "1x2_h",
+        "1x2_v",
         "1x3_h",
         "1x3_v",
-        "1x4_h",
-        "1x4_v",
-        "1x5_h",
-        "1x5_v",
         "2x2",
-        "3x3",
-        "L_giant",
-        "U_shape",
+        "L_normal",
+        "T_shape",
         "plus_5"
       ],
-      "world": "Poids Lourd",
       "star_thresholds": {
         "one_star": "goal_completed",
         "two_stars_moves_left": 6,
         "three_stars_score": 3500
       },
       "end_level_presentation": {
-        "victory_banner": "Colosse du Puzzle !",
-        "finisher_anim": "grid_rainbow_sweep",
-        "particle_theme": "fireworks"
+        "victory_banner": "Souverain des Gemmes !",
+        "finisher_anim": "gem_explosion",
+        "particle_theme": "gold"
       }
     },
     {
-      "level_id": 26,
-      "title": "Labyrinthe de Roches 1",
+      "level_id": 21,
+      "title": "Menhirs Solitaires",
+      "world": "Poids Lourd",
+      "goal": "clear_lines",
+      "target_value": 7,
+      "move_limit": 24,
+      "initial_grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          -1,
+          0,
+          0,
+          0,
+          0,
+          -1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          -1,
+          0,
+          0,
+          0,
+          0,
+          -1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "allowed_shapes": [
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "2x2",
+        "L_normal",
+        "T_shape"
+      ],
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 7,
+        "three_stars_score": 2600
+      },
+      "end_level_presentation": {
+        "victory_banner": "Menhirs Fissurés !",
+        "finisher_anim": "grid_rainbow_sweep",
+        "particle_theme": "neon"
+      }
+    },
+    {
+      "level_id": 22,
+      "title": "La Tranchée Sombre",
+      "world": "Poids Lourd",
       "goal": "clear_lines",
       "target_value": 8,
+      "move_limit": 23,
+      "initial_grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          -1,
+          -1,
+          -1,
+          0,
+          0,
+          -1,
+          -1,
+          -1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "allowed_shapes": [
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "2x2",
+        "L_normal",
+        "L_inv"
+      ],
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 6,
+        "three_stars_score": 2900
+      },
+      "end_level_presentation": {
+        "victory_banner": "Tranchée Comblée !",
+        "finisher_anim": "grid_rainbow_sweep",
+        "particle_theme": "crystal"
+      }
+    },
+    {
+      "level_id": 23,
+      "title": "Le Canyon Étroit",
+      "world": "Poids Lourd",
+      "goal": "score",
+      "target_value": 2600,
       "move_limit": 22,
       "initial_grid": [
         [
@@ -2812,64 +2410,14 @@
           -1
         ],
         [
-          0,
-          0,
-          1,
-          1,
-          1,
-          1,
-          0,
-          0
-        ],
-        [
-          0,
-          1,
-          0,
-          0,
-          0,
-          0,
-          1,
-          0
-        ],
-        [
-          0,
-          1,
-          0,
-          -1,
           -1,
           0,
-          1,
-          0
-        ],
-        [
-          0,
-          1,
-          0,
-          -1,
-          -1,
-          0,
-          1,
-          0
-        ],
-        [
-          0,
-          1,
           0,
           0,
           0,
           0,
-          1,
-          0
-        ],
-        [
           0,
-          0,
-          1,
-          1,
-          1,
-          1,
-          0,
-          0
+          -1
         ],
         [
           -1,
@@ -2880,6 +2428,56 @@
           0,
           0,
           -1
+        ],
+        [
+          -1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          -1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          5,
+          5,
+          5,
+          5,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
         ]
       ],
       "allowed_shapes": [
@@ -2888,27 +2486,353 @@
         "1x3_h",
         "1x3_v",
         "2x2",
-        "L_normal",
-        "L_inv",
-        "T_shape"
+        "T_shape",
+        "plus_5"
       ],
-      "world": "Poids Lourd",
       "star_thresholds": {
         "one_star": "goal_completed",
         "two_stars_moves_left": 6,
-        "three_stars_score": 2650
+        "three_stars_score": 3400
       },
       "end_level_presentation": {
-        "victory_banner": "Démolisseur !",
-        "finisher_anim": "gem_explosion",
+        "victory_banner": "Canyon Franchi !",
+        "finisher_anim": "missile_shower",
         "particle_theme": "gold"
       }
     },
     {
-      "level_id": 27,
-      "title": "Labyrinthe de Roches 2",
+      "level_id": 24,
+      "title": "L'Enclume Antique",
+      "world": "Poids Lourd",
+      "goal": "clear_lines",
+      "target_value": 9,
+      "move_limit": 22,
+      "initial_grid": [
+        [
+          0,
+          0,
+          -1,
+          -1,
+          -1,
+          -1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          -1,
+          -1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          -1,
+          -1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          -1,
+          -1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          -1,
+          -1,
+          -1,
+          -1,
+          -1,
+          -1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "2x2",
+        "L_normal"
+      ],
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 5,
+        "three_stars_score": 3300
+      },
+      "end_level_presentation": {
+        "victory_banner": "Enclume Forgée !",
+        "finisher_anim": "gem_explosion",
+        "particle_theme": "fireworks"
+      }
+    },
+    {
+      "level_id": 25,
+      "title": "Le Dolmen Sacré",
+      "world": "Poids Lourd",
       "goal": "score",
-      "target_value": 3200,
+      "target_value": 3100,
+      "move_limit": 21,
+      "initial_grid": [
+        [
+          0,
+          -1,
+          -1,
+          -1,
+          -1,
+          -1,
+          -1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          -1,
+          0,
+          0,
+          0,
+          0,
+          -1,
+          0
+        ],
+        [
+          0,
+          -1,
+          0,
+          0,
+          0,
+          0,
+          -1,
+          0
+        ],
+        [
+          0,
+          -1,
+          0,
+          0,
+          0,
+          0,
+          -1,
+          0
+        ],
+        [
+          0,
+          -1,
+          0,
+          0,
+          0,
+          0,
+          -1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "allowed_shapes": [
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "2x2",
+        "T_shape",
+        "Z_shape"
+      ],
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 6,
+        "three_stars_score": 4000
+      },
+      "end_level_presentation": {
+        "victory_banner": "Dolmen Révélé !",
+        "finisher_anim": "grid_rainbow_sweep",
+        "particle_theme": "gold"
+      }
+    },
+    {
+      "level_id": 26,
+      "title": "La Muraille Brisée",
+      "world": "Poids Lourd",
+      "goal": "clear_lines",
+      "target_value": 10,
+      "move_limit": 23,
+      "initial_grid": [
+        [
+          -1,
+          0,
+          -1,
+          0,
+          -1,
+          0,
+          -1,
+          0
+        ],
+        [
+          -1,
+          -1,
+          -1,
+          -1,
+          -1,
+          -1,
+          -1,
+          -1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "allowed_shapes": [
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "2x2",
+        "L_giant",
+        "T_shape"
+      ],
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 6,
+        "three_stars_score": 3600
+      },
+      "end_level_presentation": {
+        "victory_banner": "Remparts Démolis !",
+        "finisher_anim": "gem_explosion",
+        "particle_theme": "neon"
+      }
+    },
+    {
+      "level_id": 27,
+      "title": "Le Labyrinthe de Granit",
+      "world": "Poids Lourd",
+      "goal": "score",
+      "target_value": 3400,
       "move_limit": 21,
       "initial_grid": [
         [
@@ -2999,27 +2923,25 @@
         "1x3_h",
         "1x3_v",
         "2x2",
-        "T_shape",
-        "Z_shape",
-        "S_shape"
+        "T_shape"
       ],
-      "world": "Poids Lourd",
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 6,
-        "three_stars_score": 4650
+        "two_stars_moves_left": 5,
+        "three_stars_score": 4500
       },
       "end_level_presentation": {
-        "victory_banner": "Roc Vaincu !",
-        "finisher_anim": "missile_shower",
-        "particle_theme": "fireworks"
+        "victory_banner": "Labyrinthe Élucidé !",
+        "finisher_anim": "grid_rainbow_sweep",
+        "particle_theme": "crystal"
       }
     },
     {
       "level_id": 28,
-      "title": "Labyrinthe de Roches 3",
+      "title": "Les Quatre Bastions",
+      "world": "Poids Lourd",
       "goal": "clear_lines",
-      "target_value": 10,
+      "target_value": 11,
       "move_limit": 24,
       "initial_grid": [
         [
@@ -3034,62 +2956,62 @@
         ],
         [
           -1,
+          -1,
           0,
           0,
-          1,
-          1,
           0,
           0,
+          -1,
           -1
         ],
         [
           0,
           0,
-          1,
           0,
           0,
-          1,
+          0,
+          0,
           0,
           0
         ],
         [
           0,
-          1,
           0,
           0,
+          2,
+          2,
           0,
           0,
-          1,
-          0
-        ],
-        [
-          0,
-          1,
-          0,
-          0,
-          0,
-          0,
-          1,
           0
         ],
         [
           0,
           0,
-          1,
+          0,
+          2,
+          2,
           0,
           0,
-          1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
           0,
           0
         ],
         [
           -1,
+          -1,
           0,
           0,
-          1,
-          1,
           0,
           0,
+          -1,
           -1
         ],
         [
@@ -3104,666 +3026,112 @@
         ]
       ],
       "allowed_shapes": [
-        "1x1",
-        "1x2_h",
-        "1x2_v",
-        "1x3_h",
-        "1x3_v",
-        "1x4_h",
-        "1x4_v",
-        "2x2",
-        "L_normal"
-      ],
-      "world": "Poids Lourd",
-      "star_thresholds": {
-        "one_star": "goal_completed",
-        "two_stars_moves_left": 7,
-        "three_stars_score": 3200
-      },
-      "end_level_presentation": {
-        "victory_banner": "Impact Titanesque !",
-        "finisher_anim": "grid_rainbow_sweep",
-        "particle_theme": "gold"
-      }
-    },
-    {
-      "level_id": 29,
-      "title": "Labyrinthe de Roches 4",
-      "goal": "score",
-      "target_value": 3800,
-      "move_limit": 22,
-      "initial_grid": [
-        [
-          0,
-          0,
-          0,
-          -1,
-          -1,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          1,
-          0,
-          0,
-          0,
-          0,
-          1,
-          0
-        ],
-        [
-          0,
-          0,
-          1,
-          0,
-          0,
-          1,
-          0,
-          0
-        ],
-        [
-          -1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          -1
-        ],
-        [
-          -1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          -1
-        ],
-        [
-          0,
-          0,
-          1,
-          0,
-          0,
-          1,
-          0,
-          0
-        ],
-        [
-          0,
-          1,
-          0,
-          0,
-          0,
-          0,
-          1,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          -1,
-          -1,
-          0,
-          0,
-          0
-        ]
-      ],
-      "allowed_shapes": [
         "1x2_h",
         "1x2_v",
         "1x3_h",
         "1x3_v",
         "2x2",
-        "T_shape",
         "L_normal",
-        "L_inv"
+        "T_shape"
       ],
-      "world": "Poids Lourd",
-      "star_thresholds": {
-        "one_star": "goal_completed",
-        "two_stars_moves_left": 6,
-        "three_stars_score": 5500
-      },
-      "end_level_presentation": {
-        "victory_banner": "Géant du Bloc !",
-        "finisher_anim": "gem_explosion",
-        "particle_theme": "fireworks"
-      }
-    },
-    {
-      "level_id": 30,
-      "title": "Labyrinthe de Roches 5",
-      "goal": "clear_lines",
-      "target_value": 12,
-      "move_limit": 25,
-      "initial_grid": [
-        [
-          -1,
-          0,
-          -1,
-          0,
-          0,
-          -1,
-          0,
-          -1
-        ],
-        [
-          0,
-          1,
-          0,
-          1,
-          1,
-          0,
-          1,
-          0
-        ],
-        [
-          -1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          -1
-        ],
-        [
-          0,
-          1,
-          0,
-          -1,
-          -1,
-          0,
-          1,
-          0
-        ],
-        [
-          0,
-          1,
-          0,
-          -1,
-          -1,
-          0,
-          1,
-          0
-        ],
-        [
-          -1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          -1
-        ],
-        [
-          0,
-          1,
-          0,
-          1,
-          1,
-          0,
-          1,
-          0
-        ],
-        [
-          -1,
-          0,
-          -1,
-          0,
-          0,
-          -1,
-          0,
-          -1
-        ]
-      ],
-      "allowed_shapes": [
-        "1x1",
-        "1x2_h",
-        "1x2_v",
-        "1x3_h",
-        "1x3_v",
-        "2x2",
-        "T_shape",
-        "L_normal",
-        "L_inv"
-      ],
-      "world": "Poids Lourd",
-      "star_thresholds": {
-        "one_star": "goal_completed",
-        "two_stars_moves_left": 7,
-        "three_stars_score": 3750
-      },
-      "end_level_presentation": {
-        "victory_banner": "Écrasant !",
-        "finisher_anim": "missile_shower",
-        "particle_theme": "gold"
-      }
-    },
-    {
-      "level_id": 31,
-      "title": "Trésor Antique 1",
-      "goal": "clear_jewels",
-      "target_value": 10,
-      "move_limit": 20,
-      "initial_grid": [
-        [
-          0,
-          0,
-          0,
-          2,
-          2,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          2,
-          0,
-          0,
-          2,
-          0,
-          0
-        ],
-        [
-          0,
-          2,
-          0,
-          0,
-          0,
-          0,
-          2,
-          0
-        ],
-        [
-          2,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          2
-        ],
-        [
-          2,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          2
-        ],
-        [
-          0,
-          2,
-          0,
-          0,
-          0,
-          0,
-          2,
-          0
-        ],
-        [
-          0,
-          0,
-          2,
-          0,
-          0,
-          2,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          2,
-          2,
-          0,
-          0,
-          0
-        ]
-      ],
-      "allowed_shapes": [
-        "1x1",
-        "1x2_h",
-        "1x2_v",
-        "1x3_h",
-        "1x3_v",
-        "1x4_h",
-        "1x4_v",
-        "2x2"
-      ],
-      "world": "Combos",
       "star_thresholds": {
         "one_star": "goal_completed",
         "two_stars_moves_left": 6,
         "three_stars_score": 3900
       },
       "end_level_presentation": {
-        "victory_banner": "Maître du Combo !",
-        "finisher_anim": "grid_rainbow_sweep",
-        "particle_theme": "fireworks"
-      }
-    },
-    {
-      "level_id": 32,
-      "title": "Trésor Antique 2",
-      "goal": "clear_jewels",
-      "target_value": 12,
-      "move_limit": 19,
-      "initial_grid": [
-        [
-          2,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          2
-        ],
-        [
-          0,
-          2,
-          0,
-          1,
-          1,
-          0,
-          2,
-          0
-        ],
-        [
-          0,
-          0,
-          2,
-          0,
-          0,
-          2,
-          0,
-          0
-        ],
-        [
-          0,
-          1,
-          0,
-          2,
-          2,
-          0,
-          1,
-          0
-        ],
-        [
-          0,
-          1,
-          0,
-          2,
-          2,
-          0,
-          1,
-          0
-        ],
-        [
-          0,
-          0,
-          2,
-          0,
-          0,
-          2,
-          0,
-          0
-        ],
-        [
-          0,
-          2,
-          0,
-          1,
-          1,
-          0,
-          2,
-          0
-        ],
-        [
-          2,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          2
-        ]
-      ],
-      "allowed_shapes": [
-        "1x1",
-        "1x2_h",
-        "1x2_v",
-        "1x3_h",
-        "1x3_v",
-        "2x2",
-        "L_normal",
-        "L_inv"
-      ],
-      "world": "Combos",
-      "star_thresholds": {
-        "one_star": "goal_completed",
-        "two_stars_moves_left": 5,
-        "three_stars_score": 4300
-      },
-      "end_level_presentation": {
-        "victory_banner": "Cascade Magique !",
-        "finisher_anim": "gem_explosion",
-        "particle_theme": "crystal"
-      }
-    },
-    {
-      "level_id": 33,
-      "title": "Trésor Antique 3",
-      "goal": "clear_jewels",
-      "target_value": 14,
-      "move_limit": 19,
-      "initial_grid": [
-        [
-          -1,
-          2,
-          0,
-          0,
-          0,
-          0,
-          2,
-          -1
-        ],
-        [
-          2,
-          0,
-          2,
-          0,
-          0,
-          2,
-          0,
-          2
-        ],
-        [
-          0,
-          2,
-          0,
-          2,
-          2,
-          0,
-          2,
-          0
-        ],
-        [
-          0,
-          0,
-          2,
-          0,
-          0,
-          2,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          2,
-          0,
-          0,
-          2,
-          0,
-          0
-        ],
-        [
-          0,
-          2,
-          0,
-          2,
-          2,
-          0,
-          2,
-          0
-        ],
-        [
-          2,
-          0,
-          2,
-          0,
-          0,
-          2,
-          0,
-          2
-        ],
-        [
-          -1,
-          2,
-          0,
-          0,
-          0,
-          0,
-          2,
-          -1
-        ]
-      ],
-      "allowed_shapes": [
-        "1x1",
-        "1x2_h",
-        "1x2_v",
-        "1x3_h",
-        "1x3_v",
-        "1x4_h",
-        "1x4_v",
-        "2x2",
-        "T_shape"
-      ],
-      "world": "Combos",
-      "star_thresholds": {
-        "one_star": "goal_completed",
-        "two_stars_moves_left": 5,
-        "three_stars_score": 4800
-      },
-      "end_level_presentation": {
-        "victory_banner": "Mega Blast !",
+        "victory_banner": "Bastions Pris !",
         "finisher_anim": "missile_shower",
         "particle_theme": "fireworks"
       }
     },
     {
-      "level_id": 34,
-      "title": "Trésor Antique 4",
+      "level_id": 29,
+      "title": "Le Cratère Obscur",
+      "world": "Poids Lourd",
       "goal": "clear_jewels",
-      "target_value": 16,
-      "move_limit": 18,
+      "target_value": 6,
+      "move_limit": 20,
       "initial_grid": [
         [
-          2,
-          2,
           0,
           0,
           0,
-          0,
-          2,
-          2
-        ],
-        [
-          2,
-          0,
-          2,
-          0,
-          0,
-          2,
-          0,
-          2
-        ],
-        [
-          0,
-          2,
-          0,
-          2,
-          2,
-          0,
-          2,
-          0
-        ],
-        [
-          0,
-          0,
-          2,
           -1,
           -1,
-          2,
+          0,
           0,
           0
         ],
         [
           0,
+          -1,
           0,
           2,
-          -1,
-          -1,
           2,
           0,
+          -1,
           0
         ],
         [
           0,
+          -1,
           2,
           0,
-          2,
-          2,
           0,
           2,
+          -1,
           0
         ],
         [
-          2,
-          0,
-          2,
+          -1,
           0,
           0,
-          2,
           0,
-          2
+          0,
+          0,
+          0,
+          -1
         ],
         [
+          -1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          -1
+        ],
+        [
+          0,
+          -1,
+          2,
+          0,
+          0,
+          2,
+          -1,
+          0
+        ],
+        [
+          0,
+          -1,
+          0,
           2,
           2,
           0,
+          -1,
+          0
+        ],
+        [
           0,
           0,
           0,
-          2,
-          2
+          -1,
+          -1,
+          0,
+          0,
+          0
         ]
       ],
       "allowed_shapes": [
@@ -3773,134 +3141,134 @@
         "1x3_h",
         "1x3_v",
         "2x2",
-        "L_normal",
-        "T_shape"
+        "T_shape",
+        "plus_5"
       ],
-      "world": "Combos",
       "star_thresholds": {
         "one_star": "goal_completed",
         "two_stars_moves_left": 5,
-        "three_stars_score": 5200
+        "three_stars_score": 4200
       },
       "end_level_presentation": {
-        "victory_banner": "Virtuose !",
-        "finisher_anim": "grid_rainbow_sweep",
-        "particle_theme": "crystal"
+        "victory_banner": "Cratère Purifié !",
+        "finisher_anim": "gem_explosion",
+        "particle_theme": "gold"
       }
     },
     {
-      "level_id": 35,
-      "title": "Trésor Antique 5",
-      "goal": "clear_jewels",
-      "target_value": 18,
-      "move_limit": 18,
+      "level_id": 30,
+      "title": "Le Golem Millénaire",
+      "world": "Poids Lourd",
+      "goal": "clear_lines",
+      "target_value": 12,
+      "move_limit": 25,
       "initial_grid": [
         [
-          2,
           0,
-          2,
-          0,
-          0,
-          2,
-          0,
-          2
-        ],
-        [
-          0,
-          2,
-          0,
-          2,
-          2,
-          0,
-          2,
-          0
-        ],
-        [
-          2,
-          0,
-          2,
-          0,
-          0,
-          2,
-          0,
-          2
-        ],
-        [
-          0,
-          2,
           0,
           -1,
           -1,
+          -1,
+          -1,
           0,
-          2,
           0
         ],
         [
           0,
+          0,
+          -1,
           2,
+          2,
+          -1,
+          0,
+          0
+        ],
+        [
+          0,
+          -1,
+          -1,
+          -1,
+          -1,
+          -1,
+          -1,
+          0
+        ],
+        [
+          -1,
+          0,
+          -1,
+          -1,
+          -1,
+          -1,
+          0,
+          -1
+        ],
+        [
+          -1,
+          0,
+          -1,
+          -1,
+          -1,
+          -1,
+          0,
+          -1
+        ],
+        [
+          0,
+          0,
+          -1,
+          0,
+          0,
+          -1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          -1,
+          0,
+          0,
+          -1,
+          0,
+          0
+        ],
+        [
           0,
           -1,
           -1,
           0,
-          2,
+          0,
+          -1,
+          -1,
           0
-        ],
-        [
-          2,
-          0,
-          2,
-          0,
-          0,
-          2,
-          0,
-          2
-        ],
-        [
-          0,
-          2,
-          0,
-          2,
-          2,
-          0,
-          2,
-          0
-        ],
-        [
-          2,
-          0,
-          2,
-          0,
-          0,
-          2,
-          0,
-          2
         ]
       ],
       "allowed_shapes": [
-        "1x1",
         "1x2_h",
         "1x2_v",
         "1x3_h",
         "1x3_v",
-        "1x4_h",
-        "1x4_v",
-        "2x2"
+        "2x2",
+        "3x3",
+        "L_giant",
+        "T_shape"
       ],
-      "world": "Combos",
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 5,
-        "three_stars_score": 5650
+        "two_stars_moves_left": 7,
+        "three_stars_score": 4800
       },
       "end_level_presentation": {
-        "victory_banner": "Harmonie Parfaite !",
-        "finisher_anim": "gem_explosion",
+        "victory_banner": "Golem Terrassé !",
+        "finisher_anim": "missile_shower",
         "particle_theme": "fireworks"
       }
     },
     {
-      "level_id": 36,
-      "title": "Maître des Polyominos 1",
+      "level_id": 31,
+      "title": "Le Détonateur Triple",
+      "world": "Combos",
       "goal": "clear_lines",
       "target_value": 8,
       "move_limit": 20,
@@ -3908,39 +3276,69 @@
         [
           0,
           0,
-          1,
           0,
           0,
-          1,
+          0,
+          0,
           0,
           0
         ],
         [
-          0,
+          1,
+          1,
+          1,
           1,
           0,
-          0,
-          0,
-          0,
           1,
-          0
-        ],
-        [
           1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
           1
         ],
         [
           0,
           0,
           0,
-          1,
-          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          3,
+          3,
+          3,
+          0,
+          3,
+          3,
+          3,
+          3
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          0,
+          4
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
           0,
           0,
           0
@@ -3949,324 +3347,45 @@
           0,
           0,
           0,
-          1,
-          1,
-          0,
-          0,
-          0
-        ],
-        [
-          1,
           0,
           0,
           0,
-          0,
-          0,
-          0,
-          1
-        ],
-        [
-          0,
-          1,
-          0,
-          0,
-          0,
-          0,
-          1,
-          0
-        ],
-        [
-          0,
-          0,
-          1,
-          0,
-          0,
-          1,
           0,
           0
         ]
       ],
       "allowed_shapes": [
-        "T_shape",
-        "Z_shape",
-        "S_shape",
-        "L_normal",
-        "L_inv",
-        "plus_5"
-      ],
-      "world": "Combos",
-      "star_thresholds": {
-        "one_star": "goal_completed",
-        "two_stars_moves_left": 6,
-        "three_stars_score": 2650
-      },
-      "end_level_presentation": {
-        "victory_banner": "Combo Explosif !",
-        "finisher_anim": "missile_shower",
-        "particle_theme": "crystal"
-      }
-    },
-    {
-      "level_id": 37,
-      "title": "Maître des Polyominos 2",
-      "goal": "score",
-      "target_value": 4200,
-      "move_limit": 21,
-      "initial_grid": [
-        [
-          1,
-          1,
-          0,
-          0,
-          0,
-          0,
-          1,
-          1
-        ],
-        [
-          1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          1
-        ],
-        [
-          0,
-          0,
-          1,
-          0,
-          0,
-          1,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          1,
-          1,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          1,
-          1,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          1,
-          0,
-          0,
-          1,
-          0,
-          0
-        ],
-        [
-          1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          1
-        ],
-        [
-          1,
-          1,
-          0,
-          0,
-          0,
-          0,
-          1,
-          1
-        ]
-      ],
-      "allowed_shapes": [
-        "2x2",
-        "3x3",
-        "T_shape",
-        "L_giant",
-        "U_shape",
-        "plus_5"
-      ],
-      "world": "Combos",
-      "star_thresholds": {
-        "one_star": "goal_completed",
-        "two_stars_moves_left": 6,
-        "three_stars_score": 6100
-      },
-      "end_level_presentation": {
-        "victory_banner": "Rythme Parfait !",
-        "finisher_anim": "grid_rainbow_sweep",
-        "particle_theme": "fireworks"
-      }
-    },
-    {
-      "level_id": 38,
-      "title": "Maître des Polyominos 3",
-      "goal": "clear_lines",
-      "target_value": 10,
-      "move_limit": 22,
-      "initial_grid": [
-        [
-          0,
-          1,
-          0,
-          1,
-          0,
-          1,
-          0,
-          1
-        ],
-        [
-          1,
-          0,
-          1,
-          0,
-          1,
-          0,
-          1,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          1,
-          0,
-          1,
-          0,
-          1,
-          0,
-          1,
-          0
-        ],
-        [
-          0,
-          1,
-          0,
-          1,
-          0,
-          1,
-          0,
-          1
-        ]
-      ],
-      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
         "1x3_h",
-        "1x3_v",
-        "1x4_h",
-        "1x4_v",
-        "T_shape",
-        "Z_shape",
-        "S_shape",
         "2x2"
       ],
-      "world": "Combos",
       "star_thresholds": {
         "one_star": "goal_completed",
         "two_stars_moves_left": 6,
-        "three_stars_score": 3200
+        "three_stars_score": 3800
       },
       "end_level_presentation": {
-        "victory_banner": "Chaîne Divine !",
-        "finisher_anim": "gem_explosion",
-        "particle_theme": "crystal"
+        "victory_banner": "Triple Combo Explosé !",
+        "finisher_anim": "grid_rainbow_sweep",
+        "particle_theme": "neon"
       }
     },
     {
-      "level_id": 39,
-      "title": "Maître des Polyominos 4",
+      "level_id": 32,
+      "title": "La Croix Déclic x4",
+      "world": "Combos",
       "goal": "score",
-      "target_value": 4800,
+      "target_value": 3600,
       "move_limit": 20,
       "initial_grid": [
         [
           0,
           0,
           0,
+          6,
           0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          1,
-          1,
-          0,
-          0,
-          1,
-          1,
-          0
-        ],
-        [
-          0,
-          1,
-          0,
-          0,
-          0,
-          0,
-          1,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          1,
-          1,
           0,
           0,
           0
@@ -4275,6 +3394,105 @@
           0,
           0,
           0,
+          6,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          5,
+          5,
+          0,
+          0,
+          5,
+          5,
+          5,
+          5
+        ],
+        [
+          5,
+          5,
+          5,
+          0,
+          5,
+          5,
+          5,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          6,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          6,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          6,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "2x2",
+        "T_shape"
+      ],
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 6,
+        "three_stars_score": 5200
+      },
+      "end_level_presentation": {
+        "victory_banner": "Combo Quadruple !",
+        "finisher_anim": "missile_shower",
+        "particle_theme": "gold"
+      }
+    },
+    {
+      "level_id": 33,
+      "title": "Le Moulin Stellaire",
+      "world": "Combos",
+      "goal": "clear_lines",
+      "target_value": 10,
+      "move_limit": 22,
+      "initial_grid": [
+        [
+          0,
+          0,
+          0,
           1,
           1,
           0,
@@ -4283,22 +3501,171 @@
         ],
         [
           0,
-          1,
-          0,
-          0,
           0,
           0,
           1,
+          1,
+          0,
+          0,
           0
         ],
         [
           0,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
           1,
           1,
           0,
           0,
           1,
           1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          0
+        ]
+      ],
+      "allowed_shapes": [
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "2x2",
+        "L_normal",
+        "Z_shape"
+      ],
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 7,
+        "three_stars_score": 4400
+      },
+      "end_level_presentation": {
+        "victory_banner": "Tourbillon Validé !",
+        "finisher_anim": "grid_rainbow_sweep",
+        "particle_theme": "crystal"
+      }
+    },
+    {
+      "level_id": 34,
+      "title": "La Spirale Électrique",
+      "world": "Combos",
+      "goal": "score",
+      "target_value": 4200,
+      "move_limit": 21,
+      "initial_grid": [
+        [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          0
+        ],
+        [
+          4,
+          0,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0
+        ],
+        [
+          4,
+          0,
+          4,
+          4,
+          4,
+          0,
+          4,
+          0
+        ],
+        [
+          4,
+          0,
+          4,
+          0,
+          0,
+          0,
+          4,
+          0
+        ],
+        [
+          4,
+          0,
+          4,
+          4,
+          4,
+          4,
+          4,
+          0
+        ],
+        [
+          4,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
           0
         ],
         [
@@ -4313,41 +3680,376 @@
         ]
       ],
       "allowed_shapes": [
-        "1x4_h",
-        "1x4_v",
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
         "2x2",
-        "3x3",
-        "L_giant",
-        "plus_5",
-        "U_shape"
+        "T_shape"
       ],
-      "world": "Combos",
       "star_thresholds": {
         "one_star": "goal_completed",
         "two_stars_moves_left": 6,
-        "three_stars_score": 6950
+        "three_stars_score": 5800
       },
       "end_level_presentation": {
-        "victory_banner": "Tempête de Lignes !",
+        "victory_banner": "Spirale Déchaînée !",
         "finisher_anim": "missile_shower",
-        "particle_theme": "fireworks"
+        "particle_theme": "neon"
       }
     },
     {
-      "level_id": 40,
-      "title": "Maître des Polyominos 5",
+      "level_id": 35,
+      "title": "L'Avalanche Néon",
+      "world": "Combos",
+      "goal": "clear_lines",
+      "target_value": 11,
+      "move_limit": 22,
+      "initial_grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          3,
+          0,
+          3,
+          0,
+          3,
+          0,
+          3
+        ],
+        [
+          3,
+          0,
+          3,
+          0,
+          3,
+          0,
+          3,
+          0
+        ],
+        [
+          1,
+          1,
+          1,
+          0,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          7,
+          7,
+          0,
+          7,
+          7,
+          7,
+          7,
+          7
+        ],
+        [
+          4,
+          4,
+          4,
+          4,
+          0,
+          4,
+          4,
+          4
+        ]
+      ],
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "2x2",
+        "L_normal",
+        "L_inv"
+      ],
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 6,
+        "three_stars_score": 5000
+      },
+      "end_level_presentation": {
+        "victory_banner": "Avalanche Écrasante !",
+        "finisher_anim": "grid_rainbow_sweep",
+        "particle_theme": "gold"
+      }
+    },
+    {
+      "level_id": 36,
+      "title": "Tétronomie Pure",
+      "world": "Combos",
+      "goal": "score",
+      "target_value": 4600,
+      "move_limit": 20,
+      "initial_grid": [
+        [
+          0,
+          0,
+          5,
+          5,
+          0,
+          0,
+          5,
+          5
+        ],
+        [
+          0,
+          5,
+          5,
+          0,
+          0,
+          5,
+          5,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          6,
+          6,
+          0,
+          0,
+          6,
+          6,
+          0,
+          0
+        ],
+        [
+          0,
+          6,
+          6,
+          0,
+          0,
+          6,
+          6,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          7,
+          7,
+          7,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          7,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "allowed_shapes": [
+        "T_shape",
+        "L_normal",
+        "L_inv",
+        "Z_shape",
+        "S_shape",
+        "2x2"
+      ],
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 6,
+        "three_stars_score": 6400
+      },
+      "end_level_presentation": {
+        "victory_banner": "Virtuose Polyomino !",
+        "finisher_anim": "gem_explosion",
+        "particle_theme": "crystal"
+      }
+    },
+    {
+      "level_id": 37,
+      "title": "La Tempête Multicolore",
+      "world": "Combos",
       "goal": "clear_lines",
       "target_value": 12,
-      "move_limit": 24,
+      "move_limit": 23,
       "initial_grid": [
         [
           1,
           0,
+          3,
+          0,
+          4,
+          0,
+          5,
+          0
+        ],
+        [
+          0,
+          6,
+          0,
+          7,
+          0,
+          1,
+          0,
+          3
+        ],
+        [
+          4,
+          0,
+          5,
+          0,
+          6,
+          0,
+          7,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          3,
+          0,
+          4,
+          0,
+          5
+        ],
+        [
+          6,
+          0,
+          7,
+          0,
+          1,
+          0,
+          3,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "allowed_shapes": [
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "2x2",
+        "T_shape",
+        "plus_5"
+      ],
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 7,
+        "three_stars_score": 5400
+      },
+      "end_level_presentation": {
+        "victory_banner": "Arc-en-Ciel Foudroyant !",
+        "finisher_anim": "grid_rainbow_sweep",
+        "particle_theme": "fireworks"
+      }
+    },
+    {
+      "level_id": 38,
+      "title": "L'Orage Sonore x5",
+      "world": "Combos",
+      "goal": "score",
+      "target_value": 5200,
+      "move_limit": 21,
+      "initial_grid": [
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          1,
+          1,
+          1,
+          0,
           0,
           1,
           1,
-          0,
-          0,
           1
         ],
         [
@@ -4363,49 +4065,208 @@
         [
           0,
           0,
-          1,
           0,
+          2,
+          2,
           0,
-          1,
-          0,
-          0
-        ],
-        [
-          1,
-          0,
-          0,
-          1,
-          1,
-          0,
-          0,
-          1
-        ],
-        [
-          1,
-          0,
-          0,
-          1,
-          1,
-          0,
-          0,
-          1
-        ],
-        [
-          0,
-          0,
-          1,
-          0,
-          0,
-          1,
           0,
           0
         ],
         [
           0,
+          0,
+          0,
+          2,
+          2,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          3,
+          0,
+          0,
+          0,
+          0,
+          3,
+          0
+        ],
+        [
+          3,
+          3,
+          3,
+          0,
+          0,
+          3,
+          3,
+          3
+        ],
+        [
+          0,
+          3,
+          0,
+          0,
+          0,
+          0,
+          3,
+          0
+        ]
+      ],
+      "allowed_shapes": [
+        "1x1",
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "2x2",
+        "T_shape",
+        "L_giant"
+      ],
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 6,
+        "three_stars_score": 7200
+      },
+      "end_level_presentation": {
+        "victory_banner": "Gamme Complète Jouée !",
+        "finisher_anim": "missile_shower",
+        "particle_theme": "neon"
+      }
+    },
+    {
+      "level_id": 39,
+      "title": "L'Onde Électro-Choc",
+      "world": "Combos",
+      "goal": "clear_lines",
+      "target_value": 13,
+      "move_limit": 24,
+      "initial_grid": [
+        [
+          0,
+          0,
+          4,
+          4,
+          0,
+          0,
+          4,
+          4
+        ],
+        [
+          0,
+          4,
+          0,
+          0,
+          4,
+          4,
+          0,
+          0
+        ],
+        [
+          4,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          4
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          4,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          4
+        ],
+        [
+          0,
+          4,
+          0,
+          0,
+          4,
+          4,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          4,
+          4,
+          0,
+          0,
+          4,
+          4
+        ]
+      ],
+      "allowed_shapes": [
+        "1x2_h",
+        "1x2_v",
+        "1x3_h",
+        "1x3_v",
+        "2x2",
+        "T_shape",
+        "plus_5"
+      ],
+      "star_thresholds": {
+        "one_star": "goal_completed",
+        "two_stars_moves_left": 7,
+        "three_stars_score": 6000
+      },
+      "end_level_presentation": {
+        "victory_banner": "Choc Sismique !",
+        "finisher_anim": "grid_rainbow_sweep",
+        "particle_theme": "crystal"
+      }
+    },
+    {
+      "level_id": 40,
+      "title": "L'Ouragan Stellaire",
+      "world": "Combos",
+      "goal": "score",
+      "target_value": 5800,
+      "move_limit": 22,
+      "initial_grid": [
+        [
+          0,
+          0,
+          1,
+          1,
+          1,
           1,
           0,
+          0
+        ],
+        [
           0,
+          1,
           0,
+          2,
+          2,
           0,
           1,
           0
@@ -4413,12 +4274,62 @@
         [
           1,
           0,
+          2,
           0,
-          1,
-          1,
           0,
+          2,
           0,
           1
+        ],
+        [
+          1,
+          2,
+          0,
+          -1,
+          -1,
+          0,
+          2,
+          1
+        ],
+        [
+          1,
+          2,
+          0,
+          -1,
+          -1,
+          0,
+          2,
+          1
+        ],
+        [
+          1,
+          0,
+          2,
+          0,
+          0,
+          2,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0,
+          2,
+          2,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          0,
+          0
         ]
       ],
       "allowed_shapes": [
@@ -4429,26 +4340,25 @@
         "2x2",
         "T_shape",
         "L_normal",
-        "Z_shape",
-        "S_shape"
+        "Z_shape"
       ],
-      "world": "Combos",
       "star_thresholds": {
         "one_star": "goal_completed",
         "two_stars_moves_left": 7,
-        "three_stars_score": 3750
+        "three_stars_score": 8500
       },
       "end_level_presentation": {
-        "victory_banner": "Fulgurant !",
-        "finisher_anim": "grid_rainbow_sweep",
-        "particle_theme": "crystal"
+        "victory_banner": "Maître des Tempêtes !",
+        "finisher_anim": "missile_shower",
+        "particle_theme": "gold"
       }
     },
     {
       "level_id": 41,
-      "title": "Défi Tempête 1",
+      "title": "L'Échiquier Cosmique",
+      "world": "Master",
       "goal": "clear_jewels",
-      "target_value": 12,
+      "target_value": 8,
       "move_limit": 18,
       "initial_grid": [
         [
@@ -4542,21 +4452,21 @@
         "L_normal",
         "T_shape"
       ],
-      "world": "Master",
       "star_thresholds": {
         "one_star": "goal_completed",
         "two_stars_moves_left": 5,
-        "three_stars_score": 4250
+        "three_stars_score": 4500
       },
       "end_level_presentation": {
-        "victory_banner": "Maître du Puzzle !",
+        "victory_banner": "Échec et Mat Cosmique !",
         "finisher_anim": "gem_explosion",
         "particle_theme": "gold"
       }
     },
     {
       "level_id": 42,
-      "title": "Défi Tempête 2",
+      "title": "Le Portail Dimensionnel",
+      "world": "Master",
       "goal": "score",
       "target_value": 5200,
       "move_limit": 20,
@@ -4652,63 +4562,53 @@
         "2x2",
         "L_normal"
       ],
-      "world": "Master",
       "star_thresholds": {
         "one_star": "goal_completed",
         "two_stars_moves_left": 6,
-        "three_stars_score": 7550
+        "three_stars_score": 7500
       },
       "end_level_presentation": {
-        "victory_banner": "Divin !",
+        "victory_banner": "Portail Traversé !",
         "finisher_anim": "missile_shower",
         "particle_theme": "fireworks"
       }
     },
     {
       "level_id": 43,
-      "title": "Défi Tempête 3",
+      "title": "Le Triangle du Mirage",
+      "world": "Master",
       "goal": "clear_jewels",
-      "target_value": 14,
-      "move_limit": 17,
+      "target_value": 9,
+      "move_limit": 18,
       "initial_grid": [
         [
-          -1,
-          2,
-          -1,
           0,
           0,
-          -1,
-          2,
-          -1
-        ],
-        [
-          2,
-          0,
-          0,
-          2,
-          2,
-          0,
-          0,
-          2
-        ],
-        [
-          -1,
           0,
           2,
           0,
           0,
-          2,
           0,
-          -1
+          0
         ],
         [
           0,
+          0,
+          2,
+          3,
           2,
           0,
           0,
+          0
+        ],
+        [
           0,
           0,
-          2,
+          3,
+          0,
+          3,
+          0,
+          0,
           0
         ],
         [
@@ -4717,39 +4617,49 @@
           0,
           0,
           0,
+          2,
+          0,
+          0
+        ],
+        [
+          0,
+          3,
+          0,
+          2,
+          0,
+          3,
+          0,
+          0
+        ],
+        [
+          2,
+          0,
+          0,
+          0,
+          0,
           0,
           2,
           0
         ],
         [
-          -1,
-          0,
+          3,
+          3,
           2,
-          0,
-          0,
+          3,
+          3,
           2,
-          0,
-          -1
+          3,
+          3
         ],
         [
-          2,
           0,
-          0,
-          2,
-          2,
-          0,
-          0,
-          2
-        ],
-        [
-          -1,
-          2,
-          -1,
           0,
           0,
           -1,
-          2,
-          -1
+          -1,
+          0,
+          0,
+          0
         ]
       ],
       "allowed_shapes": [
@@ -4762,104 +4672,104 @@
         "T_shape",
         "L_normal"
       ],
-      "world": "Master",
       "star_thresholds": {
         "one_star": "goal_completed",
         "two_stars_moves_left": 5,
-        "three_stars_score": 4650
+        "three_stars_score": 5000
       },
       "end_level_presentation": {
-        "victory_banner": "Légendaire !",
+        "victory_banner": "Mirage Dompté !",
         "finisher_anim": "grid_rainbow_sweep",
         "particle_theme": "neon"
       }
     },
     {
       "level_id": 44,
-      "title": "Défi Tempête 4",
+      "title": "L'Horloge Astrale",
+      "world": "Master",
       "goal": "clear_lines",
       "target_value": 13,
       "move_limit": 22,
       "initial_grid": [
         [
-          -1,
           0,
           0,
-          1,
-          1,
           0,
+          5,
+          5,
           0,
-          -1
-        ],
-        [
-          0,
-          0,
-          1,
-          0,
-          0,
-          1,
           0,
           0
         ],
         [
           0,
-          1,
-          0,
-          -1,
-          -1,
-          0,
-          1,
-          0
-        ],
-        [
-          1,
-          0,
-          -1,
+          5,
           0,
           0,
-          -1,
-          0,
-          1
-        ],
-        [
-          1,
-          0,
-          -1,
           0,
           0,
-          -1,
-          0,
-          1
-        ],
-        [
-          0,
-          1,
-          0,
-          -1,
-          -1,
-          0,
-          1,
+          5,
           0
         ],
         [
           0,
           0,
-          1,
           0,
+          -1,
+          -1,
           0,
-          1,
           0,
           0
         ],
         [
+          5,
+          0,
+          -1,
+          2,
+          2,
+          -1,
+          0,
+          5
+        ],
+        [
+          5,
+          0,
+          -1,
+          2,
+          2,
+          -1,
+          0,
+          5
+        ],
+        [
+          0,
+          0,
+          0,
+          -1,
           -1,
           0,
           0,
-          1,
-          1,
+          0
+        ],
+        [
+          0,
+          5,
           0,
           0,
-          -1
+          0,
+          0,
+          5,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          5,
+          5,
+          0,
+          0,
+          0
         ]
       ],
       "allowed_shapes": [
@@ -4872,21 +4782,21 @@
         "L_normal",
         "L_inv"
       ],
-      "world": "Master",
       "star_thresholds": {
         "one_star": "goal_completed",
         "two_stars_moves_left": 6,
-        "three_stars_score": 4050
+        "three_stars_score": 4600
       },
       "end_level_presentation": {
-        "victory_banner": "Grand Maître !",
+        "victory_banner": "Horloge Gelée !",
         "finisher_anim": "gem_explosion",
         "particle_theme": "crystal"
       }
     },
     {
       "level_id": 45,
-      "title": "Défi Tempête 5",
+      "title": "Le Temple Suspendu",
+      "world": "Master",
       "goal": "score",
       "target_value": 6000,
       "move_limit": 20,
@@ -4982,23 +4892,23 @@
         "T_shape",
         "plus_5"
       ],
-      "world": "Master",
       "star_thresholds": {
         "one_star": "goal_completed",
         "two_stars_moves_left": 6,
-        "three_stars_score": 8700
+        "three_stars_score": 8800
       },
       "end_level_presentation": {
-        "victory_banner": "Champion Suprême !",
+        "victory_banner": "Temple Purifié !",
         "finisher_anim": "missile_shower",
         "particle_theme": "gold"
       }
     },
     {
       "level_id": 46,
-      "title": "Légende du Sanctuaire 1",
+      "title": "L'Hydre Polyomino",
+      "world": "Master",
       "goal": "clear_jewels",
-      "target_value": 16,
+      "target_value": 10,
       "move_limit": 18,
       "initial_grid": [
         [
@@ -5015,8 +4925,8 @@
           0,
           2,
           0,
-          2,
-          2,
+          0,
+          0,
           0,
           2,
           0
@@ -5033,22 +4943,22 @@
         ],
         [
           0,
-          2,
+          0,
           0,
           2,
           2,
           0,
-          2,
+          0,
           0
         ],
         [
           0,
-          2,
+          0,
           0,
           2,
           2,
           0,
-          2,
+          0,
           0
         ],
         [
@@ -5065,8 +4975,8 @@
           0,
           2,
           0,
-          2,
-          2,
+          0,
+          0,
           0,
           2,
           0
@@ -5090,23 +5000,24 @@
         "1x3_v",
         "2x2",
         "L_normal",
-        "T_shape"
+        "T_shape",
+        "3x3"
       ],
-      "world": "Master",
       "star_thresholds": {
         "one_star": "goal_completed",
         "two_stars_moves_left": 5,
-        "three_stars_score": 5200
+        "three_stars_score": 5500
       },
       "end_level_presentation": {
-        "victory_banner": "Génie Tactique !",
+        "victory_banner": "Hydre Défaite !",
         "finisher_anim": "grid_rainbow_sweep",
         "particle_theme": "fireworks"
       }
     },
     {
       "level_id": 47,
-      "title": "Légende du Sanctuaire 2",
+      "title": "Le Bouclier d'Orion",
+      "world": "Master",
       "goal": "clear_lines",
       "target_value": 14,
       "move_limit": 22,
@@ -5203,21 +5114,21 @@
         "T_shape",
         "L_normal"
       ],
-      "world": "Master",
       "star_thresholds": {
         "one_star": "goal_completed",
         "two_stars_moves_left": 6,
-        "three_stars_score": 4300
+        "three_stars_score": 4800
       },
       "end_level_presentation": {
-        "victory_banner": "Perfection Absolue !",
+        "victory_banner": "Bouclier Brisé !",
         "finisher_anim": "gem_explosion",
         "particle_theme": "neon"
       }
     },
     {
       "level_id": 48,
-      "title": "Légende du Sanctuaire 3",
+      "title": "La Nébuleuse Chaotique",
+      "world": "Master",
       "goal": "score",
       "target_value": 6800,
       "move_limit": 20,
@@ -5314,24 +5225,24 @@
         "S_shape",
         "plus_5"
       ],
-      "world": "Master",
       "star_thresholds": {
         "one_star": "goal_completed",
         "two_stars_moves_left": 6,
-        "three_stars_score": 9850
+        "three_stars_score": 10000
       },
       "end_level_presentation": {
-        "victory_banner": "Souverain du Bloc !",
+        "victory_banner": "Nébuleuse Domptée !",
         "finisher_anim": "missile_shower",
         "particle_theme": "crystal"
       }
     },
     {
       "level_id": 49,
-      "title": "Légende du Sanctuaire 4",
+      "title": "L'Antichambre de Cristal",
+      "world": "Master",
       "goal": "clear_jewels",
-      "target_value": 18,
-      "move_limit": 17,
+      "target_value": 12,
+      "move_limit": 18,
       "initial_grid": [
         [
           2,
@@ -5422,23 +5333,24 @@
         "1x3_v",
         "2x2",
         "L_normal",
-        "T_shape"
+        "T_shape",
+        "plus_5"
       ],
-      "world": "Master",
       "star_thresholds": {
         "one_star": "goal_completed",
         "two_stars_moves_left": 5,
-        "three_stars_score": 5600
+        "three_stars_score": 6000
       },
       "end_level_presentation": {
-        "victory_banner": "Transcendance !",
+        "victory_banner": "Antichambre Déverrouillée !",
         "finisher_anim": "grid_rainbow_sweep",
         "particle_theme": "gold"
       }
     },
     {
       "level_id": 50,
-      "title": "Sanctuaire Ultime",
+      "title": "L'Oasis Céleste Ultime",
+      "world": "Master",
       "goal": "score",
       "target_value": 8000,
       "move_limit": 22,
@@ -5538,24 +5450,16 @@
         "plus_5",
         "T_shape"
       ],
-      "world": "Master",
       "star_thresholds": {
         "one_star": "goal_completed",
         "two_stars_moves_left": 6,
-        "three_stars_score": 11600
+        "three_stars_score": 12000
       },
       "end_level_presentation": {
-        "victory_banner": "Sanctuaire Conquis !",
+        "victory_banner": "Oasis Céleste Conquise !",
         "finisher_anim": "gem_explosion",
         "particle_theme": "fireworks"
       }
     }
-  ],
-  "worlds": [
-    "Initiation",
-    "Pierres",
-    "Poids Lourd",
-    "Combos",
-    "Master"
   ]
 }

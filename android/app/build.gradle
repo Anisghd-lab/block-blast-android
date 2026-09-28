@@ -22,6 +22,15 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0.0'
 }
 
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (!keystorePropertiesFile.exists()) {
+    keystorePropertiesFile = file('key.properties')
+}
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
 android {
     namespace "com.playgames.blockblast"
     compileSdk 35
@@ -55,13 +64,27 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        release {
+            if (keystorePropertiesFile.exists()) {
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+                def storeFilePath = keystoreProperties['storeFile']
+                if (storeFilePath != null) {
+                    storeFile file(storeFilePath)
+                }
+                storePassword keystoreProperties['storePassword']
+            }
+        }
+    }
+
     buildTypes {
         release {
             // Configuration R8 / Proguard pour un APK/AAB ultra-léger et rapide
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.debug // Remplacer par release keystore pour publication Play Store
+            signingConfig (keystorePropertiesFile.exists() ? signingConfigs.release : signingConfigs.debug)
         }
         debug {
             minifyEnabled false

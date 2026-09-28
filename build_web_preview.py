@@ -1,7 +1,8 @@
 import json
 
-# Read levels
-with open('/root/block_blast_android/assets/levels/levels.json', 'r', encoding='utf-8') as f:
+import os
+levels_path = '/root/block-blast-android/assets/levels/levels.json' if os.path.exists('/root/block-blast-android/assets/levels/levels.json') else '/root/block_blast_android/assets/levels/levels.json'
+with open(levels_path, 'r', encoding='utf-8') as f:
     levels_data = json.load(f)
 
 levels_json_str = json.dumps(levels_data['levels'], ensure_ascii=False)
@@ -237,12 +238,19 @@ html_template = """<!DOCTYPE html>
       -ms-overflow-style: none;
       scrollbar-width: none;
     }
+
+    #appContainer {
+      background-image: url('assets/mirage_oasis_bg.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
   </style>
 </head>
-<body class="flex items-center justify-center min-h-[100dvh] bg-[#080915]">
+<body class="flex items-center justify-center min-h-[100dvh] bg-[#0c0d1a]">
   
   <!-- Conteneur Principal Responsive (Fluidité mobile & Frame élégant desktop) -->
-  <div id="appContainer" class="w-full h-[100dvh] max-h-[100dvh] flex flex-col justify-between p-2.5 sm:p-4 max-w-md mx-auto md:max-w-[430px] md:h-[94dvh] md:max-h-[850px] md:border md:border-cyan-500/25 md:rounded-[36px] md:shadow-[0_0_60px_rgba(0,242,254,0.18)] md:bg-[#0c0d1d] relative overflow-hidden">
+  <div id="appContainer" class="w-full h-[100dvh] max-h-[100dvh] flex flex-col justify-between p-2.5 sm:p-4 max-w-md mx-auto md:max-w-[430px] md:h-[94dvh] md:max-h-[850px] md:border md:border-cyan-500/25 md:rounded-[36px] md:shadow-[0_0_60px_rgba(0,242,254,0.25)] relative overflow-hidden">
 
     <!-- HUD Supérieur (Flexible et compact) -->
     <header class="w-full flex-shrink-0 flex flex-col items-center pt-0.5">
@@ -254,19 +262,17 @@ html_template = """<!DOCTYPE html>
         </button>
 
         <!-- Switcher Mode : Classique / Aventure -->
-        <div class="flex items-center bg-[#15162a] p-1 rounded-full border border-white/10 shadow-inner">
-          <button id="tabModeLevels" type="button" class="btn-action px-3 sm:px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-bold transition-all bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md">
-            🗺️ Niveaux (50)
+        <div class="inline-flex items-center bg-[#15162a]/90 backdrop-blur-sm p-1 rounded-full border border-white/10 shadow-inner">
+          <button id="tabModeLevels" type="button" class="btn-action w-24 sm:w-28 py-1.5 rounded-full text-xs font-bold text-center transition-all bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md shadow-cyan-500/20">
+            Niveau
           </button>
-          <button id="tabModeClassic" type="button" class="btn-action px-3 sm:px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-bold transition-all text-gray-400 hover:text-white">
-            ⚡ Classique
+          <button id="tabModeClassic" type="button" class="btn-action w-24 sm:w-28 py-1.5 rounded-full text-xs font-bold text-center transition-all text-gray-400 hover:text-white bg-transparent">
+            Classique
           </button>
         </div>
 
-        <!-- Bouton Son -->
-        <button id="btnSound" type="button" class="btn-action w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#1b1c31] border border-white/15 flex items-center justify-center text-white shadow-lg">
-          <span id="soundIcon" class="text-sm sm:text-base">🔊</span>
-        </button>
+        <!-- Bouton Son (Supprimé) -->
+        <div class="w-9 h-9 sm:w-10 sm:h-10 invisible" aria-hidden="true"></div>
       </div>
 
       <!-- HUD Mode Aventure (Niveaux) -->
@@ -1864,9 +1870,12 @@ html_template = """<!DOCTYPE html>
 
     function switchMode(mode, fromRestore = false) {
       gameMode = mode;
+      const activeClass = 'btn-action w-24 sm:w-28 py-1.5 rounded-full text-xs font-bold text-center transition-all bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md shadow-cyan-500/20';
+      const inactiveClass = 'btn-action w-24 sm:w-28 py-1.5 rounded-full text-xs font-bold text-center transition-all text-gray-400 hover:text-white bg-transparent';
+
       if (mode === 'levels') {
-        tabModeLevels.className = 'btn-action px-3 sm:px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-bold transition-all bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md';
-        tabModeClassic.className = 'btn-action px-3 sm:px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-bold transition-all text-gray-400 hover:text-white';
+        tabModeLevels.className = activeClass;
+        tabModeClassic.className = inactiveClass;
         hudLevels.classList.remove('hidden');
         hudClassic.classList.add('hidden');
         if (!fromRestore) {
@@ -1874,8 +1883,8 @@ html_template = """<!DOCTYPE html>
           loadLevel(currentLevelIndex);
         }
       } else {
-        tabModeClassic.className = 'btn-action px-3 sm:px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-bold transition-all bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-md';
-        tabModeLevels.className = 'btn-action px-3 sm:px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-bold transition-all text-gray-400 hover:text-white';
+        tabModeClassic.className = activeClass;
+        tabModeLevels.className = inactiveClass;
         hudLevels.classList.add('hidden');
         hudClassic.classList.remove('hidden');
         if (!fromRestore) {
