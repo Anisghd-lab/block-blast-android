@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/game_theme.dart';
+import 'candy_visuals.dart';
 
 class BoardCell extends StatelessWidget {
   final int colorIndex;
@@ -22,29 +23,31 @@ class BoardCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 1. État de destruction en cours (Flash blanc + explosion)
+    final isCandyTheme = theme.mode == GameThemeMode.sugarDelight;
+
+    // 1. État de destruction en cours (Flash éclatant + particule étoilée)
     if (isClearing) {
       return AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
+        duration: const Duration(milliseconds: 160),
         width: size,
         height: size,
         decoration: BoxDecoration(
-          color: colorIndex == 2
-              ? const Color(0xFF00F2FE)
-              : (colorIndex == -1 ? const Color(0xFF64748B) : Colors.white),
+          color: Colors.white,
           borderRadius: BorderRadius.circular(theme.cellBorderRadius),
           boxShadow: [
             BoxShadow(
-              color: Colors.white.withOpacity(0.9),
-              blurRadius: 12,
+              color: isCandyTheme
+                  ? CandyColors.starGoldGlow.withOpacity(0.9)
+                  : Colors.white.withOpacity(0.9),
+              blurRadius: 14,
               spreadRadius: 3,
             ),
           ],
         ),
         child: Center(
           child: Text(
-            colorIndex == 2 ? '💎' : (colorIndex == -1 ? '🪨' : '✨'),
-            style: TextStyle(fontSize: size * 0.45),
+            isCandyTheme ? '🌟' : (colorIndex == 2 ? '💎' : '✨'),
+            style: TextStyle(fontSize: size * 0.52),
           ),
         ),
       );
@@ -52,6 +55,15 @@ class BoardCell extends StatelessWidget {
 
     // 2. Aperçu fantôme lors du Drag & Drop
     if (isGhost) {
+      if (isCandyTheme) {
+        return CandyWidget(
+          type: getCandyTypeFromIndex(colorIndex),
+          size: size,
+          isGhost: true,
+          isGhostValid: isGhostValid,
+        );
+      }
+
       final ghostColor = isGhostValid
           ? AppColors.gridCellGhostValid
           : AppColors.gridCellGhostInvalid;
@@ -71,8 +83,20 @@ class BoardCell extends StatelessWidget {
       );
     }
 
-    // 3. Case Joyau (Valeur 2)
+    // 3. Case Joyau / Target (Valeur 2)
     if (colorIndex == 2) {
+      if (isCandyTheme) {
+        return SizedBox(
+          width: size,
+          height: size,
+          child: CandyWidget(
+            type: CandyType.gummyBear,
+            size: size,
+            showGlow: true,
+          ),
+        );
+      }
+
       return Container(
         width: size,
         height: size,
@@ -117,8 +141,19 @@ class BoardCell extends StatelessWidget {
       );
     }
 
-    // 4. Case Roche / Obstacle (Valeur -1)
+    // 4. Case Roche / Obstacle Biscuit (Valeur -1)
     if (colorIndex == -1) {
+      if (isCandyTheme) {
+        return SizedBox(
+          width: size,
+          height: size,
+          child: CandyWidget(
+            type: CandyType.waferChoco,
+            size: size,
+          ),
+        );
+      }
+
       return Container(
         width: size,
         height: size,
@@ -165,6 +200,18 @@ class BoardCell extends StatelessWidget {
 
     // 5. Case occupée par un bloc normal ou coloré
     if (colorIndex > 0) {
+      if (isCandyTheme) {
+        return SizedBox(
+          width: size,
+          height: size,
+          child: CandyWidget(
+            type: getCandyTypeFromIndex(colorIndex),
+            size: size,
+            showGlow: true,
+          ),
+        );
+      }
+
       final baseColor = theme.blockColors[(colorIndex - 1) % theme.blockColors.length];
       final gradient = AppColors.blockGradient(baseColor);
 
@@ -220,7 +267,29 @@ class BoardCell extends StatelessWidget {
       );
     }
 
-    // 6. Case vide
+    // 6. Case vide (Moule de confiserie biseauté avec profondeur)
+    if (isCandyTheme) {
+      return Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          color: theme.cellEmptyColor,
+          borderRadius: BorderRadius.circular(theme.cellBorderRadius),
+          border: Border.all(
+            color: theme.cellBorderColor,
+            width: 1.2,
+          ),
+          boxShadow: const [
+            BoxShadow(
+              color: CandyColors.cellInnerShadow,
+              blurRadius: 2.0,
+              offset: Offset(0, 1.5),
+            ),
+          ],
+        ),
+      );
+    }
+
     return Container(
       width: size,
       height: size,

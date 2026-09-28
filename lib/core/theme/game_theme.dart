@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'app_colors.dart';
 
-enum GameThemeMode { neonArcade, crystalJewel, classicWood, zenPastel }
+enum GameThemeMode { sugarDelight, neonArcade, crystalJewel, classicWood, zenPastel }
 
 class GameTheme {
   final GameThemeMode mode;
@@ -25,6 +25,19 @@ class GameTheme {
     required this.cellBorderRadius,
     required this.hasGlow,
   });
+
+  /// Thème phare inspiré de Sugar Delight / Sugar Burst (Play Store)
+  static const GameTheme sugarDelight = GameTheme(
+    mode: GameThemeMode.sugarDelight,
+    displayName: 'Sugar Delight',
+    backgroundColor: CandyColors.skyMid,
+    surfaceColor: CandyColors.boardContainer,
+    cellEmptyColor: CandyColors.cellEmpty,
+    cellBorderColor: CandyColors.cellBorder,
+    blockColors: CandyColors.candyPalette,
+    cellBorderRadius: 10.0,
+    hasGlow: true,
+  );
 
   static const GameTheme neon = GameTheme(
     mode: GameThemeMode.neonArcade,
@@ -100,6 +113,8 @@ class GameTheme {
 
   static GameTheme fromMode(GameThemeMode mode) {
     switch (mode) {
+      case GameThemeMode.sugarDelight:
+        return sugarDelight;
       case GameThemeMode.neonArcade:
         return neon;
       case GameThemeMode.crystalJewel:

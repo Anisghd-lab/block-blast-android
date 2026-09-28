@@ -45,3 +45,74 @@ class AppColors {
   static const Color fireOrange = Color(0xFFFF4500);
   static const Color fireYellow = Color(0xFFFFA500);
 }
+
+/// Palette gourmande "Sugar Delight / Candy Burst" (inspirée du jeu modèle Play Store)
+class CandyColors {
+  // Fond & Ciel Sucré Pastel
+  static const Color skyTop = Color(0xFFC7E8FD);
+  static const Color skyMid = Color(0xFFE9F3FE);
+  static const Color skyBottom = Color(0xFFFDE8F1);
+  static const Color cloudWhite = Color(0xEEFFFFFF);
+
+  // Plateau de jeu façon boîte de confiserie nacrée
+  static const Color boardContainer = Color(0xFF2C4E7E);
+  static const Color boardBorder = Color(0xFF4C75AB);
+  static const Color cellEmpty = Color(0xFF1E385D);
+  static const Color cellBorder = Color(0xFF385E92);
+  static const Color cellInnerShadow = Color(0x44000000);
+
+  // Prévisualisation Ghost
+  static const Color ghostValid = Color(0x7700E5FF);
+  static const Color ghostInvalid = Color(0x77FF1744);
+
+  // Bonbons Polyominos (Vifs, sucrés et contrastés)
+  static const Color rubyHeart = Color(0xFFFF2E63);    // 1: Cœur Fraise Rubis
+  static const Color lemonStar = Color(0xFFFFBE0B);    // 2: Étoile Citron Dorée
+  static const Color limeDrop = Color(0xFF10B981);     // 3: Goutte Pomme Verte
+  static const Color plumBonbon = Color(0xFFA855F7);   // 4: Coussin Violet Myrtille
+  static const Color aquaRing = Color(0xFF00C8FF);     // 5: Anneau Cyan Glacé
+  static const Color orangeTangerine = Color(0xFFFF7A00); // 6: Quartier d'Orange
+  static const Color berryPink = Color(0xFFFF4D94);    // 7: Bonbon Framboise Guimauve
+
+  static const List<Color> candyPalette = [
+    rubyHeart,
+    lemonStar,
+    limeDrop,
+    plumBonbon,
+    aquaRing,
+    orangeTangerine,
+    berryPink,
+  ];
+
+  // Obstacles & Spéciaux
+  static const Color gummyBearGold = Color(0xFFFFB300);
+  static const Color waferBiscuitBase = Color(0xFFD97706);
+  static const Color waferBiscuitDark = Color(0xFF92400E);
+  static const Color chocolateIcing = Color(0xFF532410);
+  static const Color creamWhipped = Color(0xFFFFFBEB);
+
+  // Interface HUD Cartoon
+  static const Color hudBannerBlue = Color(0xFF2E86DE);
+  static const Color hudBannerBlueDark = Color(0xFF1B62AB);
+  static const Color hudCardWhite = Color(0xFFFFFFFF);
+  static const Color hudCardBorder = Color(0xFFD8EBFF);
+  static const Color textCaramel = Color(0xFF5C3317);
+  static const Color starGold = Color(0xFFFFC107);
+  static const Color starGoldGlow = Color(0xFFFFD54F);
+  static const Color greenSuccess = Color(0xFF00E676);
+
+  /// Dégradé de bonbon bombé avec brillance zénithale
+  static LinearGradient candyShineGradient(Color baseColor) {
+    final HSLColor hsl = HSLColor.fromColor(baseColor);
+    final Color highlight = hsl.withLightness((hsl.lightness + 0.22).clamp(0.0, 1.0)).toColor();
+    final Color shade = hsl.withLightness((hsl.lightness - 0.20).clamp(0.0, 1.0)).toColor();
+
+    return LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [highlight, baseColor, shade],
+      stops: const [0.0, 0.40, 1.0],
+    );
+  }
+}
+

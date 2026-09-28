@@ -12,20 +12,24 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final settingsProvider = context.watch<SettingsProvider>();
 
+    final theme = settingsProvider.currentTheme;
+    final isCandy = theme.mode == GameThemeMode.sugarDelight;
+    final titleColor = isCandy ? const Color(0xFF1E3A8A) : Colors.white;
+
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: theme.backgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          icon: Icon(Icons.arrow_back_ios_new_rounded, color: titleColor),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
+        title: Text(
           'PARAMÈTRES & THÈMES',
           style: TextStyle(
             fontFamily: 'Rubik',
-            color: Colors.white,
+            color: titleColor,
             fontSize: 18,
             fontWeight: FontWeight.w900,
             letterSpacing: 0.5,
@@ -39,7 +43,7 @@ class SettingsScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Section 1: Thèmes Visuels
-            _buildSectionTitle('THÈMES VISUELS'),
+            _buildSectionTitle('THÈMES VISUELS', isCandy),
             const SizedBox(height: 12),
             ...GameThemeMode.values.map((mode) {
               final themeOption = GameTheme.fromMode(mode);
@@ -52,12 +56,23 @@ class SettingsScreen extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                     decoration: BoxDecoration(
-                      color: AppColors.surfaceContainer,
+                      color: isCandy ? Colors.white : AppColors.surfaceContainer,
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: isSelected ? const Color(0xFF00F2FE) : Colors.white10,
-                        width: isSelected ? 2.0 : 1.0,
+                        color: isSelected
+                            ? (isCandy ? const Color(0xFF2563EB) : const Color(0xFF00F2FE))
+                            : (isCandy ? CandyColors.hudCardBorder : Colors.white10),
+                        width: isSelected ? 2.2 : 1.0,
                       ),
+                      boxShadow: isCandy
+                          ? const [
+                              BoxShadow(
+                                color: Color(0x15000000),
+                                blurRadius: 6,
+                                offset: Offset(0, 2),
+                              ),
+                            ]
+                          : null,
                     ),
                     child: Row(
                       children: [
@@ -182,12 +197,12 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionTitle(String title) {
+  Widget _buildSectionTitle(String title, [bool isCandy = false]) {
     return Text(
       title,
-      style: const TextStyle(
+      style: TextStyle(
         fontFamily: 'Space Grotesk',
-        color: AppColors.textMuted,
+        color: isCandy ? const Color(0xFF475569) : AppColors.textMuted,
         fontSize: 12,
         fontWeight: FontWeight.bold,
         letterSpacing: 1.2,
@@ -195,23 +210,23 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStatRow(String label, String value) {
+  Widget _buildStatRow(String label, String value, [bool isCandy = false]) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontFamily: 'Space Grotesk',
-            color: Colors.white70,
+            color: isCandy ? const Color(0xFF64748B) : Colors.white70,
             fontSize: 14,
           ),
         ),
         Text(
           value,
-          style: const TextStyle(
+          style: TextStyle(
             fontFamily: 'Rubik',
-            color: Colors.white,
+            color: isCandy ? const Color(0xFF1E3A8A) : Colors.white,
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),

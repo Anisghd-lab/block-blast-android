@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../core/theme/app_colors.dart';
+import '../../core/theme/game_theme.dart';
 import '../../providers/game_provider.dart';
 import '../../providers/settings_provider.dart';
 import '../widgets/dialogs/game_over_dialog.dart';
@@ -65,6 +67,7 @@ class GameScreen extends StatelessWidget {
     final gameProvider = context.watch<GameProvider>();
     final settingsProvider = context.watch<SettingsProvider>();
     final theme = settingsProvider.currentTheme;
+    final isCandyTheme = theme.mode == GameThemeMode.sugarDelight;
 
     // Déclencher les dialogues de fin de niveau ou de partie dès que l'état bascule
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -85,39 +88,54 @@ class GameScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: theme.backgroundColor,
-      body: SafeArea(
-        child: Column(
-          children: [
-            // 1. HUD & Score
-            ScoreHeader(
-              onPausePressed: () => _showPauseDialog(context),
-              onSettingsPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const SettingsScreen()),
-                );
-              },
-            ),
+      body: Container(
+        decoration: isCandyTheme
+            ? const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    CandyColors.skyTop,
+                    CandyColors.skyMid,
+                    CandyColors.skyBottom,
+                  ],
+                ),
+              )
+            : BoxDecoration(color: theme.backgroundColor),
+        child: SafeArea(
+          child: Column(
+            children: [
+              // 1. HUD & Score
+              ScoreHeader(
+                onPausePressed: () => _showPauseDialog(context),
+                onSettingsPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const SettingsScreen()),
+                  );
+                },
+              ),
 
-            // 2. Grille de jeu 8x8 centrale
-            const Expanded(
-              child: Center(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                  child: GameBoard(),
+              // 2. Grille de jeu 8x8 centrale
+              const Expanded(
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    child: GameBoard(),
+                  ),
                 ),
               ),
-            ),
 
-            // 3. Tiroir de pièces du bas fixé à l'écran
-            const SafeArea(
-              top: false,
-              child: Padding(
-                padding: EdgeInsets.only(bottom: 12.0),
-                child: PieceDock(),
+              // 3. Tiroir de pièces du bas fixé à l'écran
+              const SafeArea(
+                top: false,
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 12.0),
+                  child: PieceDock(),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -7,7 +7,7 @@ import '../core/theme/game_theme.dart';
 class SettingsProvider extends ChangeNotifier {
   bool _soundEnabled = true;
   bool _hapticsEnabled = true;
-  GameTheme _currentTheme = GameTheme.neon;
+  GameTheme _currentTheme = GameTheme.sugarDelight;
 
   bool get soundEnabled => _soundEnabled;
   bool get hapticsEnabled => _hapticsEnabled;

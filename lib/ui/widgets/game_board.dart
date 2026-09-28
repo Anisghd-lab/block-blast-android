@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../core/theme/app_colors.dart';
 import '../../core/theme/game_theme.dart';
 import '../../engine/block_shape.dart';
 import '../../engine/board_state.dart';
@@ -25,6 +26,7 @@ class _GameBoardState extends State<GameBoard> {
     final gameProvider = context.watch<GameProvider>();
     final settingsProvider = context.watch<SettingsProvider>();
     final theme = settingsProvider.currentTheme;
+    final isCandyTheme = theme.mode == GameThemeMode.sugarDelight;
 
     final screenSize = MediaQuery.of(context).size;
     final availableWidth = screenSize.width - 32.0;
@@ -41,21 +43,49 @@ class _GameBoardState extends State<GameBoard> {
         width: boardSize,
         height: boardSize,
         padding: const EdgeInsets.all(padding),
-        decoration: BoxDecoration(
-          color: theme.surfaceColor,
-          borderRadius: BorderRadius.circular(16.0),
-          border: Border.all(
-            color: Colors.white.withOpacity(0.08),
-            width: 1.5,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.4),
-              blurRadius: 16,
-              offset: const Offset(0, 8),
-            ),
-          ],
-        ),
+        decoration: isCandyTheme
+            ? BoxDecoration(
+                gradient: const LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color(0xFF345B92),
+                    Color(0xFF233E65),
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(20.0),
+                border: Border.all(
+                  color: CandyColors.boardBorder,
+                  width: 3.0,
+                ),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color(0x660F2648),
+                    blurRadius: 18,
+                    offset: Offset(0, 8),
+                  ),
+                  BoxShadow(
+                    color: Color(0x33FFFFFF),
+                    blurRadius: 4,
+                    offset: Offset(0, -1),
+                  ),
+                ],
+              )
+            : BoxDecoration(
+                color: theme.surfaceColor,
+                borderRadius: BorderRadius.circular(16.0),
+                border: Border.all(
+                  color: Colors.white.withOpacity(0.08),
+                  width: 1.5,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.4),
+                    blurRadius: 16,
+                    offset: const Offset(0, 8),
+                  ),
+                ],
+              ),
         child: DragTarget<Map<String, dynamic>>(
           onWillAcceptWithDetails: (details) => true,
           onMove: (details) {
