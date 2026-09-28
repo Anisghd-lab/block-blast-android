@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../core/audio/audio_service.dart';
+import '../../core/haptics/haptic_service.dart';
 import '../../core/storage/game_storage.dart';
 import '../../core/theme/app_colors.dart';
 import '../../engine/level_manager.dart';
@@ -600,6 +602,8 @@ class _LevelSelectScreenState extends State<LevelSelectScreen> with TickerProvid
         } catch (_) {}
 
         if (found != null) {
+          AudioService.playPiecePick();
+          HapticService.onPiecePick();
           _showLevelStartModal(found, stars);
         }
       },
@@ -889,9 +893,14 @@ class _LuckyWheelDialogState extends State<_LuckyWheelDialog> with SingleTickerP
     final prizeIndex = _rng.nextInt(_rewards.length);
     _wonCoins = _rewards[prizeIndex];
 
+    AudioService.playWheelTick();
+    HapticService.onWheelTick();
+
     _spinController.reset();
     _spinController.forward().then((_) {
       widget.onRewardClaimed(_wonCoins);
+      AudioService.playCoinReward();
+      HapticService.onWheelReward();
       setState(() => _isSpinning = false);
       showDialog(
         context: context,

@@ -306,8 +306,8 @@ class GameProvider extends ChangeNotifier {
     if (piece == null) return;
 
     _availablePieces[slotIndex] = piece.rotate90();
-    AudioService.playPiecePlace();
-    HapticService.onPiecePick();
+    AudioService.playPiecePick();
+    HapticService.onPieceRotate();
     saveCurrentState();
     notifyListeners();
   }
@@ -319,8 +319,8 @@ class GameProvider extends ChangeNotifier {
     if (piece == null) return;
 
     _availablePieces[slotIndex] = piece.mirror();
-    AudioService.playPiecePlace();
-    HapticService.onPiecePick();
+    AudioService.playPiecePick();
+    HapticService.onPieceRotate();
     saveCurrentState();
     notifyListeners();
   }
@@ -406,7 +406,10 @@ class GameProvider extends ChangeNotifier {
       // Sons et haptiques
       AudioService.playLineClear(_comboStreak);
       HapticService.onLineClear(lineCount: clearResult.totalLines);
-      if (_comboStreak >= 2) {
+      if (_comboStreak >= 3) {
+        AudioService.playComboBlast();
+        HapticService.onComboBlast();
+      } else if (_comboStreak >= 2) {
         HapticService.onComboBlast();
       }
 
@@ -484,8 +487,8 @@ class GameProvider extends ChangeNotifier {
         _starsEarned = stars;
 
         _levelManager.recordCompletion(lvl.levelId, _starsEarned, _levelScore);
-        AudioService.playLineClear(4);
-        HapticService.onComboBlast();
+        AudioService.playLevelVictory();
+        HapticService.onLevelVictory();
         notifyListeners();
         return;
       }
@@ -573,8 +576,8 @@ class GameProvider extends ChangeNotifier {
     _hammerCount = GameStorage.getHammerCount();
     _activeBooster = ActiveBooster.none;
 
-    AudioService.playPiecePlace();
-    HapticService.onComboBlast();
+    AudioService.playHammerSmash();
+    HapticService.onHammerSmash();
 
     if (oldVal == 2) {
       _levelJewelsCollected++;
@@ -600,8 +603,8 @@ class GameProvider extends ChangeNotifier {
     _bombCount = GameStorage.getBombCount();
     _activeBooster = ActiveBooster.none;
 
-    AudioService.playLineClear(3);
-    HapticService.onLineClear(lineCount: 3);
+    AudioService.playBombExplosion();
+    HapticService.onBombExplosion();
 
     int jewels = 0;
     for (final item in cleared) {
@@ -628,7 +631,7 @@ class GameProvider extends ChangeNotifier {
     _gloveCount = GameStorage.getGloveCount();
     _spawnNewTrio();
 
-    AudioService.playPiecePlace();
+    AudioService.playPiecePick();
     HapticService.onPiecePick();
 
     _checkPostMoveState();
@@ -646,7 +649,7 @@ class GameProvider extends ChangeNotifier {
     _isLevelFailed = false;
     _defeatReason = '';
 
-    AudioService.playPiecePlace();
+    AudioService.playCoinReward();
     HapticService.onPieceDrop();
 
     saveCurrentState();
@@ -660,6 +663,7 @@ class GameProvider extends ChangeNotifier {
     if (success) {
       await GameStorage.addBooster(boosterType, 1);
       refreshBoosterCounts();
+      AudioService.playCoinReward();
       return true;
     }
     return false;

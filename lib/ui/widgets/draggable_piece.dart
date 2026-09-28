@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/audio/audio_service.dart';
 import '../../core/haptics/haptic_service.dart';
 import '../../core/theme/game_theme.dart';
 import '../../engine/block_shape.dart';
@@ -35,6 +36,7 @@ class DraggablePiece extends StatelessWidget {
       },
       onDragStarted: () {
         HapticService.onPiecePick();
+        AudioService.playPiecePick();
       },
       // Le composant visuel qui flotte sous/au-dessus du doigt avec élévation et ombrage 3D
       feedback: Material(

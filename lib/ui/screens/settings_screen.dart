@@ -116,8 +116,55 @@ class SettingsScreen extends StatelessWidget {
 
             const SizedBox(height: 24),
 
-            // Section 2: Statistiques de Jeu
-            _buildSectionTitle('VOS STATISTIQUES'),
+            // Section 2: Audio & Haptiques
+            _buildSectionTitle('AUDIO & VIBRATIONS', isCandy),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                color: isCandy ? Colors.white : AppColors.surfaceContainer,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: isCandy ? CandyColors.hudCardBorder : Colors.white10,
+                ),
+                boxShadow: isCandy
+                    ? const [
+                        BoxShadow(
+                          color: Color(0x15000000),
+                          blurRadius: 6,
+                          offset: Offset(0, 2),
+                        ),
+                      ]
+                    : null,
+              ),
+              child: Column(
+                children: [
+                  _buildToggleRow(
+                    'Effets Sonores (SFX)',
+                    '🔊',
+                    settingsProvider.soundEnabled,
+                    (_) => settingsProvider.toggleSound(),
+                    isCandy,
+                  ),
+                  Divider(
+                    color: isCandy ? const Color(0xFFE2E8F0) : Colors.white10,
+                    height: 12,
+                  ),
+                  _buildToggleRow(
+                    'Vibrations Haptiques',
+                    '📳',
+                    settingsProvider.hapticsEnabled,
+                    (_) => settingsProvider.toggleHaptics(),
+                    isCandy,
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 24),
+
+            // Section 3: Statistiques de Jeu
+            _buildSectionTitle('VOS STATISTIQUES', isCandy),
             const SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.all(16),
@@ -232,6 +279,43 @@ class SettingsScreen extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildToggleRow(
+    String label,
+    String icon,
+    bool value,
+    ValueChanged<bool> onChanged,
+    bool isCandy,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Text(icon, style: const TextStyle(fontSize: 18)),
+              const SizedBox(width: 10),
+              Text(
+                label,
+                style: TextStyle(
+                  fontFamily: 'Rubik',
+                  color: isCandy ? const Color(0xFF1E3A8A) : Colors.white,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
+          Switch.adaptive(
+            value: value,
+            onChanged: onChanged,
+            activeColor: isCandy ? const Color(0xFF2563EB) : const Color(0xFF00F2FE),
+          ),
+        ],
+      ),
     );
   }
 }
