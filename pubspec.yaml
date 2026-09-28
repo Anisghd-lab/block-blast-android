@@ -1,7 +1,7 @@
 name: block_blast_android
 description: "Blockium - Block Quest - Jeu de puzzle de blocs viral ultra-fluide pour Android avec moteur de combos, particules et respect des règles Google Play."
 publish_to: 'none'
-version: 1.0.1+1
+version: 1.0.2+2
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
