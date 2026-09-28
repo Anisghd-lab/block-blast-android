@@ -85,7 +85,7 @@ class BlockBlastApp extends StatelessWidget {
           );
 
           return MaterialApp(
-            title: 'Block Blast',
+            title: 'Blockium - Block Quest',
             debugShowCheckedModeBanner: false,
             themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
             theme: lightThemeData,
