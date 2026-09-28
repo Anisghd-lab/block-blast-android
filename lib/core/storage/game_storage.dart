@@ -10,6 +10,7 @@ class GameStorage {
   static const String _keySound = 'block_blast_sound_enabled';
   static const String _keyHaptics = 'block_blast_haptics_enabled';
   static const String _keyTheme = 'block_blast_theme_mode';
+  static const String _keyDarkMode = 'block_blast_dark_mode';
   static const String _keySavedGame = 'block_blast_saved_game_state';
 
   static SharedPreferences? _prefs;
@@ -80,6 +81,14 @@ class GameStorage {
 
   static Future<void> setThemeIndex(int index) async {
     await _prefs?.setInt(_keyTheme, index);
+  }
+
+  static bool getDarkMode() {
+    return _prefs?.getBool(_keyDarkMode) ?? true;
+  }
+
+  static Future<void> setDarkMode(bool isDark) async {
+    await _prefs?.setBool(_keyDarkMode, isDark);
   }
 
   // Sauvegarde de l'état de la partie en cours pour reprise automatique

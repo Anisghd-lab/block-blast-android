@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/storage/game_storage.dart';
-import '../../core/theme/app_colors.dart';
 import '../../core/theme/game_theme.dart';
 import '../../providers/settings_provider.dart';
 
@@ -11,10 +10,7 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final settingsProvider = context.watch<SettingsProvider>();
-
     final theme = settingsProvider.currentTheme;
-    final isCandy = theme.mode == GameThemeMode.sugarDelight;
-    final titleColor = isCandy ? const Color(0xFF1E3A8A) : Colors.white;
 
     return Scaffold(
       backgroundColor: theme.backgroundColor,
@@ -22,14 +18,14 @@ class SettingsScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new_rounded, color: titleColor),
+          icon: Icon(Icons.arrow_back_ios_new_rounded, color: theme.textColor),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           'PARAMÈTRES & THÈMES',
           style: TextStyle(
             fontFamily: 'Rubik',
-            color: titleColor,
+            color: theme.textColor,
             fontSize: 18,
             fontWeight: FontWeight.w900,
             letterSpacing: 0.5,
@@ -42,12 +38,40 @@ class SettingsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Section 0: Apparence (Mode Sombre / Mode Clair)
+            _buildSectionTitle('APPARENCE', theme),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              decoration: BoxDecoration(
+                color: theme.surfaceColor,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: theme.borderColor),
+                boxShadow: [
+                  BoxShadow(
+                    color: theme.isDark ? Colors.black26 : const Color(0x0C000000),
+                    blurRadius: 6,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: _buildToggleRow(
+                settingsProvider.isDarkMode ? 'Mode Sombre' : 'Mode Clair',
+                settingsProvider.isDarkMode ? '🌙' : '☀️',
+                settingsProvider.isDarkMode,
+                (_) => settingsProvider.toggleDarkMode(),
+                theme,
+              ),
+            ),
+
+            const SizedBox(height: 24),
+
             // Section 1: Thèmes Visuels
-            _buildSectionTitle('THÈMES VISUELS', isCandy),
+            _buildSectionTitle('THÈMES VISUELS', theme),
             const SizedBox(height: 12),
             ...GameThemeMode.values.map((mode) {
-              final themeOption = GameTheme.fromMode(mode);
-              final isSelected = settingsProvider.currentTheme.mode == mode;
+              final themeOption = GameTheme.getTheme(mode, isDark: settingsProvider.isDarkMode);
+              final isSelected = settingsProvider.currentThemeMode == mode;
 
               return Padding(
                 padding: const EdgeInsets.only(bottom: 12),
@@ -56,29 +80,27 @@ class SettingsScreen extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                     decoration: BoxDecoration(
-                      color: isCandy ? Colors.white : AppColors.surfaceContainer,
+                      color: isSelected ? theme.cardColor : theme.surfaceColor,
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: isSelected
-                            ? (isCandy ? const Color(0xFF2563EB) : const Color(0xFF00F2FE))
-                            : (isCandy ? CandyColors.hudCardBorder : Colors.white10),
+                        color: isSelected ? theme.primaryAccent : theme.borderColor,
                         width: isSelected ? 2.2 : 1.0,
                       ),
-                      boxShadow: isCandy
-                          ? const [
-                              BoxShadow(
-                                color: Color(0x15000000),
-                                blurRadius: 6,
-                                offset: Offset(0, 2),
-                              ),
-                            ]
-                          : null,
+                      boxShadow: [
+                        BoxShadow(
+                          color: isSelected
+                              ? theme.primaryAccent.withValues(alpha: 0.25)
+                              : (theme.isDark ? Colors.black12 : const Color(0x08000000)),
+                          blurRadius: isSelected ? 8 : 4,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
                     ),
                     child: Row(
                       children: [
                         // Pastilles des couleurs du thème
                         Row(
-                          children: themeOption.blockColors.take(4).map((c) {
+                          children: themeOption.blockColors.take(5).map((c) {
                             return Container(
                               margin: const EdgeInsets.only(right: 6),
                               width: 18,
@@ -95,16 +117,16 @@ class SettingsScreen extends StatelessWidget {
                           themeOption.displayName,
                           style: TextStyle(
                             fontFamily: 'Rubik',
-                            color: isSelected ? const Color(0xFF00F2FE) : Colors.white,
+                            color: isSelected ? theme.primaryAccent : theme.textColor,
                             fontSize: 16,
                             fontWeight: isSelected ? FontWeight.w900 : FontWeight.w500,
                           ),
                         ),
                         const Spacer(),
                         if (isSelected)
-                          const Icon(
+                          Icon(
                             Icons.check_circle_rounded,
-                            color: Color(0xFF00F2FE),
+                            color: theme.primaryAccent,
                             size: 22,
                           ),
                       ],
@@ -117,25 +139,21 @@ class SettingsScreen extends StatelessWidget {
             const SizedBox(height: 24),
 
             // Section 2: Audio & Haptiques
-            _buildSectionTitle('AUDIO & VIBRATIONS', isCandy),
+            _buildSectionTitle('AUDIO & VIBRATIONS', theme),
             const SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
-                color: isCandy ? Colors.white : AppColors.surfaceContainer,
+                color: theme.surfaceColor,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: isCandy ? CandyColors.hudCardBorder : Colors.white10,
-                ),
-                boxShadow: isCandy
-                    ? const [
-                        BoxShadow(
-                          color: Color(0x15000000),
-                          blurRadius: 6,
-                          offset: Offset(0, 2),
-                        ),
-                      ]
-                    : null,
+                border: Border.all(color: theme.borderColor),
+                boxShadow: [
+                  BoxShadow(
+                    color: theme.isDark ? Colors.black26 : const Color(0x0C000000),
+                    blurRadius: 6,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
               ),
               child: Column(
                 children: [
@@ -144,10 +162,10 @@ class SettingsScreen extends StatelessWidget {
                     '🔊',
                     settingsProvider.soundEnabled,
                     (_) => settingsProvider.toggleSound(),
-                    isCandy,
+                    theme,
                   ),
                   Divider(
-                    color: isCandy ? const Color(0xFFE2E8F0) : Colors.white10,
+                    color: theme.dividerColor,
                     height: 12,
                   ),
                   _buildToggleRow(
@@ -155,7 +173,7 @@ class SettingsScreen extends StatelessWidget {
                     '📳',
                     settingsProvider.hapticsEnabled,
                     (_) => settingsProvider.toggleHaptics(),
-                    isCandy,
+                    theme,
                   ),
                 ],
               ),
@@ -164,74 +182,74 @@ class SettingsScreen extends StatelessWidget {
             const SizedBox(height: 24),
 
             // Section 3: Statistiques de Jeu
-            _buildSectionTitle('VOS STATISTIQUES', isCandy),
+            _buildSectionTitle('VOS STATISTIQUES', theme),
             const SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: AppColors.surfaceContainer,
+                color: theme.surfaceColor,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.white10),
+                border: Border.all(color: theme.borderColor),
               ),
               child: Column(
                 children: [
-                  _buildStatRow('Meilleur Score', '${GameStorage.getHighScore()}'),
-                  const Divider(color: Colors.white10, height: 20),
-                  _buildStatRow('Meilleure Série de Combos', 'x${GameStorage.getBestStreak()}'),
-                  const Divider(color: Colors.white10, height: 20),
-                  _buildStatRow('Lignes Détruites', '${GameStorage.getTotalLines()}'),
-                  const Divider(color: Colors.white10, height: 20),
-                  _buildStatRow('Parties Jouées', '${GameStorage.getGamesPlayed()}'),
+                  _buildStatRow('Meilleur Score', '${GameStorage.getHighScore()}', theme),
+                  Divider(color: theme.dividerColor, height: 20),
+                  _buildStatRow('Meilleure Série de Combos', 'x${GameStorage.getBestStreak()}', theme),
+                  Divider(color: theme.dividerColor, height: 20),
+                  _buildStatRow('Lignes Détruites', '${GameStorage.getTotalLines()}', theme),
+                  Divider(color: theme.dividerColor, height: 20),
+                  _buildStatRow('Parties Jouées', '${GameStorage.getGamesPlayed()}', theme),
                 ],
               ),
             ),
 
             const SizedBox(height: 24),
 
-            // Section 3: Conformité & Règles Google Play
-            _buildSectionTitle('CONFORMITÉ GOOGLE PLAY'),
+            // Section 4: Conformité & Règles Google Play
+            _buildSectionTitle('CONFORMITÉ GOOGLE PLAY', theme),
             const SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: AppColors.surfaceContainer,
+                color: theme.surfaceColor,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.white10),
+                border: Border.all(color: theme.borderColor),
               ),
-              child: const Column(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     children: [
-                      Icon(Icons.verified_user_rounded, color: Color(0xFF00F5A0), size: 20),
-                      SizedBox(width: 8),
+                      Icon(Icons.verified_user_rounded, color: theme.successColor, size: 20),
+                      const SizedBox(width: 8),
                       Text(
                         '100% Respect de la vie privée',
                         style: TextStyle(
                           fontFamily: 'Rubik',
-                          color: Colors.white,
+                          color: theme.textColor,
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(
                     'Jeu 100% hors-ligne. Aucune collecte de données personnelles, aucun traceur intrusif, conforme aux directives Familles & Sécurité des Données du Google Play Store.',
                     style: TextStyle(
                       fontFamily: 'Space Grotesk',
-                      color: AppColors.textMuted,
+                      color: theme.textMutedColor,
                       fontSize: 12,
                       height: 1.4,
                     ),
                   ),
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
                   Text(
                     'Version 1.0.0 (Target Android 15 / API 35 - 64 bits)',
                     style: TextStyle(
                       fontFamily: 'Space Grotesk',
-                      color: Colors.white38,
+                      color: theme.textMutedColor.withValues(alpha: 0.6),
                       fontSize: 11,
                     ),
                   ),
@@ -244,12 +262,12 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionTitle(String title, [bool isCandy = false]) {
+  Widget _buildSectionTitle(String title, GameTheme theme) {
     return Text(
       title,
       style: TextStyle(
         fontFamily: 'Space Grotesk',
-        color: isCandy ? const Color(0xFF475569) : AppColors.textMuted,
+        color: theme.textMutedColor,
         fontSize: 12,
         fontWeight: FontWeight.bold,
         letterSpacing: 1.2,
@@ -257,7 +275,7 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStatRow(String label, String value, [bool isCandy = false]) {
+  Widget _buildStatRow(String label, String value, GameTheme theme) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -265,7 +283,7 @@ class SettingsScreen extends StatelessWidget {
           label,
           style: TextStyle(
             fontFamily: 'Space Grotesk',
-            color: isCandy ? const Color(0xFF64748B) : Colors.white70,
+            color: theme.textMutedColor,
             fontSize: 14,
           ),
         ),
@@ -273,7 +291,7 @@ class SettingsScreen extends StatelessWidget {
           value,
           style: TextStyle(
             fontFamily: 'Rubik',
-            color: isCandy ? const Color(0xFF1E3A8A) : Colors.white,
+            color: theme.textColor,
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
@@ -287,7 +305,7 @@ class SettingsScreen extends StatelessWidget {
     String icon,
     bool value,
     ValueChanged<bool> onChanged,
-    bool isCandy,
+    GameTheme theme,
   ) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -302,7 +320,7 @@ class SettingsScreen extends StatelessWidget {
                 label,
                 style: TextStyle(
                   fontFamily: 'Rubik',
-                  color: isCandy ? const Color(0xFF1E3A8A) : Colors.white,
+                  color: theme.textColor,
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
                 ),
@@ -312,7 +330,7 @@ class SettingsScreen extends StatelessWidget {
           Switch.adaptive(
             value: value,
             onChanged: onChanged,
-            activeColor: isCandy ? const Color(0xFF2563EB) : const Color(0xFF00F2FE),
+            activeColor: theme.primaryAccent,
           ),
         ],
       ),

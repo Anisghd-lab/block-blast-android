@@ -1,8 +1,6 @@
 import 'game_board.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../core/theme/app_colors.dart';
-import '../../core/theme/game_theme.dart';
 import '../../providers/game_provider.dart';
 import '../../providers/settings_provider.dart';
 import 'draggable_piece.dart';
@@ -15,7 +13,6 @@ class PieceDock extends StatelessWidget {
     final gameProvider = context.watch<GameProvider>();
     final settingsProvider = context.watch<SettingsProvider>();
     final theme = settingsProvider.currentTheme;
-    final isCandyTheme = theme.mode == GameThemeMode.sugarDelight;
 
     final pieces = gameProvider.availablePieces;
     final board = gameProvider.board;
@@ -28,30 +25,25 @@ class PieceDock extends StatelessWidget {
       width: dockWidth,
       height: fixedDockHeight,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-      decoration: isCandyTheme
-          ? BoxDecoration(
-              color: Colors.white.withOpacity(0.92),
-              borderRadius: BorderRadius.circular(24.0),
-              border: Border.all(
-                color: CandyColors.hudCardBorder,
-                width: 2.0,
-              ),
-              boxShadow: const [
-                BoxShadow(
-                  color: Color(0x1F000000),
-                  blurRadius: 10,
-                  offset: Offset(0, 4),
-                ),
-              ],
-            )
-          : BoxDecoration(
-              color: theme.surfaceColor.withOpacity(0.6),
-              borderRadius: BorderRadius.circular(20.0),
-              border: Border.all(
-                color: Colors.white.withOpacity(0.06),
-                width: 1.0,
-              ),
-            ),
+      decoration: BoxDecoration(
+        color: theme.isDark
+            ? theme.surfaceColor.withValues(alpha: 0.85)
+            : theme.surfaceColor,
+        borderRadius: BorderRadius.circular(22.0),
+        border: Border.all(
+          color: theme.borderColor,
+          width: theme.isDark ? 1.0 : 1.5,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: theme.isDark
+                ? Colors.black.withValues(alpha: 0.35)
+                : const Color(0x14000000),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,

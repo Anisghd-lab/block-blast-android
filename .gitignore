@@ -41,5 +41,11 @@ migrate_working_dir/
 # Symbols
 app.*.symbols
 
+# Local helper scripts & locks
+pubspec.lock
+generate_50_levels.py
+serve.py
+update_index_html.py
+
 # Exceptions to above rules.
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages

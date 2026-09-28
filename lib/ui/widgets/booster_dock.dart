@@ -2,15 +2,11 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/storage/game_storage.dart';
-import '../../core/theme/app_colors.dart';
+import '../../core/theme/game_assets.dart';
 import '../../providers/game_provider.dart';
+import '../../providers/settings_provider.dart';
 
-/// Barre d'outils et boosters tactiques du bas (Inspiré de Sugar Delight)
-/// Propose 4 boosters signatures :
-/// 1. 🍭🔨 Marteau Sucré (Détruit 1 bonbon ou obstacle)
-/// 2. 💣 Bombe Soda (Explose une zone 3x3)
-/// 3. 🧤 Gant Magique (Régénère le trio de pièces disponibles)
-/// 4. ➕🖐️ +5 Coups (Ajoute 5 coups au niveau en cours)
+/// Barre d'outils et boosters tactiques du bas
 class BoosterDock extends StatelessWidget {
   const BoosterDock({Key? key}) : super(key: key);
 
@@ -28,6 +24,7 @@ class BoosterDock extends StatelessWidget {
       builder: (ctx) {
         final currentCoins = GameStorage.getCoins();
         final canAfford = currentCoins >= cost;
+        final theme = context.read<SettingsProvider>().currentTheme;
 
         return Dialog(
           backgroundColor: Colors.transparent,
@@ -35,24 +32,17 @@ class BoosterDock extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(22),
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color(0xFFFFF9ED),
-                  Color(0xFFFFECD1),
-                ],
-              ),
-              borderRadius: BorderRadius.circular(26),
+              color: theme.cardColor,
+              borderRadius: BorderRadius.circular(24),
               border: Border.all(
-                color: CandyColors.boardBorder,
-                width: 3.0,
+                color: theme.borderColor,
+                width: 2.0,
               ),
-              boxShadow: const [
+              boxShadow: [
                 BoxShadow(
-                  color: Color(0x66000000),
+                  color: theme.isDark ? Colors.black54 : const Color(0x33000000),
                   blurRadius: 20,
-                  offset: Offset(0, 8),
+                  offset: const Offset(0, 8),
                 ),
               ],
             ),
@@ -215,42 +205,45 @@ class BoosterDock extends StatelessWidget {
   Widget build(BuildContext context) {
     final provider = context.watch<GameProvider>();
     final active = provider.activeBooster;
+    final theme = context.watch<SettingsProvider>().currentTheme;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
         decoration: BoxDecoration(
-          color: const Color(0xE8FFFFFF),
+          color: theme.isDark
+              ? theme.surfaceColor.withValues(alpha: 0.85)
+              : theme.surfaceColor,
           borderRadius: BorderRadius.circular(22),
           border: Border.all(
-            color: CandyColors.boardBorder.withOpacity(0.8),
-            width: 2.0,
+            color: theme.borderColor,
+            width: theme.isDark ? 1.0 : 1.5,
           ),
-          boxShadow: const [
+          boxShadow: [
             BoxShadow(
-              color: Color(0x24000000),
+              color: theme.isDark ? Colors.black38 : const Color(0x14000000),
               blurRadius: 10,
-              offset: Offset(0, 4),
-            ),
-            BoxShadow(
-              color: Color(0x66FFFFFF),
-              blurRadius: 2,
-              offset: Offset(0, -1),
+              offset: const Offset(0, 4),
             ),
           ],
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            // 1. Marteau Sucré
+            // 1. Marteau (Booster 1)
             _BoosterButton(
               title: 'Marteau',
               count: provider.hammerCount,
               isActive: active == ActiveBooster.hammer,
-              icon: const CustomPaint(
-                size: Size(32, 32),
-                painter: HammerIconPainter(),
+              icon: Image.asset(
+                GameAssets.getBoosterAsset(0),
+                width: 32,
+                height: 32,
+                errorBuilder: (_, __, ___) => const CustomPaint(
+                  size: Size(32, 32),
+                  painter: HammerIconPainter(),
+                ),
               ),
               onTap: () {
                 if (provider.hammerCount > 0) {
@@ -260,26 +253,36 @@ class BoosterDock extends StatelessWidget {
                     context,
                     provider,
                     type: 'hammer',
-                    title: 'Marteau Sucré 🍭🔨',
-                    description: 'Écrase n\'importe quel bonbon ou obstacle sur la grille d\'un seul coup sec !',
+                    title: 'Marteau 🔨',
+                    description: 'Écrase n\'importe quel bloc ou obstacle sur la grille d\'un seul coup sec !',
                     cost: 50,
-                    iconWidget: const CustomPaint(
-                      size: Size(44, 44),
-                      painter: HammerIconPainter(),
+                    iconWidget: Image.asset(
+                      GameAssets.getBoosterAsset(0),
+                      width: 44,
+                      height: 44,
+                      errorBuilder: (_, __, ___) => const CustomPaint(
+                        size: Size(44, 44),
+                        painter: HammerIconPainter(),
+                      ),
                     ),
                   );
                 }
               },
             ),
 
-            // 2. Bombe Soda
+            // 2. Bombe (Booster 2)
             _BoosterButton(
               title: 'Bombe',
               count: provider.bombCount,
               isActive: active == ActiveBooster.bomb,
-              icon: const CustomPaint(
-                size: Size(32, 32),
-                painter: BombIconPainter(),
+              icon: Image.asset(
+                GameAssets.getBoosterAsset(1),
+                width: 32,
+                height: 32,
+                errorBuilder: (_, __, ___) => const CustomPaint(
+                  size: Size(32, 32),
+                  painter: BombIconPainter(),
+                ),
               ),
               onTap: () {
                 if (provider.bombCount > 0) {
@@ -289,26 +292,36 @@ class BoosterDock extends StatelessWidget {
                     context,
                     provider,
                     type: 'bomb',
-                    title: 'Bombe Soda 💣',
+                    title: 'Bombe 💣',
                     description: 'Déclenche une puissante onde de choc détruisant une zone entière de 3x3 cases !',
                     cost: 60,
-                    iconWidget: const CustomPaint(
-                      size: Size(44, 44),
-                      painter: BombIconPainter(),
+                    iconWidget: Image.asset(
+                      GameAssets.getBoosterAsset(1),
+                      width: 44,
+                      height: 44,
+                      errorBuilder: (_, __, ___) => const CustomPaint(
+                        size: Size(44, 44),
+                        painter: BombIconPainter(),
+                      ),
                     ),
                   );
                 }
               },
             ),
 
-            // 3. Gant Magique (Reroll)
+            // 3. Gant Magique (Booster 3)
             _BoosterButton(
               title: 'Gant',
               count: provider.gloveCount,
               isActive: false,
-              icon: const CustomPaint(
-                size: Size(32, 32),
-                painter: GloveIconPainter(),
+              icon: Image.asset(
+                GameAssets.getBoosterAsset(2),
+                width: 32,
+                height: 32,
+                errorBuilder: (_, __, ___) => const CustomPaint(
+                  size: Size(32, 32),
+                  painter: GloveIconPainter(),
+                ),
               ),
               onTap: () {
                 if (provider.gloveCount > 0) {
@@ -321,23 +334,33 @@ class BoosterDock extends StatelessWidget {
                     title: 'Gant Magique 🧤',
                     description: 'Remplace instantanément les 3 pièces du tiroir par 3 nouvelles formes fraîches !',
                     cost: 40,
-                    iconWidget: const CustomPaint(
-                      size: Size(44, 44),
-                      painter: GloveIconPainter(),
+                    iconWidget: Image.asset(
+                      GameAssets.getBoosterAsset(2),
+                      width: 44,
+                      height: 44,
+                      errorBuilder: (_, __, ___) => const CustomPaint(
+                        size: Size(44, 44),
+                        painter: GloveIconPainter(),
+                      ),
                     ),
                   );
                 }
               },
             ),
 
-            // 4. +5 Coups Extra
+            // 4. +5 Coups Extra (Booster 4)
             _BoosterButton(
               title: '+5 Coups',
               count: provider.extraMovesCount,
               isActive: false,
-              icon: const CustomPaint(
-                size: Size(32, 32),
-                painter: ExtraMovesIconPainter(),
+              icon: Image.asset(
+                GameAssets.getBoosterAsset(3),
+                width: 32,
+                height: 32,
+                errorBuilder: (_, __, ___) => const CustomPaint(
+                  size: Size(32, 32),
+                  painter: ExtraMovesIconPainter(),
+                ),
               ),
               onTap: () {
                 if (provider.gameMode != GameMode.adventure || provider.movesRemaining == null) {
@@ -361,9 +384,14 @@ class BoosterDock extends StatelessWidget {
                     title: '+5 Coups Extra ➕🖐️',
                     description: 'Ajoute 5 coups supplémentaires pour continuer et réussir le niveau !',
                     cost: 60,
-                    iconWidget: const CustomPaint(
-                      size: Size(44, 44),
-                      painter: ExtraMovesIconPainter(),
+                    iconWidget: Image.asset(
+                      GameAssets.getBoosterAsset(3),
+                      width: 44,
+                      height: 44,
+                      errorBuilder: (_, __, ___) => const CustomPaint(
+                        size: Size(44, 44),
+                        painter: ExtraMovesIconPainter(),
+                      ),
                     ),
                   );
                 }
@@ -394,6 +422,8 @@ class _BoosterButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = context.watch<SettingsProvider>().currentTheme;
+
     return GestureDetector(
       onTap: onTap,
       child: Column(
@@ -402,7 +432,7 @@ class _BoosterButton extends StatelessWidget {
           Stack(
             clipBehavior: Clip.none,
             children: [
-              // Bouton circulaire 3D doré
+              // Bouton circulaire 3D
               AnimatedContainer(
                 duration: const Duration(milliseconds: 180),
                 width: 48,
@@ -420,31 +450,22 @@ class _BoosterButton extends StatelessWidget {
                     stops: [0.0, 0.65, 1.0],
                   ),
                   border: Border.all(
-                    color: isActive ? const Color(0xFFFF4081) : CandyColors.boardBorder,
-                    width: isActive ? 3.0 : 2.0,
+                    color: isActive ? theme.primaryAccent : theme.borderColor,
+                    width: isActive ? 2.5 : 1.5,
                   ),
                   boxShadow: isActive
                       ? [
-                          const BoxShadow(
-                            color: Color(0xFFFF4081),
+                          BoxShadow(
+                            color: theme.primaryAccent.withValues(alpha: 0.5),
                             blurRadius: 10,
                             spreadRadius: 2,
                           ),
-                          const BoxShadow(
-                            color: Color(0xFFFFD54F),
-                            blurRadius: 6,
-                          ),
                         ]
-                      : const [
+                      : [
                           BoxShadow(
-                            color: Color(0x33000000),
+                            color: theme.isDark ? Colors.black38 : const Color(0x20000000),
                             blurRadius: 5,
-                            offset: Offset(0, 3),
-                          ),
-                          BoxShadow(
-                            color: Color(0x80FFFFFF),
-                            blurRadius: 2,
-                            offset: Offset(0, -1),
+                            offset: const Offset(0, 3),
                           ),
                         ],
                 ),
@@ -514,7 +535,7 @@ class _BoosterButton extends StatelessWidget {
             style: TextStyle(
               fontSize: 10.5,
               fontWeight: FontWeight.w800,
-              color: isActive ? const Color(0xFFFF4081) : const Color(0xFF6B3600),
+              color: isActive ? theme.primaryAccent : theme.textColor,
             ),
           ),
         ],

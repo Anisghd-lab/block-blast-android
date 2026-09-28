@@ -5,11 +5,9 @@ import 'package:provider/provider.dart';
 import '../../core/audio/audio_service.dart';
 import '../../core/haptics/haptic_service.dart';
 import '../../core/storage/game_storage.dart';
-import '../../core/theme/app_colors.dart';
 import '../../engine/level_manager.dart';
 import '../../engine/level_model.dart';
 import '../../providers/game_provider.dart';
-import '../widgets/candy_visuals.dart';
 
 class LevelSelectScreen extends StatefulWidget {
   const LevelSelectScreen({Key? key}) : super(key: key);
@@ -204,7 +202,7 @@ class _LevelSelectScreenState extends State<LevelSelectScreen> with TickerProvid
               colors: [Color(0xFFE0F2FE), Colors.white],
             ),
             borderRadius: BorderRadius.circular(28),
-            border: Border.all(color: CandyColors.hudBannerBlue, width: 3.0),
+            border: Border.all(color: const Color(0xFF2563EB), width: 2.5),
             boxShadow: const [
               BoxShadow(
                 color: Color(0x33000000),
@@ -282,16 +280,26 @@ class _LevelSelectScreenState extends State<LevelSelectScreen> with TickerProvid
                 decoration: BoxDecoration(
                   color: const Color(0xFFF1F5F9),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: CandyColors.hudCardBorder),
+                  border: Border.all(color: const Color(0xFFCBD5E1)),
                 ),
                 child: Row(
                   children: [
-                    CandyWidget(
-                      type: level.goal == LevelGoal.clearJewels
-                          ? CandyType.gummyBear
-                          : (level.goal == LevelGoal.clearLines ? CandyType.ring : CandyType.star),
-                      size: 34,
-                      showGlow: true,
+                    Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: const Color(0xFFE2E8F0)),
+                      ),
+                      child: Center(
+                        child: Text(
+                          level.goal == LevelGoal.clearJewels
+                              ? '💎'
+                              : (level.goal == LevelGoal.clearLines ? '⚡' : '⭐'),
+                          style: const TextStyle(fontSize: 20),
+                        ),
+                      ),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
@@ -988,6 +996,26 @@ class _LuckyWheelDialogState extends State<_LuckyWheelDialog> with SingleTickerP
           ],
         ),
       ),
+    );
+  }
+}
+
+class StarBadge extends StatelessWidget {
+  final bool isEarned;
+  final double size;
+
+  const StarBadge({
+    Key? key,
+    required this.isEarned,
+    this.size = 24.0,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Icon(
+      isEarned ? Icons.star_rounded : Icons.star_outline_rounded,
+      color: isEarned ? const Color(0xFFFFD700) : const Color(0xFFCBD5E1),
+      size: size,
     );
   }
 }

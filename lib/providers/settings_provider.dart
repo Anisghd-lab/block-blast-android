@@ -7,10 +7,14 @@ import '../core/theme/game_theme.dart';
 class SettingsProvider extends ChangeNotifier {
   bool _soundEnabled = true;
   bool _hapticsEnabled = true;
-  GameTheme _currentTheme = GameTheme.sugarDelight;
+  bool _isDarkMode = true;
+  GameThemeMode _currentThemeMode = GameThemeMode.neonArcade;
+  late GameTheme _currentTheme;
 
   bool get soundEnabled => _soundEnabled;
   bool get hapticsEnabled => _hapticsEnabled;
+  bool get isDarkMode => _isDarkMode;
+  GameThemeMode get currentThemeMode => _currentThemeMode;
   GameTheme get currentTheme => _currentTheme;
 
   SettingsProvider() {
@@ -20,8 +24,10 @@ class SettingsProvider extends ChangeNotifier {
   void _loadSettings() {
     _soundEnabled = GameStorage.getSoundEnabled();
     _hapticsEnabled = GameStorage.getHapticsEnabled();
+    _isDarkMode = GameStorage.getDarkMode();
     final themeIndex = GameStorage.getThemeIndex();
-    _currentTheme = GameTheme.fromMode(GameThemeMode.values[themeIndex % GameThemeMode.values.length]);
+    _currentThemeMode = GameThemeMode.values[themeIndex % GameThemeMode.values.length];
+    _currentTheme = GameTheme.getTheme(_currentThemeMode, isDark: _isDarkMode);
 
     AudioService.isEnabled = _soundEnabled;
     HapticService.isEnabled = _hapticsEnabled;
@@ -42,8 +48,21 @@ class SettingsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> toggleDarkMode() async {
+    await setDarkMode(!_isDarkMode);
+  }
+
+  Future<void> setDarkMode(bool isDark) async {
+    if (_isDarkMode == isDark) return;
+    _isDarkMode = isDark;
+    _currentTheme = GameTheme.getTheme(_currentThemeMode, isDark: _isDarkMode);
+    await GameStorage.setDarkMode(isDark);
+    notifyListeners();
+  }
+
   Future<void> setTheme(GameThemeMode mode) async {
-    _currentTheme = GameTheme.fromMode(mode);
+    _currentThemeMode = mode;
+    _currentTheme = GameTheme.getTheme(_currentThemeMode, isDark: _isDarkMode);
     await GameStorage.setThemeIndex(mode.index);
     notifyListeners();
   }

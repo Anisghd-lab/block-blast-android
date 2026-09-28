@@ -1,11 +1,10 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import '../../core/theme/app_colors.dart';
 
 enum ParticleShape {
   star,
-  sugarCrystal,
-  candyDisc,
+  crystal,
+  circleDisc,
   sparkle,
 }
 
@@ -226,7 +225,7 @@ class JuiceOverlayState extends State<JuiceOverlay> with SingleTickerProviderSta
           cx: position.dx,
           cy: position.dy,
           maxRadius: 75.0,
-          color: colors.isNotEmpty ? colors.first : CandyColors.starGold,
+          color: colors.isNotEmpty ? colors.first : const Color(0xFFFFD700),
         ),
       );
     }
@@ -234,11 +233,11 @@ class JuiceOverlayState extends State<JuiceOverlay> with SingleTickerProviderSta
     _ensureTicking();
   }
 
-  /// Affiche un texte flottant rebondissant ("SUCRÉ !", "+250", etc.)
+  /// Affiche un texte flottant rebondissant ("COMBO !", "+250", etc.)
   void spawnFloatingText({
     required Offset position,
     required String text,
-    Color color = CandyColors.starGold,
+    Color color = const Color(0xFFFFD700),
   }) {
     final angle = (_rng.nextDouble() - 0.5) * 0.18; // Léger tilt aléatoire
     _floatingTexts.add(
@@ -345,10 +344,10 @@ class _JuicePainter extends CustomPainter {
         case ParticleShape.sparkle:
           _paintSparkle(canvas, currentSize, paint);
           break;
-        case ParticleShape.sugarCrystal:
+        case ParticleShape.crystal:
           _paintCrystal(canvas, currentSize, paint);
           break;
-        case ParticleShape.candyDisc:
+        case ParticleShape.circleDisc:
           canvas.drawCircle(Offset.zero, currentSize * 0.5, paint);
           // Petit reflet blanc sur le disque
           canvas.drawCircle(

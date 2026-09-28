@@ -44,10 +44,10 @@ class _ComboBannerState extends State<ComboBanner> with SingleTickerProviderStat
   }
 
   String _getComboTitle(int streak) {
-    if (streak == 2) return '🍬 COMBO x2 ! DÉLICIEUX !';
-    if (streak == 3) return '🍭 COMBO x3 ! SUCRÉ !';
-    if (streak == 4) return '🧁 COMBO x4 ! FÉERIQUE !';
-    if (streak == 5) return '👑 COMBO x5 ! SUGAR CRUSH !';
+    if (streak == 2) return '⚡ COMBO x2 ! SUPER !';
+    if (streak == 3) return '🔥 COMBO x3 ! INCROYABLE !';
+    if (streak == 4) return '💥 COMBO x4 ! EXPLOSIF !';
+    if (streak == 5) return '👑 COMBO x5 ! BLOCK CRUSH !';
     return '🌟 COMBO x$streak ! DIVIN !';
   }
 

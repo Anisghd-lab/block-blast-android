@@ -1,6 +1,6 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../core/theme/app_colors.dart';
 import '../../core/theme/game_theme.dart';
 import '../../engine/block_shape.dart';
 import '../../engine/board_state.dart';
@@ -63,20 +63,12 @@ class _GameBoardState extends State<GameBoard> {
     double cellSize,
     double spacing,
     double padding,
-    bool isCandyTheme,
+    GameTheme theme,
   ) {
     final juice = _juiceKey.currentState;
     if (juice == null) return;
 
-    final colors = isCandyTheme
-        ? CandyColors.candyPalette
-        : const [
-            Color(0xFF00F2FE),
-            Color(0xFFFF0844),
-            Color(0xFFFED929),
-            Color(0xFF00F5A0),
-            Color(0xFF8B5CF6),
-          ];
+    final colors = theme.blockColors;
 
     // 1. Particules éclatantes sur chaque ligne détruite
     for (final r in event.rows) {
@@ -131,7 +123,7 @@ class _GameBoardState extends State<GameBoard> {
     juice.spawnFloatingText(
       position: Offset(boardSize / 2, boardSize * 0.45),
       text: phrase,
-      color: event.comboStreak >= 2 ? CandyColors.rubyHeart : CandyColors.starGoldGlow,
+      color: event.comboStreak >= 2 ? theme.secondaryAccent : theme.starGold,
     );
   }
 
@@ -142,6 +134,7 @@ class _GameBoardState extends State<GameBoard> {
     double spacing,
     double padding,
     GameProvider provider,
+    GameTheme theme,
   ) {
     final juice = _juiceKey.currentState;
     final x = padding + c * (cellSize + spacing) + cellSize / 2;
@@ -149,7 +142,7 @@ class _GameBoardState extends State<GameBoard> {
 
     juice?.emitBurst(
       position: Offset(x, y),
-      colors: CandyColors.candyPalette,
+      colors: theme.blockColors,
       particleCount: 22,
       emitShockwave: true,
     );
@@ -157,7 +150,7 @@ class _GameBoardState extends State<GameBoard> {
     juice?.spawnFloatingText(
       position: Offset(x, y - 20),
       text: '🔨 SMASH !',
-      color: CandyColors.lemonStar,
+      color: theme.primaryAccent,
     );
 
     provider.applyHammer(r, c);
@@ -170,6 +163,7 @@ class _GameBoardState extends State<GameBoard> {
     double spacing,
     double padding,
     GameProvider provider,
+    GameTheme theme,
   ) {
     final juice = _juiceKey.currentState;
     final x = padding + centerC * (cellSize + spacing) + cellSize / 2;
@@ -184,7 +178,7 @@ class _GameBoardState extends State<GameBoard> {
           final cy = padding + pr * (cellSize + spacing) + cellSize / 2;
           juice?.emitBurst(
             position: Offset(cx, cy),
-            colors: CandyColors.candyPalette,
+            colors: theme.blockColors,
             particleCount: 14,
             emitShockwave: dr == 0 && dc == 0,
           );
@@ -196,29 +190,29 @@ class _GameBoardState extends State<GameBoard> {
     juice?.spawnFloatingText(
       position: Offset(x, y - 30),
       text: '💣 BOOM !',
-      color: CandyColors.tangerineOrange,
+      color: theme.alertColor,
     );
 
     provider.applyBomb(centerR, centerC);
   }
 
-  Widget _buildBoosterTargetBanner(GameProvider provider) {
+  Widget _buildBoosterTargetBanner(GameProvider provider, GameTheme theme) {
     final isHammer = provider.activeBooster == ActiveBooster.hammer;
     final text = isHammer
-        ? "🔨 Touchez un bonbon à écraser !"
+        ? "🔨 Touchez un bloc à détruire !"
         : "💣 Touchez la zone 3x3 à exploser !";
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFF8E7),
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: CandyColors.boardBorder, width: 2),
-        boxShadow: const [
+        border: Border.all(color: theme.borderColor, width: 2),
+        boxShadow: [
           BoxShadow(
-            color: Color(0x40000000),
+            color: theme.isDark ? Colors.black45 : const Color(0x20000000),
             blurRadius: 10,
-            offset: Offset(0, 4),
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -227,8 +221,8 @@ class _GameBoardState extends State<GameBoard> {
         children: [
           Text(
             text,
-            style: const TextStyle(
-              color: Color(0xFF5D3600),
+            style: TextStyle(
+              color: theme.textColor,
               fontWeight: FontWeight.w900,
               fontSize: 12.5,
             ),
@@ -239,10 +233,10 @@ class _GameBoardState extends State<GameBoard> {
             child: Container(
               padding: const EdgeInsets.all(3),
               decoration: BoxDecoration(
-                color: Colors.red.shade100,
+                color: theme.alertColor.withValues(alpha: 0.2),
                 shape: BoxShape.circle,
               ),
-              child: const Icon(Icons.close, size: 14, color: Colors.red),
+              child: Icon(Icons.close, size: 14, color: theme.alertColor),
             ),
           ),
         ],
@@ -255,49 +249,49 @@ class _GameBoardState extends State<GameBoard> {
     final gameProvider = context.watch<GameProvider>();
     final settingsProvider = context.watch<SettingsProvider>();
     final theme = settingsProvider.currentTheme;
-    final isCandyTheme = theme.mode == GameThemeMode.sugarDelight;
 
-    final screenSize = MediaQuery.of(context).size;
-    final availableWidth = screenSize.width - 32.0;
-    final availableHeight = screenSize.height * 0.39;
-    final boardSize = (availableWidth < availableHeight ? availableWidth : availableHeight)
-        .clamp(240.0, 350.0);
-    const double padding = GameBoard.padding;
-    const double spacing = GameBoard.spacing;
-    final cellSize = (boardSize - (padding * 2) - (spacing * 7)) / BoardState.size;
+    // LayoutBuilder lit les dimensions exactes disponibles dans Expanded
+    // pour garantir l'absence totale de débordement sur les boosters
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final maxSquare = math.min(constraints.maxWidth, constraints.maxHeight);
+        final boardSize = (maxSquare - 6.0).clamp(200.0, 336.0);
+        const double padding = GameBoard.padding;
+        const double spacing = GameBoard.spacing;
+        final cellSize = (boardSize - (padding * 2) - (spacing * 7)) / BoardState.size;
 
-    GameBoard.currentCellSize = cellSize;
+        GameBoard.currentCellSize = cellSize;
 
-    // Déclencher les effets dès qu'un nouvel événement de destruction survient
-    final clearEvent = gameProvider.lastClearEvent;
-    if (clearEvent != null && clearEvent.timestamp != _lastHandledClearTimestamp) {
-      _lastHandledClearTimestamp = clearEvent.timestamp;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _handleClearEffects(clearEvent, boardSize, cellSize, spacing, padding, isCandyTheme);
-      });
-    }
+        // Déclencher les effets dès qu'un nouvel événement de destruction survient
+        final clearEvent = gameProvider.lastClearEvent;
+        if (clearEvent != null && clearEvent.timestamp != _lastHandledClearTimestamp) {
+          _lastHandledClearTimestamp = clearEvent.timestamp;
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _handleClearEffects(clearEvent, boardSize, cellSize, spacing, padding, theme);
+          });
+        }
 
-    // Calcul des lignes/colonnes "presque pleines" (7/8 remplies) — lueur d'aperçu
-    final Set<int> nearFullRows = {};
-    final Set<int> nearFullCols = {};
-    final grid = gameProvider.board.grid;
-    for (int r = 0; r < BoardState.size; r++) {
-      int filled = 0;
-      for (int c = 0; c < BoardState.size; c++) {
-        if (grid[r][c] != 0) filled++;
-      }
-      if (filled >= BoardState.size - 1) nearFullRows.add(r);
-    }
-    for (int c = 0; c < BoardState.size; c++) {
-      int filled = 0;
-      for (int r = 0; r < BoardState.size; r++) {
-        if (grid[r][c] != 0) filled++;
-      }
-      if (filled >= BoardState.size - 1) nearFullCols.add(c);
-    }
+        // Calcul des lignes/colonnes "presque pleines" (7/8 remplies) — lueur d'aperçu
+        final Set<int> nearFullRows = {};
+        final Set<int> nearFullCols = {};
+        final grid = gameProvider.board.grid;
+        for (int r = 0; r < BoardState.size; r++) {
+          int filled = 0;
+          for (int c = 0; c < BoardState.size; c++) {
+            if (grid[r][c] != 0) filled++;
+          }
+          if (filled >= BoardState.size - 1) nearFullRows.add(r);
+        }
+        for (int c = 0; c < BoardState.size; c++) {
+          int filled = 0;
+          for (int r = 0; r < BoardState.size; r++) {
+            if (grid[r][c] != 0) filled++;
+          }
+          if (filled >= BoardState.size - 1) nearFullCols.add(c);
+        }
 
-    return Center(
-      child: JuiceOverlay(
+        return Center(
+          child: JuiceOverlay(
         key: _juiceKey,
         child: Stack(
           clipBehavior: Clip.none,
@@ -308,49 +302,29 @@ class _GameBoardState extends State<GameBoard> {
               width: boardSize,
               height: boardSize,
               padding: const EdgeInsets.all(padding),
-              decoration: isCandyTheme
-                  ? BoxDecoration(
-                      gradient: const LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Color(0xFF345B92),
-                          Color(0xFF233E65),
-                        ],
-                      ),
-                      borderRadius: BorderRadius.circular(20.0),
-                      border: Border.all(
-                        color: CandyColors.boardBorder,
-                        width: 3.0,
-                      ),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Color(0x660F2648),
-                          blurRadius: 18,
-                          offset: Offset(0, 8),
-                        ),
-                        BoxShadow(
-                          color: Color(0x33FFFFFF),
-                          blurRadius: 4,
-                          offset: Offset(0, -1),
-                        ),
-                      ],
-                    )
-                  : BoxDecoration(
-                      color: theme.surfaceColor,
-                      borderRadius: BorderRadius.circular(16.0),
-                      border: Border.all(
-                        color: Colors.white.withOpacity(0.08),
-                        width: 1.5,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.4),
-                          blurRadius: 16,
-                          offset: const Offset(0, 8),
-                        ),
-                      ],
+              decoration: BoxDecoration(
+                color: theme.boardBackground,
+                borderRadius: BorderRadius.circular(20.0),
+                border: Border.all(
+                  color: theme.boardBorder,
+                  width: theme.isDark ? 1.5 : 2.0,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: theme.isDark
+                        ? Colors.black.withValues(alpha: 0.5)
+                        : const Color(0x1F000000),
+                    blurRadius: 18,
+                    offset: const Offset(0, 8),
+                  ),
+                  if (!theme.isDark)
+                    const BoxShadow(
+                      color: Color(0x33FFFFFF),
+                      blurRadius: 4,
+                      offset: Offset(0, -1),
                     ),
+                ],
+              ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: List.generate(BoardState.size, (r) {
@@ -390,9 +364,9 @@ class _GameBoardState extends State<GameBoard> {
                         behavior: HitTestBehavior.opaque,
                         onTap: () {
                           if (gameProvider.activeBooster == ActiveBooster.hammer) {
-                            _applyHammerAt(r, c, cellSize, spacing, padding, gameProvider);
+                            _applyHammerAt(r, c, cellSize, spacing, padding, gameProvider, theme);
                           } else if (gameProvider.activeBooster == ActiveBooster.bomb) {
-                            _applyBombAt(r, c, cellSize, spacing, padding, gameProvider);
+                            _applyBombAt(r, c, cellSize, spacing, padding, gameProvider, theme);
                           }
                         },
                         child: Padding(
@@ -423,12 +397,14 @@ class _GameBoardState extends State<GameBoard> {
                 left: 0,
                 right: 0,
                 child: Center(
-                  child: _buildBoosterTargetBanner(gameProvider),
+                  child: _buildBoosterTargetBanner(gameProvider, theme),
                 ),
               ),
           ],
         ),
       ),
+    );
+      },
     );
   }
 }

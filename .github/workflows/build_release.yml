@@ -103,13 +103,13 @@ jobs:
         run: |
           # 1. APK Universel (compatible avec tous les appareils)
           flutter build apk --release --android-skip-build-dependency-validation
-          cp build/app/outputs/flutter-apk/app-release.apk release_assets/SugarDelight-universal.apk
+          cp build/app/outputs/flutter-apk/app-release.apk release_assets/BlockBlast-universal.apk
 
           # 2. APKs optimisés par ABI (arm64, arm32, x86_64)
           flutter build apk --release --split-per-abi --android-skip-build-dependency-validation
-          cp build/app/outputs/flutter-apk/app-arm64-v8a-release.apk release_assets/SugarDelight-arm64.apk
-          cp build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk release_assets/SugarDelight-arm32.apk
-          cp build/app/outputs/flutter-apk/app-x86_64-release.apk release_assets/SugarDelight-x86_64.apk
+          cp build/app/outputs/flutter-apk/app-arm64-v8a-release.apk release_assets/BlockBlast-arm64.apk
+          cp build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk release_assets/BlockBlast-arm32.apk
+          cp build/app/outputs/flutter-apk/app-x86_64-release.apk release_assets/BlockBlast-x86_64.apk
 
           echo "=== Fichiers APK prêts pour test ==="
           ls -lh release_assets/
@@ -117,7 +117,7 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: sugar-delight-test-apks
+          name: block-blast-test-apks
           path: |
             release_assets/*.apk
 
@@ -136,15 +136,23 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ env.APP_VERSION }}
-          name: "Sugar Delight Test Release ${{ env.APP_VERSION }}"
+          name: "Block Blast Release ${{ env.APP_VERSION }}"
           body: |
-            ### 🍬 Sugar Delight - Release Test ${{ env.APP_VERSION }}
+            ### 🎮 Block Blast - Release ${{ env.APP_VERSION }}
 
-            #### 📱 APKs de Test Directs
-            * **`SugarDelight-universal.apk`** : Compatible avec tous les téléphones et tablettes Android (installation directe recommandée).
-            * **`SugarDelight-arm64.apk`** : Optimisé pour smartphones 64-bit récents (performances maximales).
-            * **`SugarDelight-arm32.apk`** : Pour smartphones 32-bit (ARMv7).
-            * **`SugarDelight-x86_64.apk`** : Pour émulateurs PC / Android Studio.
+            #### ✨ Nouveautés & Mises à jour :
+            * **Mode Sombre / Clair (Dark & Light Mode)** dynamique pour tous les thèmes (Néon Arcade, Joyaux Célestes, Bois Rustique, Zen Pastel).
+            * **Bascule 1-clic ☀️ / 🌙** intégrée dans l'en-tête du jeu et dans les paramètres.
+            * **Sauvegarde persistante** des préférences utilisateur (SharedPreferences).
+            * **Nouveaux graphismes et fonds aléatoires** haute définition pour les boosters et les arrières-plans.
+            * **Suppression complète** de l'ancien thème temporaire Sugar Delight.
+            * **Optimisation de la grille 8x8** : remontée sans aucun chevauchement des boosters, hitboxes élargies des pièces.
+
+            #### 📱 APKs Directs
+            * **`BlockBlast-universal.apk`** : Compatible avec tous les téléphones et tablettes Android (installation directe recommandée).
+            * **`BlockBlast-arm64.apk`** : Optimisé pour smartphones 64-bit récents (performances maximales).
+            * **`BlockBlast-arm32.apk`** : Pour smartphones 32-bit (ARMv7).
+            * **`BlockBlast-x86_64.apk`** : Pour émulateurs PC / Android Studio.
           draft: false
           prerelease: false
           files: |
