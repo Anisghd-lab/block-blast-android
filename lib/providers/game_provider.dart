@@ -422,8 +422,8 @@ class GameProvider extends ChangeNotifier {
 
     if (_gameMode == GameMode.adventure) {
       _levelScore += clearPoints +
-          (clearResult.jewelsCleared * 50) +
-          (clearResult.rocksCleared * 30);
+          (clearResult.jewelsCleared * ScoreCalculator.jewelsBonus) +
+          (clearResult.rocksCleared * ScoreCalculator.rocksBonus);
       _levelLinesCleared += clearResult.totalLines;
       _levelJewelsCollected += clearResult.jewelsCleared;
     } else {

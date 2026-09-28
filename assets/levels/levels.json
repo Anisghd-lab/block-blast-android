@@ -99,7 +99,7 @@
       "star_thresholds": {
         "one_star": "goal_completed",
         "two_stars_moves_left": null,
-        "three_stars_score": 400
+        "three_stars_score": 700
       },
       "end_level_presentation": {
         "victory_banner": "Premier Pas Réussi !",
@@ -206,7 +206,7 @@
       "star_thresholds": {
         "one_star": "goal_completed",
         "two_stars_moves_left": null,
-        "three_stars_score": 750
+        "three_stars_score": 900
       },
       "end_level_presentation": {
         "victory_banner": "Lignes Traversées !",
@@ -314,8 +314,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 8,
-        "three_stars_score": 1100
+        "two_stars_moves_left": 5,
+        "three_stars_score": 909
       },
       "end_level_presentation": {
         "victory_banner": "Éclat Solaire !",
@@ -422,8 +422,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 7,
-        "three_stars_score": 1350
+        "two_stars_moves_left": 4,
+        "three_stars_score": 1400
       },
       "end_level_presentation": {
         "victory_banner": "Piliers Démantelés !",
@@ -530,8 +530,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 6,
-        "three_stars_score": 1500
+        "two_stars_moves_left": 4,
+        "three_stars_score": 1260
       },
       "end_level_presentation": {
         "victory_banner": "Harmonie Atteinte !",
@@ -639,8 +639,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 7,
-        "three_stars_score": 1800
+        "two_stars_moves_left": 4,
+        "three_stars_score": 1600
       },
       "end_level_presentation": {
         "victory_banner": "Sommet Conquis !",
@@ -748,8 +748,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 6,
-        "three_stars_score": 1900
+        "two_stars_moves_left": 4,
+        "three_stars_score": 1610
       },
       "end_level_presentation": {
         "victory_banner": "Arche Franchie !",
@@ -856,8 +856,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 8,
-        "three_stars_score": 2100
+        "two_stars_moves_left": 5,
+        "three_stars_score": 1825
       },
       "end_level_presentation": {
         "victory_banner": "Tours Effondrées !",
@@ -965,8 +965,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 6,
-        "three_stars_score": 2300
+        "two_stars_moves_left": 4,
+        "three_stars_score": 1959
       },
       "end_level_presentation": {
         "victory_banner": "Temps Maîtrisé !",
@@ -1075,8 +1075,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 8,
-        "three_stars_score": 2600
+        "two_stars_moves_left": 5,
+        "three_stars_score": 2050
       },
       "end_level_presentation": {
         "victory_banner": "Monde 1 Maîtrisé !",
@@ -1183,8 +1183,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 7,
-        "three_stars_score": 1400
+        "two_stars_moves_left": 4,
+        "three_stars_score": 720
       },
       "end_level_presentation": {
         "victory_banner": "Gemmes Extraites !",
@@ -1292,8 +1292,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 6,
-        "three_stars_score": 1600
+        "two_stars_moves_left": 4,
+        "three_stars_score": 800
       },
       "end_level_presentation": {
         "victory_banner": "Saphir Scintillant !",
@@ -1400,8 +1400,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 6,
-        "three_stars_score": 1800
+        "two_stars_moves_left": 4,
+        "three_stars_score": 880
       },
       "end_level_presentation": {
         "victory_banner": "Étoiles Alignées !",
@@ -1509,8 +1509,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 5,
-        "three_stars_score": 2000
+        "two_stars_moves_left": 4,
+        "three_stars_score": 880
       },
       "end_level_presentation": {
         "victory_banner": "Coffre Pillé !",
@@ -1618,8 +1618,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 5,
-        "three_stars_score": 2200
+        "two_stars_moves_left": 3,
+        "three_stars_score": 960
       },
       "end_level_presentation": {
         "victory_banner": "Cascade Brillante !",
@@ -1727,8 +1727,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 6,
-        "three_stars_score": 2400
+        "two_stars_moves_left": 4,
+        "three_stars_score": 1040
       },
       "end_level_presentation": {
         "victory_banner": "Géodes Ouvertes !",
@@ -1836,8 +1836,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 5,
-        "three_stars_score": 2600
+        "two_stars_moves_left": 3,
+        "three_stars_score": 1040
       },
       "end_level_presentation": {
         "victory_banner": "Joyau Parfait !",
@@ -1945,8 +1945,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 5,
-        "three_stars_score": 2800
+        "two_stars_moves_left": 3,
+        "three_stars_score": 1120
       },
       "end_level_presentation": {
         "victory_banner": "Filons Épuisés !",
@@ -2054,8 +2054,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 5,
-        "three_stars_score": 3000
+        "two_stars_moves_left": 3,
+        "three_stars_score": 1200
       },
       "end_level_presentation": {
         "victory_banner": "Cœur Purifié !",
@@ -2164,8 +2164,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 6,
-        "three_stars_score": 3500
+        "two_stars_moves_left": 4,
+        "three_stars_score": 1360
       },
       "end_level_presentation": {
         "victory_banner": "Souverain des Gemmes !",
@@ -2273,8 +2273,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 7,
-        "three_stars_score": 2600
+        "two_stars_moves_left": 4,
+        "three_stars_score": 2000
       },
       "end_level_presentation": {
         "victory_banner": "Menhirs Fissurés !",
@@ -2382,8 +2382,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 6,
-        "three_stars_score": 2900
+        "two_stars_moves_left": 4,
+        "three_stars_score": 2175
       },
       "end_level_presentation": {
         "victory_banner": "Tranchée Comblée !",
@@ -2491,8 +2491,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 6,
-        "three_stars_score": 3400
+        "two_stars_moves_left": 4,
+        "three_stars_score": 3639
       },
       "end_level_presentation": {
         "victory_banner": "Canyon Franchi !",
@@ -2600,8 +2600,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 5,
-        "three_stars_score": 3300
+        "two_stars_moves_left": 4,
+        "three_stars_score": 2350
       },
       "end_level_presentation": {
         "victory_banner": "Enclume Forgée !",
@@ -2709,8 +2709,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 6,
-        "three_stars_score": 4000
+        "two_stars_moves_left": 4,
+        "three_stars_score": 4340
       },
       "end_level_presentation": {
         "victory_banner": "Dolmen Révélé !",
@@ -2818,8 +2818,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 6,
-        "three_stars_score": 3600
+        "two_stars_moves_left": 4,
+        "three_stars_score": 2575
       },
       "end_level_presentation": {
         "victory_banner": "Remparts Démolis !",
@@ -2927,8 +2927,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 5,
-        "three_stars_score": 4500
+        "two_stars_moves_left": 4,
+        "three_stars_score": 4760
       },
       "end_level_presentation": {
         "victory_banner": "Labyrinthe Élucidé !",
@@ -3036,8 +3036,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 6,
-        "three_stars_score": 3900
+        "two_stars_moves_left": 4,
+        "three_stars_score": 2800
       },
       "end_level_presentation": {
         "victory_banner": "Bastions Pris !",
@@ -3146,8 +3146,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 5,
-        "three_stars_score": 4200
+        "two_stars_moves_left": 4,
+        "three_stars_score": 880
       },
       "end_level_presentation": {
         "victory_banner": "Cratère Purifié !",
@@ -3256,8 +3256,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 7,
-        "three_stars_score": 4800
+        "two_stars_moves_left": 5,
+        "three_stars_score": 3025
       },
       "end_level_presentation": {
         "victory_banner": "Golem Terrassé !",
@@ -3363,8 +3363,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 6,
-        "three_stars_score": 3800
+        "two_stars_moves_left": 4,
+        "three_stars_score": 2100
       },
       "end_level_presentation": {
         "victory_banner": "Triple Combo Explosé !",
@@ -3472,8 +3472,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 6,
-        "three_stars_score": 5200
+        "two_stars_moves_left": 4,
+        "three_stars_score": 5040
       },
       "end_level_presentation": {
         "victory_banner": "Combo Quadruple !",
@@ -3581,8 +3581,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 7,
-        "three_stars_score": 4400
+        "two_stars_moves_left": 4,
+        "three_stars_score": 2550
       },
       "end_level_presentation": {
         "victory_banner": "Tourbillon Validé !",
@@ -3689,8 +3689,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 6,
-        "three_stars_score": 5800
+        "two_stars_moves_left": 4,
+        "three_stars_score": 5880
       },
       "end_level_presentation": {
         "victory_banner": "Spirale Déchaînée !",
@@ -3798,8 +3798,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 6,
-        "three_stars_score": 5000
+        "two_stars_moves_left": 4,
+        "three_stars_score": 2750
       },
       "end_level_presentation": {
         "victory_banner": "Avalanche Écrasante !",
@@ -3906,8 +3906,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 6,
-        "three_stars_score": 6400
+        "two_stars_moves_left": 4,
+        "three_stars_score": 6440
       },
       "end_level_presentation": {
         "victory_banner": "Virtuose Polyomino !",
@@ -4015,8 +4015,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 7,
-        "three_stars_score": 5400
+        "two_stars_moves_left": 4,
+        "three_stars_score": 2975
       },
       "end_level_presentation": {
         "victory_banner": "Arc-en-Ciel Foudroyant !",
@@ -4125,8 +4125,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 6,
-        "three_stars_score": 7200
+        "two_stars_moves_left": 4,
+        "three_stars_score": 7279
       },
       "end_level_presentation": {
         "victory_banner": "Gamme Complète Jouée !",
@@ -4234,8 +4234,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 7,
-        "three_stars_score": 6000
+        "two_stars_moves_left": 4,
+        "three_stars_score": 3200
       },
       "end_level_presentation": {
         "victory_banner": "Choc Sismique !",
@@ -4344,8 +4344,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 7,
-        "three_stars_score": 8500
+        "two_stars_moves_left": 4,
+        "three_stars_score": 8119
       },
       "end_level_presentation": {
         "victory_banner": "Maître des Tempêtes !",
@@ -4454,8 +4454,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 5,
-        "three_stars_score": 4500
+        "two_stars_moves_left": 3,
+        "three_stars_score": 1040
       },
       "end_level_presentation": {
         "victory_banner": "Échec et Mat Cosmique !",
@@ -4564,8 +4564,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 6,
-        "three_stars_score": 7500
+        "two_stars_moves_left": 4,
+        "three_stars_score": 7279
       },
       "end_level_presentation": {
         "victory_banner": "Portail Traversé !",
@@ -4674,8 +4674,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 5,
-        "three_stars_score": 5000
+        "two_stars_moves_left": 3,
+        "three_stars_score": 1120
       },
       "end_level_presentation": {
         "victory_banner": "Mirage Dompté !",
@@ -4784,8 +4784,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 6,
-        "three_stars_score": 4600
+        "two_stars_moves_left": 4,
+        "three_stars_score": 3150
       },
       "end_level_presentation": {
         "victory_banner": "Horloge Gelée !",
@@ -4894,8 +4894,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 6,
-        "three_stars_score": 8800
+        "two_stars_moves_left": 4,
+        "three_stars_score": 8400
       },
       "end_level_presentation": {
         "victory_banner": "Temple Purifié !",
@@ -5005,8 +5005,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 5,
-        "three_stars_score": 5500
+        "two_stars_moves_left": 3,
+        "three_stars_score": 1200
       },
       "end_level_presentation": {
         "victory_banner": "Hydre Défaite !",
@@ -5116,8 +5116,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 6,
-        "three_stars_score": 4800
+        "two_stars_moves_left": 4,
+        "three_stars_score": 3350
       },
       "end_level_presentation": {
         "victory_banner": "Bouclier Brisé !",
@@ -5227,8 +5227,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 6,
-        "three_stars_score": 10000
+        "two_stars_moves_left": 4,
+        "three_stars_score": 9520
       },
       "end_level_presentation": {
         "victory_banner": "Nébuleuse Domptée !",
@@ -5338,8 +5338,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 5,
-        "three_stars_score": 6000
+        "two_stars_moves_left": 3,
+        "three_stars_score": 1360
       },
       "end_level_presentation": {
         "victory_banner": "Antichambre Déverrouillée !",
@@ -5452,8 +5452,8 @@
       ],
       "star_thresholds": {
         "one_star": "goal_completed",
-        "two_stars_moves_left": 6,
-        "three_stars_score": 12000
+        "two_stars_moves_left": 4,
+        "three_stars_score": 11200
       },
       "end_level_presentation": {
         "victory_banner": "Oasis Céleste Conquise !",
