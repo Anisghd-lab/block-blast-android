@@ -10,3 +10,4 @@
 -keepattributes *Annotation*
 -keepattributes SourceFile,LineNumberTable
 -dontwarn io.flutter.embedding.**
+-keep class com.playgames.blockblast.** { *; }
