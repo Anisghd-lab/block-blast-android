@@ -259,9 +259,9 @@ class _GameBoardState extends State<GameBoard> {
 
     final screenSize = MediaQuery.of(context).size;
     final availableWidth = screenSize.width - 32.0;
-    final availableHeight = screenSize.height * 0.44;
+    final availableHeight = screenSize.height * 0.39;
     final boardSize = (availableWidth < availableHeight ? availableWidth : availableHeight)
-        .clamp(240.0, 380.0);
+        .clamp(240.0, 350.0);
     const double padding = GameBoard.padding;
     const double spacing = GameBoard.spacing;
     final cellSize = (boardSize - (padding * 2) - (spacing * 7)) / BoardState.size;

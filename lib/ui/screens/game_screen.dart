@@ -144,18 +144,23 @@ class GameScreen extends StatelessWidget {
                     ),
                   ),
 
-                  // 2. Grille de jeu 8x8 centrale
+                  // 2. Grille de jeu 8x8 centrale : décalée vers le haut avec marge généreuse au-dessus des boosters
                   const Expanded(
-                    child: Center(
+                    child: Align(
+                      alignment: Alignment(0.0, -0.45), // Décalage vers le haut
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+                        padding: EdgeInsets.symmetric(horizontal: 16.0),
                         child: GameBoard(),
                       ),
                     ),
                   ),
 
+                  // Espace d'aération net pour ne jamais toucher la barre de boosters
+                  const SizedBox(height: 16),
+
                   // 3. Barre de Boosters tactiques (Sugar Delight System)
                   const RepaintBoundary(child: BoosterDock()),
+                  const SizedBox(height: 6),
 
                   // 4. Tiroir de pièces du bas fixé à l'écran
                   const SafeArea(
