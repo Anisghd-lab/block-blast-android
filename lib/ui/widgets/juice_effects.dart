@@ -276,7 +276,8 @@ class JuiceOverlayState extends State<JuiceOverlay> with SingleTickerProviderSta
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          widget.child,
+          // Isolation de la grille de jeu pour éviter le re-rendering à chaque frame de particule
+          RepaintBoundary(child: widget.child),
           // Couche CustomPaint des effets physiques (isolée pour 60-120 FPS)
           Positioned.fill(
             child: IgnorePointer(

@@ -403,16 +403,18 @@ class _LevelSelectScreenState extends State<LevelSelectScreen> with TickerProvid
               height: totalMapHeight,
               child: Stack(
                 children: [
-                  // Tracé du sentier serpentin et éléments de décor
-                  CustomPaint(
-                    size: Size(screenSize.width, totalMapHeight),
-                    painter: _SagaMapPainter(
-                      totalLevels: totalLevels,
-                      screenWidth: screenSize.width,
-                      totalHeight: totalMapHeight,
-                      unlockedLevel: unlockedLevel,
-                      nodeStepY: nodeStepY,
-                      bottomPadding: bottomPadding,
+                  // Tracé du sentier serpentin et éléments de décor (Isolé dans un RepaintBoundary)
+                  RepaintBoundary(
+                    child: CustomPaint(
+                      size: Size(screenSize.width, totalMapHeight),
+                      painter: _SagaMapPainter(
+                        totalLevels: totalLevels,
+                        screenWidth: screenSize.width,
+                        totalHeight: totalMapHeight,
+                        unlockedLevel: unlockedLevel,
+                        nodeStepY: nodeStepY,
+                        bottomPadding: bottomPadding,
+                      ),
                     ),
                   ),
 

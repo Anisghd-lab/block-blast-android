@@ -106,15 +106,17 @@ class GameScreen extends StatelessWidget {
         child: SafeArea(
           child: Column(
             children: [
-              // 1. HUD & Score
-              ScoreHeader(
-                onPausePressed: () => _showPauseDialog(context),
-                onSettingsPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const SettingsScreen()),
-                  );
-                },
+              // 1. HUD & Score (Isolé dans un RepaintBoundary pour le rasterizer)
+              RepaintBoundary(
+                child: ScoreHeader(
+                  onPausePressed: () => _showPauseDialog(context),
+                  onSettingsPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const SettingsScreen()),
+                    );
+                  },
+                ),
               ),
 
               // 2. Grille de jeu 8x8 centrale
@@ -128,14 +130,14 @@ class GameScreen extends StatelessWidget {
               ),
 
               // 3. Barre de Boosters tactiques (Sugar Delight System)
-              const BoosterDock(),
+              const RepaintBoundary(child: BoosterDock()),
 
               // 4. Tiroir de pièces du bas fixé à l'écran
               const SafeArea(
                 top: false,
                 child: Padding(
                   padding: EdgeInsets.only(bottom: 8.0),
-                  child: PieceDock(),
+                  child: RepaintBoundary(child: PieceDock()),
                 ),
               ),
             ],
