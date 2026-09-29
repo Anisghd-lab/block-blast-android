@@ -1,4 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:block_blast_android/core/storage/game_storage.dart';
 import 'package:block_blast_android/engine/block_shape.dart';
 import 'package:block_blast_android/engine/board_state.dart';
 import 'package:block_blast_android/engine/score_calculator.dart';
@@ -128,6 +130,44 @@ void main() {
       expect(ptsCombo1, greaterThan(0));
       expect(ptsCombo2, greaterThan(ptsCombo1));
       expect(ptsCombo3, greaterThan(ptsCombo2));
+    });
+  });
+
+  group('Lucky Wheel 6-Hour Cooldown Tests', () {
+    setUp(() async {
+      SharedPreferences.setMockInitialValues({});
+      await GameStorage.init();
+    });
+
+    test('Initial state: user can spin immediately', () {
+      expect(GameStorage.canSpinLuckyWheel(), isTrue);
+      expect(GameStorage.getSecondsUntilNextLuckyWheelSpin(), 0);
+    });
+
+    test('After spinning: user cannot spin and 6h cooldown starts', () async {
+      await GameStorage.recordLuckyWheelSpin();
+
+      expect(GameStorage.canSpinLuckyWheel(), isFalse);
+      final remaining = GameStorage.getSecondsUntilNextLuckyWheelSpin();
+      expect(remaining, greaterThan(0));
+      expect(remaining, lessThanOrEqualTo(GameStorage.luckyWheelCooldownSeconds));
+    });
+
+    test('After 6 hours elapsed: user can spin again', () async {
+      // Simule un tour effectué il y a 6h et 1 seconde
+      final sixHoursAgo = DateTime.now().millisecondsSinceEpoch - (6 * 3600 + 1) * 1000;
+      await GameStorage.recordLuckyWheelSpin(sixHoursAgo);
+
+      expect(GameStorage.canSpinLuckyWheel(), isTrue);
+      expect(GameStorage.getSecondsUntilNextLuckyWheelSpin(), 0);
+    });
+
+    test('Countdown string formatting formats hours, minutes, seconds', () {
+      // 5h 30m 15s = 5*3600 + 30*60 + 15 = 18000 + 1800 + 15 = 19815s
+      final formatted = GameStorage.formatLuckyWheelCountdown(19815);
+      expect(formatted, '05h 30m 15s');
+
+      expect(GameStorage.formatLuckyWheelCountdown(0), '00:00:00');
     });
   });
 }

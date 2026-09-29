@@ -264,4 +264,42 @@ class GameStorage {
         return _keyExtraMoves;
     }
   }
+
+  // --- ROUE DE LA FORTUNE (LUCKY WHEEL) - 1 TOUR TOUTES LES 6 HEURES ---
+  static const String _keyLastLuckyWheelSpin = 'lucky_wheel_last_spin_timestamp';
+  static const int luckyWheelCooldownSeconds = 6 * 3600; // 6 heures = 21 600 secondes
+
+  /// Indique si la roue de la fortune est disponible pour tourner
+  static bool canSpinLuckyWheel() {
+    return getSecondsUntilNextLuckyWheelSpin() <= 0;
+  }
+
+  /// Retourne le nombre de secondes restantes avant le prochain tour gratuit (0 si disponible)
+  static int getSecondsUntilNextLuckyWheelSpin() {
+    final lastTime = _prefs?.getInt(_keyLastLuckyWheelSpin);
+    if (lastTime == null) return 0; // Jamais tourné -> disponible immédiatement
+    final elapsedSec = ((DateTime.now().millisecondsSinceEpoch - lastTime) / 1000).floor();
+    final remaining = luckyWheelCooldownSeconds - elapsedSec;
+    return remaining > 0 ? remaining : 0;
+  }
+
+  /// Enregistre l'horodatage du tour de roue (démarre le cooldown de 6h)
+  static Future<void> recordLuckyWheelSpin([int? timestampMs]) async {
+    await _prefs?.setInt(
+      _keyLastLuckyWheelSpin,
+      timestampMs ?? DateTime.now().millisecondsSinceEpoch,
+    );
+  }
+
+  /// Formate le temps restant en chaîne lisible (ex: "05h 42m 18s")
+  static String formatLuckyWheelCountdown(int remainingSeconds) {
+    if (remainingSeconds <= 0) return '00:00:00';
+    final hours = remainingSeconds ~/ 3600;
+    final minutes = (remainingSeconds % 3600) ~/ 60;
+    final seconds = remainingSeconds % 60;
+    final hStr = hours.toString().padLeft(2, '0');
+    final mStr = minutes.toString().padLeft(2, '0');
+    final sStr = seconds.toString().padLeft(2, '0');
+    return '${hStr}h ${mStr}m ${sStr}s';
+  }
 }

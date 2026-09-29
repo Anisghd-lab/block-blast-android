@@ -559,22 +559,41 @@ class _LevelSelectScreenState extends State<LevelSelectScreen> with TickerProvid
                   // Bouton Roue de la fortune (Lucky Spin)
                   GestureDetector(
                     onTap: _showLuckyWheelDialog,
-                    child: Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        gradient: const RadialGradient(
-                          colors: [Color(0xFFFFF275), Color(0xFFFF9800)],
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            gradient: const RadialGradient(
+                              colors: [Color(0xFFFFF275), Color(0xFFFF9800)],
+                            ),
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.white, width: 2.0),
+                            boxShadow: const [
+                              BoxShadow(color: Color(0x33FF9800), blurRadius: 8, offset: Offset(0, 3)),
+                            ],
+                          ),
+                          child: const Center(
+                            child: Text('🎡', style: TextStyle(fontSize: 20)),
+                          ),
                         ),
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 2.0),
-                        boxShadow: const [
-                          BoxShadow(color: Color(0x33FF9800), blurRadius: 8, offset: Offset(0, 3)),
-                        ],
-                      ),
-                      child: const Center(
-                        child: Text('🎡', style: TextStyle(fontSize: 20)),
-                      ),
+                        if (GameStorage.canSpinLuckyWheel())
+                          Positioned(
+                            top: -2,
+                            right: -2,
+                            child: Container(
+                              width: 14,
+                              height: 14,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF10B981),
+                                shape: BoxShape.circle,
+                                border: Border.all(color: Colors.white, width: 2),
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
                   ),
                 ],
@@ -874,6 +893,7 @@ class _LuckyWheelDialogState extends State<_LuckyWheelDialog> with SingleTickerP
   final math.Random _rng = math.Random();
   bool _isSpinning = false;
   int _wonCoins = 0;
+  Timer? _countdownTimer;
 
   final List<int> _rewards = [20, 50, 100, 30, 200, 40, 80, 500];
 
@@ -881,16 +901,22 @@ class _LuckyWheelDialogState extends State<_LuckyWheelDialog> with SingleTickerP
   void initState() {
     super.initState();
     _spinController = AnimationController(vsync: this, duration: const Duration(seconds: 3));
+    // Minuteur pour actualiser le compte à rebours de 6 heures chaque seconde
+    _countdownTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (mounted) setState(() {});
+    });
   }
 
   @override
   void dispose() {
+    _countdownTimer?.cancel();
     _spinController.dispose();
     super.dispose();
   }
 
   void _spin() {
     if (_isSpinning) return;
+    if (!GameStorage.canSpinLuckyWheel()) return;
     setState(() => _isSpinning = true);
 
     final prizeIndex = _rng.nextInt(_rewards.length);
@@ -900,17 +926,51 @@ class _LuckyWheelDialogState extends State<_LuckyWheelDialog> with SingleTickerP
     HapticService.onWheelTick();
 
     _spinController.reset();
-    _spinController.forward().then((_) {
+    _spinController.forward().then((_) async {
+      await GameStorage.recordLuckyWheelSpin();
       widget.onRewardClaimed(_wonCoins);
       AudioService.playCoinReward();
       HapticService.onWheelReward();
+      if (!mounted) return;
       setState(() => _isSpinning = false);
       showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           title: const Text('🎉 FÉLICITATIONS !', style: TextStyle(fontWeight: FontWeight.bold)),
-          content: Text('Vous avez remporté $_wonCoins Pièces d\'or ! 🪙'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Vous avez remporté $_wonCoins Pièces d\'or ! 🪙',
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFEF3C7),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: const Color(0xFFF59E0B)),
+                ),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.timer_outlined, size: 16, color: Color(0xFFB45309)),
+                    SizedBox(width: 6),
+                    Text(
+                      'Prochain tour gratuit dans 6 heures !',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Color(0xFFB45309),
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
           actions: [
             TextButton(
               onPressed: () {
@@ -927,6 +987,10 @@ class _LuckyWheelDialogState extends State<_LuckyWheelDialog> with SingleTickerP
 
   @override
   Widget build(BuildContext context) {
+    final canSpin = GameStorage.canSpinLuckyWheel();
+    final remainingSec = GameStorage.getSecondsUntilNextLuckyWheelSpin();
+    final countdownStr = GameStorage.formatLuckyWheelCountdown(remainingSec);
+
     return Dialog(
       backgroundColor: Colors.transparent,
       child: Container(
@@ -946,6 +1010,38 @@ class _LuckyWheelDialogState extends State<_LuckyWheelDialog> with SingleTickerP
                 fontWeight: FontWeight.w900,
                 fontSize: 18,
                 color: Color(0xFF1E3A8A),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+              decoration: BoxDecoration(
+                color: canSpin ? const Color(0xFFECFDF5) : const Color(0xFFFEF3C7),
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(
+                  color: canSpin ? const Color(0xFF10B981) : const Color(0xFFF59E0B),
+                  width: 1.2,
+                ),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    canSpin ? Icons.check_circle_outline_rounded : Icons.hourglass_top_rounded,
+                    size: 16,
+                    color: canSpin ? const Color(0xFF047857) : const Color(0xFFB45309),
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    canSpin ? 'Tour gratuit disponible !' : 'Disponible dans : $countdownStr',
+                    style: TextStyle(
+                      fontFamily: 'Space Grotesk',
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: canSpin ? const Color(0xFF047857) : const Color(0xFFB45309),
+                    ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 16),
@@ -982,15 +1078,28 @@ class _LuckyWheelDialogState extends State<_LuckyWheelDialog> with SingleTickerP
             const SizedBox(height: 20),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFFF9800),
+                backgroundColor: canSpin ? const Color(0xFFFF9800) : const Color(0xFF94A3B8),
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 12),
+                elevation: canSpin ? 4 : 0,
               ),
-              onPressed: _isSpinning ? null : _spin,
+              onPressed: (_isSpinning || !canSpin) ? null : _spin,
               child: Text(
-                _isSpinning ? 'EN ROTATION...' : 'TOURNER LA ROUE !',
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                _isSpinning
+                    ? 'EN ROTATION...'
+                    : (canSpin ? 'TOURNER LA ROUE !' : 'REVIENS DANS $countdownStr'),
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+              ),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              '1 tour offert toutes les 6 heures pour chaque joueur',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 11,
+                color: Color(0xFF64748B),
+                fontWeight: FontWeight.w500,
               ),
             ),
           ],
